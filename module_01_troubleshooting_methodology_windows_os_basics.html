@@ -17,12 +17,12 @@
         theme: {
           extend: {
             colors: {
-              workbench: '#F7F7F5',
-              ink: '#141414',
-              muted: '#52524E',
-              amberStatus: '#D97706',
-              emeraldStatus: '#059669',
-              crimsonStatus: '#DC2626'
+              workbench: '#121417',
+              ink: '#E6E8EC',
+              muted: '#9CA3AF',
+              amberStatus: '#FBBF24',
+              emeraldStatus: '#34D399',
+              crimsonStatus: '#F87171'
             },
             fontFamily: {
               sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
@@ -37,16 +37,25 @@
   <!-- Standalone + Fallback CSS so page renders identically online and offline (file://) -->
   <style>
     :root {
-      --bg-workbench: #F7F7F5;
-      --bg-card: #FFFFFF;
-      --ink: #141414;
-      --muted: #52524E;
-      --emerald: #059669;
-      --emerald-bg: #ECFDF5;
-      --amber: #D97706;
-      --amber-bg: #FFFBEB;
-      --crimson: #DC2626;
-      --crimson-bg: #FEF2F2;
+      color-scheme: dark;
+      --bg-workbench: #121417;
+      --bg-card: #1A1D23;
+      --bg-subbox: #22262E;
+      --bg-hover: #2A2F3A;
+      --border-strong: #343A46;
+      --border-subtle: #2A2F3A;
+      --shadow-hard: #090A0C;
+      --ink: #E6E8EC;
+      --muted: #9CA3AF;
+      --emerald: #34D399;
+      --emerald-bg: #122922;
+      --emerald-border: #1F5E4B;
+      --amber: #FBBF24;
+      --amber-bg: #292112;
+      --amber-border: #6B4C16;
+      --crimson: #F87171;
+      --crimson-bg: #2B1518;
+      --crimson-border: #6E252C;
     }
 
     *, *::before, *::after {
@@ -55,6 +64,7 @@
 
     html {
       scroll-behavior: smooth;
+      color-scheme: dark;
     }
 
     body {
@@ -63,7 +73,7 @@
       background-color: var(--bg-workbench);
       color: var(--ink);
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.5;
+      line-height: 1.55;
       overflow-x: hidden;
     }
 
@@ -81,11 +91,14 @@
       height: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #F7F7F5;
+      background: #121417;
     }
     ::-webkit-scrollbar-thumb {
-      background: #141414;
+      background: #343A46;
       border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
     }
 
     /* App Shell Layout */
@@ -106,8 +119,8 @@
       position: sticky;
       top: 0;
       z-index: 30;
-      background: #FFFFFF;
-      border-bottom: 2px solid #141414;
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--border-strong);
       padding: 12px 16px;
       display: flex;
       align-items: center;
@@ -130,8 +143,8 @@
       height: 100vh;
       width: 290px;
       max-width: 88vw;
-      background: #FFFFFF;
-      border-right: 2px solid #141414;
+      background: var(--bg-card);
+      border-right: 2px solid var(--border-strong);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -160,14 +173,14 @@
 
     .sidebar-footer {
       padding: 14px;
-      border-top: 2px solid #141414;
-      background: #F7F7F5;
+      border-top: 2px solid var(--border-strong);
+      background: #16191F;
     }
 
     .sidebar-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(20, 20, 20, 0.55);
+      background: rgba(5, 6, 8, 0.75);
       z-index: 35;
     }
 
@@ -199,56 +212,56 @@
       }
     }
 
-    /* Hard Borders & Shadows */
+    /* Dark Workbench Cards & Borders */
     .wb-card {
-      background: #FFFFFF;
-      border: 2px solid #141414;
+      background: var(--bg-card);
+      border: 2px solid var(--border-strong);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 4px 4px 0px #141414;
+      box-shadow: 4px 4px 0px var(--shadow-hard);
     }
 
     .wb-card-sm {
-      background: #FFFFFF;
-      border: 2px solid #141414;
+      background: var(--bg-card);
+      border: 2px solid var(--border-strong);
       border-radius: 12px;
       padding: 18px;
-      box-shadow: 2px 2px 0px #141414;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
     }
 
     .wb-subbox {
-      background: #F7F7F5;
-      border: 2px solid #141414;
+      background: var(--bg-subbox);
+      border: 2px solid var(--border-strong);
       border-radius: 10px;
       padding: 14px 16px;
     }
 
     .wb-amber-box {
       background: var(--amber-bg);
-      border: 2px solid #141414;
+      border: 2px solid var(--amber-border);
       border-radius: 12px;
       padding: 18px;
-      box-shadow: 2px 2px 0px #141414;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
     }
 
     .wb-red-box {
       background: var(--crimson-bg);
-      border: 2px solid #141414;
+      border: 2px solid var(--crimson-border);
       border-radius: 12px;
       padding: 16px;
     }
 
     .wb-emerald-box {
       background: var(--emerald-bg);
-      border: 2px solid #141414;
+      border: 2px solid var(--emerald-border);
       border-radius: 12px;
       padding: 16px;
     }
 
     .wb-terminal {
-      background: #141414;
-      color: #FFFFFF;
-      border: 2px solid #141414;
+      background: #0D0F12;
+      color: #E6E8EC;
+      border: 2px solid #2E3440;
       border-radius: 10px;
       padding: 14px 16px;
       font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
@@ -262,11 +275,11 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      border: 2px solid #141414;
+      border: 2px solid var(--border-strong);
       border-radius: 10px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease, border-color 0.15s ease;
       text-decoration: none;
     }
 
@@ -276,29 +289,34 @@
     }
 
     .btn-ink {
-      background: #141414;
-      color: #FFFFFF;
-      box-shadow: 2px 2px 0px #141414;
+      background: #2C3340;
+      color: #F3F4F6;
+      border-color: #4B5563;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
     }
 
     .btn-ink:hover {
-      background: #2b2b2b;
+      background: #374050;
+      border-color: #6B7280;
     }
 
     .btn-light {
-      background: #FFFFFF;
-      color: #141414;
-      box-shadow: 2px 2px 0px #141414;
+      background: var(--bg-subbox);
+      color: var(--ink);
+      border-color: var(--border-strong);
+      box-shadow: 2px 2px 0px var(--shadow-hard);
     }
 
     .btn-light:hover {
-      background: #F7F7F5;
+      background: var(--bg-hover);
+      border-color: #4B5563;
     }
 
     .btn-emerald {
       background: #059669;
       color: #FFFFFF;
-      box-shadow: 2px 2px 0px #141414;
+      border-color: #10B981;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
     }
 
     .btn-emerald:hover {
@@ -306,8 +324,13 @@
     }
 
     .btn-crimson {
-      background: #DC2626;
+      background: #B91C1C;
       color: #FFFFFF;
+      border-color: #EF4444;
+    }
+
+    .btn-crimson:hover {
+      background: #991B1B;
     }
 
     /* Navigation Tabs */
@@ -315,39 +338,41 @@
       width: 100%;
       text-align: left;
       padding: 10px 12px;
-      border: 2px solid #141414;
+      border: 2px solid var(--border-strong);
       border-radius: 10px;
-      background: #FFFFFF;
-      color: #141414;
+      background: var(--bg-subbox);
+      color: var(--ink);
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 8px;
       cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
 
     .nav-item:hover {
-      background: #F7F7F5;
+      background: var(--bg-hover);
+      border-color: #4B5563;
     }
 
     .nav-item.active {
-      background: #141414;
+      background: #283140;
       color: #FFFFFF;
-      box-shadow: 2px 2px 0px #141414;
+      border-color: #34D399;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
     }
 
     .nav-item.active:hover {
-      background: #141414;
+      background: #283140;
     }
 
     /* Form Controls */
     .wb-select, .wb-input {
       width: 100%;
       padding: 10px 12px;
-      background: #FFFFFF;
-      color: #141414;
-      border: 2px solid #141414;
+      background: #15181E;
+      color: var(--ink);
+      border: 2px solid var(--border-strong);
       border-radius: 8px;
       font-size: 13px;
       font-family: inherit;
@@ -355,7 +380,8 @@
 
     .wb-select:focus, .wb-input:focus {
       outline: none;
-      box-shadow: 2px 2px 0px #141414;
+      border-color: #34D399;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
     }
 
     /* Responsive Grids */
@@ -406,7 +432,7 @@
     .table-wrap {
       width: 100%;
       overflow-x: auto;
-      border: 2px solid #141414;
+      border: 2px solid var(--border-strong);
       border-radius: 10px;
     }
 
@@ -418,18 +444,19 @@
     }
 
     table.wb-table th {
-      background: #F7F7F5;
+      background: #22262E;
+      color: #F3F4F6;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
       padding: 10px 12px;
-      border-bottom: 2px solid #141414;
-      border-right: 2px solid #141414;
+      border-bottom: 2px solid var(--border-strong);
+      border-right: 2px solid var(--border-strong);
     }
 
     table.wb-table td {
       padding: 10px 12px;
-      border-bottom: 1px solid #141414;
-      border-right: 2px solid #141414;
+      border-bottom: 1px solid var(--border-subtle);
+      border-right: 2px solid var(--border-strong);
       vertical-align: top;
     }
 
@@ -446,8 +473,9 @@
     .code-pill {
       display: inline-block;
       padding: 1px 6px;
-      background: #F7F7F5;
-      border: 1px solid #141414;
+      background: #252A34;
+      color: #93C5FD;
+      border: 1px solid #3B4252;
       border-radius: 5px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
@@ -456,8 +484,9 @@
     .code-pill-white {
       display: inline-block;
       padding: 1px 6px;
-      background: #FFFFFF;
-      border: 1px solid #141414;
+      background: #16191F;
+      color: #93C5FD;
+      border: 1px solid #3B4252;
       border-radius: 5px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
@@ -467,8 +496,9 @@
     .badge-ink {
       display: inline-block;
       padding: 4px 10px;
-      background: #141414;
-      color: #FFFFFF;
+      background: #2C3340;
+      color: #F3F4F6;
+      border: 1px solid #4B5563;
       border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
@@ -479,25 +509,26 @@
     .badge-tag {
       display: inline-block;
       padding: 2px 8px;
-      background: #FFFFFF;
-      border: 1.5px solid #141414;
+      background: #22262E;
+      color: #E6E8EC;
+      border: 1.5px solid #3F4756;
       border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       font-weight: 700;
     }
 
-    .text-emerald { color: #059669; }
-    .text-amber { color: #D97706; }
-    .text-crimson { color: #DC2626; }
-    .text-muted { color: #52524E; }
+    .text-emerald { color: #34D399; }
+    .text-amber { color: #FBBF24; }
+    .text-crimson { color: #F87171; }
+    .text-muted { color: #9CA3AF; }
 
     /* Modal & Toast */
     .modal-overlay {
       position: fixed;
       inset: 0;
       z-index: 50;
-      background: rgba(20, 20, 20, 0.65);
+      background: rgba(5, 6, 8, 0.78);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -505,10 +536,10 @@
     }
 
     .modal-dialog {
-      background: #FFFFFF;
-      border: 2px solid #141414;
+      background: var(--bg-card);
+      border: 2px solid var(--border-strong);
       border-radius: 16px;
-      box-shadow: 6px 6px 0px #141414;
+      box-shadow: 6px 6px 0px var(--shadow-hard);
       width: 100%;
       max-width: 720px;
       max-height: 88vh;
@@ -522,11 +553,11 @@
       bottom: 20px;
       right: 20px;
       z-index: 60;
-      background: #141414;
-      color: #FFFFFF;
-      border: 2px solid #141414;
+      background: #242933;
+      color: #F3F4F6;
+      border: 2px solid #4B5563;
       border-radius: 10px;
-      box-shadow: 4px 4px 0px #141414;
+      box-shadow: 4px 4px 0px var(--shadow-hard);
       padding: 12px 16px;
       display: flex;
       align-items: center;
@@ -558,7 +589,7 @@
 
   <!-- Toast Notification -->
   <div id="toast" role="status" aria-live="polite" class="toast-box hidden">
-    <span id="toast-dot" style="width:10px;height:10px;border-radius:9999px;background:#059669;flex-shrink:0;"></span>
+    <span id="toast-dot" style="width:10px;height:10px;border-radius:9999px;background:#10B981;flex-shrink:0;"></span>
     <span id="toast-msg">Copied to clipboard</span>
   </div>
 
@@ -577,7 +608,7 @@
           <strong style="font-size:14px;">Module 01: Expanded Field Manual</strong>
         </div>
       </div>
-      <button type="button" onclick="openCheatSheet()" class="btn-wb font-mono" style="padding:7px 10px;font-size:11px;background:#FEF3C7;">
+      <button type="button" onclick="openCheatSheet()" class="btn-wb font-mono" style="padding:7px 10px;font-size:11px;background:#292112;border-color:#6B4C16;color:#FBBF24;">
         Win+R &amp; CLI
       </button>
     </header>
@@ -589,10 +620,10 @@
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-scroll">
         <!-- Brand / Course Header -->
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding-bottom:14px;border-bottom:2px solid #141414;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding-bottom:14px;border-bottom:2px solid #343A46;">
           <div>
-            <div class="badge-tag" style="background:#F7F7F5;margin-bottom:8px;display:inline-flex;align-items:center;gap:6px;">
-              <span style="width:8px;height:8px;border-radius:9999px;background:#059669;display:inline-block;"></span>
+            <div class="badge-tag" style="background:#22262E;margin-bottom:8px;display:inline-flex;align-items:center;gap:6px;">
+              <span style="width:8px;height:8px;border-radius:9999px;background:#10B981;display:inline-block;"></span>
               SERVICE DESK FIELD MANUAL
             </div>
             <h1 style="margin:0;font-size:17px;font-weight:800;line-height:1.25;">
@@ -611,8 +642,8 @@
             <span>Module Completion</span>
             <span id="progress-text" class="font-mono">0% (0/31)</span>
           </div>
-          <div style="width:100%;height:12px;background:#FFFFFF;border:2px solid #141414;border-radius:9999px;overflow:hidden;">
-            <div id="progress-bar" style="height:100%;background:#059669;width:0%;transition:width 0.3s ease;"></div>
+          <div style="width:100%;height:12px;background:#15181E;border:2px solid #343A46;border-radius:9999px;overflow:hidden;">
+            <div id="progress-bar" style="height:100%;background:#10B981;width:0%;transition:width 0.3s ease;"></div>
           </div>
           <p id="progress-subtext" class="font-mono text-muted" style="margin:6px 0 0;font-size:11px;">
             3 triage tickets + 16 PC labs + 12 exam checks.
@@ -730,7 +761,7 @@
         <button type="button" onclick="openCheatSheet()" class="btn-wb btn-light" style="width:100%;padding:9px 12px;justify-content:space-between;font-size:12px;">
           <span style="display:flex;align-items:center;gap:6px;">
             <span class="badge-ink" style="padding:2px 6px;font-size:10px;">Win+R</span>
-            <span>Run &amp; CLI Cheat Sheet (29)</span>
+            <span>Run &amp; CLI Cheat Sheet (28)</span>
           </span>
           <span class="font-mono">&rarr;</span>
         </button>
@@ -758,7 +789,7 @@
     <main class="main-content">
 
       <!-- Top Context Strip -->
-      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-bottom:16px;margin-bottom:24px;border-bottom:2px solid #141414;">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-bottom:16px;margin-bottom:24px;border-bottom:2px solid #343A46;">
         <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
           <span class="badge-tag">DESK SOP-01</span>
           <span class="font-mono text-muted">Target Role: Junior Service Desk Engineer</span>
@@ -778,8 +809,42 @@
             The Diagnostic Loop: How Tier-1 Thinks
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Amateur techs guess and burn 45 minutes reinstalling apps, clearing random caches, or rebooting blind. Good Service Desk engineers cut the problem space in half with every question and fix the same ticket in 3 minutes.
+            In software development, you debug stack traces in one codebase. On a Service Desk, failures span physical cables, Windows kernel drivers, identity tokens, and corporate networks—good engineers cut the blast radius in half before touching a single setting.
           </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 01 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Desk Term &amp; Extension in Lesson 01 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">SOP</strong> = <strong>S</strong>tandard <strong>O</strong>perating <strong>P</strong>rocedure<br>
+              <span class="text-muted">Repeatable desk runbook so every engineer follows the same safe steps.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">INC</strong> = <strong>Inc</strong>ident Ticket<br>
+              <span class="text-muted">ITSM ticket prefix (e.g., <code class="code-pill">INC-1042</code>) for an unplanned service outage/bug.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">ERP</strong> = <strong>E</strong>nterprise <strong>R</strong>esource <strong>P</strong>lanning<br>
+              <span class="text-muted">Core business system (SAP, Odoo, Dynamics) used for finance &amp; inventory.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">hiberfil.sys</strong> = <strong>Hiber</strong>nation <strong>Fil</strong>e<br>
+              <span class="text-muted"><code class="code-pill">.sys</code> = Windows <strong>Sys</strong>tem file saving the hibernated kernel image on <code class="code-pill">C:\</code>.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">Ring 0 (Kernel)</strong> = Core OS Mode<br>
+              <span class="text-muted">Privileged OS layer running hardware drivers; crashes here cause a full BSOD.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">Tier-1 / Tier-2</strong> = Support Tiers<br>
+              <span class="text-muted">Frontline triage &amp; endpoint fixes (Tier-1) vs. server/network admins (Tier-2).</span>
+            </div>
+          </div>
         </div>
 
         <div class="grid-2">
@@ -799,7 +864,7 @@
 
         <div class="wb-card">
           <h3 style="margin:0 0 14px;font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px;">
-            <span class="badge-tag" style="background:#F7F7F5;">WORKFLOW</span>
+            <span class="badge-tag" style="background:#22262E;">WORKFLOW</span>
             The 6-Step Diagnostic Loop
           </h3>
           <div class="grid-3">
@@ -836,18 +901,26 @@
           </div>
         </div>
 
+        <!-- Harder Windows Internals Bridge: Ring 3 vs Ring 0 & Fast Startup -->
+        <div class="wb-subbox space-y-2" style="font-size:14px;">
+          <strong class="font-mono text-emerald" style="display:block;font-size:13px;">WINDOWS INTERNALS • WHY USER-MODE APPS VS. KERNEL DRIVERS BEHAVE DIFFERENTLY</strong>
+          <p style="margin:0;">
+            In web development, an unhandled exception crashes a single <strong>User-Mode (Ring 3)</strong> process (like a Node server or Chrome tab) without harming the OS. In Windows, hardware drivers (Wi-Fi chips, USB-C docks, GPUs) execute inside the privileged <strong>Kernel (Ring 0)</strong>—meaning a single hung driver can deadlock Bluetooth, audio, or trigger a full <strong>BSOD</strong>. Because Windows <strong>Fast Startup</strong> snapshots that Ring-0 session to disk on <em>Shut down</em>, only a true <strong>Restart</strong> tears down Ring 0 and cold-initializes hardware drivers.
+          </p>
+        </div>
+
         <div class="wb-amber-box">
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px;">
-            <span class="badge-ink" style="background:#D97706;">FIELD TRAP • FAST STARTUP</span>
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">FIELD TRAP • FAST STARTUP</span>
             <h3 style="margin:0;font-size:17px;font-weight:800;">Why "I Shut Down My PC Every Night" Is Often False</h3>
           </div>
           <p style="margin:0 0 12px;font-size:14px;">
-            In Windows 10 and 11, clicking <strong>Shut down</strong> does <strong>not</strong> perform a full cold shutdown. Windows logs the user off, then hibernates the Windows kernel and loaded drivers to <code class="code-pill-white">C:\hiberfil.sys</code> so the laptop boots faster the next morning.
+            In Windows 10 and 11, clicking <strong>Shut down</strong> does <strong>not</strong> perform a full cold shutdown. Windows logs the user off (closing Ring-3 user apps), then hibernates the Windows kernel and loaded Ring-0 drivers to <code class="code-pill-white">C:\hiberfil.sys</code> so the laptop boots faster the next morning.
           </p>
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-card-sm" style="box-shadow:none;padding:12px;">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">Start &rarr; Shut down</strong>
-              Keeps kernel bugs, memory leaks, and hung drivers alive. System Up time stays at <strong>12+ days</strong>.
+              Keeps kernel bugs, memory leaks, and hung drivers alive in <code class="code-pill-white">hiberfil.sys</code>. System Up time stays at <strong>12+ days</strong>.
             </div>
             <div class="wb-card-sm" style="box-shadow:none;padding:12px;">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Start &rarr; Restart</strong>
@@ -857,13 +930,13 @@
         </div>
 
         <div class="wb-card">
-          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-bottom:14px;margin-bottom:16px;border-bottom:2px solid #141414;">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-bottom:14px;margin-bottom:16px;border-bottom:2px solid #343A46;">
             <div>
               <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">INTERACTIVE DRILL • LIVE QUEUE</div>
               <h3 style="margin:2px 0;font-size:19px;font-weight:800;">Tier-1 Triage Simulator (3 Tickets)</h3>
               <p class="text-muted" style="margin:0;font-size:13px;">Pick the best immediate action for each incoming user ticket.</p>
             </div>
-            <span id="triage-counter" class="badge-tag" style="background:#F7F7F5;padding:5px 10px;">0 / 3 Resolved</span>
+            <span id="triage-counter" class="badge-tag" style="background:#22262E;padding:5px 10px;">0 / 3 Resolved</span>
           </div>
           <div id="triage-list" class="space-y-4"></div>
         </div>
@@ -886,8 +959,42 @@
             Core Windows Tools (Your Daily Workbench)
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Learn the exact shortcuts to open these five utilities in two seconds, what each screen exposes, and the specific red flags a Service Desk tech checks first.
+            Learn the exact <code class="code-pill">Win + R</code> shortcuts to launch Windows' five core administrative snap-ins, what each acronym/extension means, and the specific red flags a Service Desk engineer inspects first.
           </p>
+        </div>
+
+        <!-- Acronym & Extension Decoder for Lesson 02 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM &amp; EXTENSION DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Windows Abbreviation in Lesson 02 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">.msc</strong> = <strong>M</strong>icrosoft <strong>S</strong>aved <strong>C</strong>onsole<br>
+              <span class="text-muted">MMC admin snap-ins (<code class="code-pill">devmgmt.msc</code>, <code class="code-pill">services.msc</code>, <code class="code-pill">eventvwr.msc</code>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">.cpl</strong> = <strong>C</strong>ontrol <strong>P</strong>anel <strong>L</strong>ink (Applet)<br>
+              <span class="text-muted">Classic Control Panel modules (<code class="code-pill">ncpa.cpl</code>, <code class="code-pill">appwiz.cpl</code>, <code class="code-pill">mmsys.cpl</code>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">PnP</strong> = <strong>P</strong>lug <strong>n</strong> <strong>P</strong>lay<br>
+              <span class="text-muted">Windows subsystem that detects hardware bus IDs and matches drivers.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">RPC</strong> = <strong>R</strong>emote <strong>P</strong>rocedure <strong>C</strong>all<br>
+              <span class="text-muted">Core Windows inter-process service that <code class="code-pill">Spooler</code> and core services depend on.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">MSI</strong> = <strong>M</strong>icro<strong>s</strong>oft <strong>I</strong>nstaller<br>
+              <span class="text-muted"><code class="code-pill">.msi</code> enterprise package format supporting in-place <strong>Repair</strong> in <code class="code-pill">appwiz.cpl</code>.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">Entra ID / BSOD</strong><br>
+              <span class="text-muted">Microsoft cloud directory (formerly <strong>Azure AD</strong>) • <strong>B</strong>lue <strong>S</strong>creen <strong>o</strong>f <strong>D</strong>eath (<code class="code-pill">BugCheck</code>).</span>
+            </div>
+          </div>
         </div>
 
         <div class="space-y-4">
@@ -895,75 +1002,80 @@
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
               <h3 style="margin:0;font-size:17px;font-weight:800;">1. Task Manager</h3>
               <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="badge-tag" style="background:#F7F7F5;">Ctrl + Shift + Esc</span>
+                <span class="badge-tag" style="background:#22262E;">Ctrl + Shift + Esc</span>
                 <button type="button" onclick="copyText('taskmgr')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: taskmgr</button>
               </div>
             </div>
-            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Shows live running processes, hardware load, system uptime, and startup bloat.</p>
+            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Shows live running processes, virtual memory commitment, system uptime, and startup bloat.</p>
             <ul style="margin:0;padding-left:18px;font-size:13px;" class="space-y-2">
               <li><strong class="font-mono text-emerald">[Processes]</strong> Spot frozen apps marked <code class="code-pill">Not responding</code> or eating abnormal RAM, select them, and click <strong>End task</strong> to unfreeze Outlook/Excel without rebooting.</li>
-              <li><strong class="font-mono text-emerald">[Performance]</strong> Check if <strong>CPU</strong>, <strong>Memory</strong>, or <strong>Disk</strong> is pinned at <code class="code-pill">100%</code>, and read <strong>Up time</strong> at the bottom of the CPU screen to catch Fast Startup issues.</li>
-              <li><strong class="font-mono text-emerald">[Startup apps]</strong> Disable unnecessary consumer apps (Spotify, auto-updaters) that slow down morning logins.</li>
+              <li><strong class="font-mono text-emerald">[Performance]</strong> Check 100% resource bottlenecks, read <strong>Up time</strong> at the bottom of the CPU screen to catch Fast Startup, and check <strong>Memory &rarr; Committed</strong> (<code class="code-pill">Physical RAM + Pagefile</code>—if Committed hits its ceiling, apps crash with <em>Out of Memory</em> even before physical RAM reaches 100%).</li>
+              <li><strong class="font-mono text-emerald">[Startup apps]</strong> Disable high-impact background updaters and consumer apps that slow down morning logins.</li>
             </ul>
           </article>
 
           <article class="wb-card-sm">
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
-              <h3 style="margin:0;font-size:17px;font-weight:800;">2. Device Manager</h3>
+              <h3 style="margin:0;font-size:17px;font-weight:800;">2. Device Manager (<code style="font-size:15px;">devmgmt.msc</code>)</h3>
               <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="badge-tag" style="background:#F7F7F5;">Win + X &rarr; M</span>
+                <span class="badge-tag" style="background:#22262E;">Win + X &rarr; M</span>
                 <button type="button" onclick="copyText('devmgmt.msc')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: devmgmt.msc</button>
               </div>
             </div>
-            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Lists every physical and virtual hardware controller Windows sees and the driver loaded for it.</p>
+            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Inspects every physical and virtual hardware controller enumerated by <strong>PnP (Plug and Play)</strong> and the Ring-0 driver bound to it.</p>
             <ul style="margin:0;padding-left:18px;font-size:13px;" class="space-y-2">
-              <li><strong class="font-mono text-amber">[Yellow Triangle !]</strong> Driver error or missing driver (e.g., Code 43 or Code 28 on audio, dock, or GPU).</li>
+              <li><strong class="font-mono text-amber">[Yellow Triangle !]</strong> Driver or device failure—double-click <strong>Properties &rarr; General</strong> to read the exact PnP code: <strong>Code 28</strong> (no driver installed), <strong>Code 10</strong> (device failed to start), or <strong>Code 43</strong> (driver/device reported hardware failure—classic on USB-C docks needing a full power drain).</li>
               <li><strong class="font-mono text-crimson">[Down Arrow &darr;]</strong> Hardware is manually <strong>Disabled</strong>—common when users disable their Wi-Fi adapter or webcam. Right-click &rarr; <strong>Enable device</strong>.</li>
-              <li><strong class="font-mono text-emerald">[Driver Tab]</strong> If hardware broke right after a Windows Update, click <strong>Roll Back Driver</strong>. If glitched, click <strong>Uninstall device</strong> (leave "Delete driver" unchecked), then <strong>Action &rarr; Scan for hardware changes</strong>.</li>
+              <li><strong class="font-mono text-emerald">[Driver Tab &amp; Uninstall Trap]</strong> If hardware broke right after a Windows Update, click <strong>Roll Back Driver</strong>. If glitched, click <strong>Uninstall device</strong>—leave <em>"Attempt to remove the driver for this device"</em> <strong>unchecked</strong> so PnP reloads the existing clean driver on <strong>Action &rarr; Scan for hardware changes</strong> (only check it when purging a bad driver package).</li>
             </ul>
           </article>
 
           <article class="wb-card-sm">
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
-              <h3 style="margin:0;font-size:17px;font-weight:800;">3. Windows Services</h3>
+              <h3 style="margin:0;font-size:17px;font-weight:800;">3. Windows Services (<code style="font-size:15px;">services.msc</code>)</h3>
               <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="badge-tag" style="background:#F7F7F5;">Win + R</span>
+                <span class="badge-tag" style="background:#22262E;">Win + R</span>
                 <button type="button" onclick="copyText('services.msc')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: services.msc</button>
               </div>
             </div>
-            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Controls background Windows processes without a desktop window. Startup Types: <strong>Automatic</strong>, <strong>Automatic (Delayed)</strong>, <strong>Manual</strong>, and <strong>Disabled</strong>.</p>
+            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Manages Windows' background daemons (similar to <code class="code-pill">systemd</code> units on Linux). Startup Types: <strong>Automatic</strong>, <strong>Automatic (Delayed Start)</strong>, <strong>Manual</strong>, and <strong>Disabled</strong>.</p>
             <ul style="margin:0;padding-left:18px;font-size:13px;" class="space-y-2">
-              <li><strong class="font-mono text-emerald">[Print Spooler]</strong> Service name <code class="code-pill">Spooler</code>. Right-click &rarr; <strong>Restart</strong> clears stuck print queues in 5 seconds without rebooting the user's PC.</li>
-              <li><strong class="font-mono text-emerald">[Windows Audio]</strong> Service name <code class="code-pill">Audiosrv</code>. Restarting it fixes USB headset audio drops mid-day.</li>
+              <li><strong class="font-mono text-emerald">[Print Spooler (<code class="code-pill">Spooler</code>)]</strong> Right-click &rarr; <strong>Restart</strong> clears stuck print queues in 5 seconds without rebooting the user's PC.</li>
+              <li><strong class="font-mono text-emerald">[Windows Audio (<code class="code-pill">Audiosrv</code>)]</strong> Restarting it fixes USB headset or dock audio drops mid-day.</li>
+              <li><strong class="font-mono text-amber">[Dependencies &amp; Log On As]</strong> Open <strong>Properties &rarr; Dependencies</strong> to see which parent services must be running first (e.g., <code class="code-pill">Spooler</code> depends on <code class="code-pill">RPC</code>). Under <strong>Log On</strong>, Windows services run as built-in non-interactive accounts (<code class="code-pill">Local System</code>, <code class="code-pill">Network Service</code>, or <code class="code-pill">Local Service</code>)—never disable a service without checking what depends on it.</li>
             </ul>
           </article>
 
           <article class="wb-card-sm">
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
-              <h3 style="margin:0;font-size:17px;font-weight:800;">4. Event Viewer</h3>
+              <h3 style="margin:0;font-size:17px;font-weight:800;">4. Event Viewer (<code style="font-size:15px;">eventvwr.msc</code>)</h3>
               <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="badge-tag" style="background:#F7F7F5;">Win + X &rarr; V</span>
+                <span class="badge-tag" style="background:#22262E;">Win + X &rarr; V</span>
                 <button type="button" onclick="copyText('eventvwr.msc')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: eventvwr.msc</button>
               </div>
             </div>
-            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Windows' black-box flight recorder. Open <strong>Windows Logs &rarr; System</strong> and <strong>Application</strong>, then click <strong>Filter Current Log &rarr; Critical &amp; Error</strong>.</p>
-            <div class="grid-2" style="font-size:13px;">
+            <p class="text-muted" style="margin:0 0 10px;font-size:13px;">Windows' structured audit &amp; crash log (<code class="code-pill">.evtx</code>). Expand <strong>Windows Logs &rarr; System</strong>, <strong>Application</strong>, or <strong>Security</strong>, then click <strong>Filter Current Log &rarr; Critical &amp; Error</strong> (or filter by specific Event ID).</p>
+            <div class="grid-3" style="font-size:13px;">
               <div class="wb-subbox">
                 <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">Event ID 41 • Kernel-Power</strong>
-                PC rebooted without a clean shutdown (power cut, dead battery, or held power button).
+                (System log) PC rebooted without a clean shutdown—power cut, dead battery, thermal shutoff, or held power button.
               </div>
               <div class="wb-subbox">
                 <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Event ID 1001 • BugCheck</strong>
-                Windows hit a Blue Screen of Death (BSOD) and saved a crash dump—include this ID when escalating to Tier-2.
+                (System log) Windows hit a <strong>BSOD</strong> stop error and wrote a memory dump—include the <code class="code-pill-white">0x0000...</code> stop code when escalating to Tier-2.
+              </div>
+              <div class="wb-subbox">
+                <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Event ID 4625 • Failed Logon</strong>
+                (Security log) Records bad password attempts and account lockout triggers—helps catch background apps or phones using an old cached password.
               </div>
             </div>
           </article>
 
           <article class="wb-card-sm">
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
-              <h3 style="margin:0;font-size:17px;font-weight:800;">5. Control Panel vs. Settings</h3>
+              <h3 style="margin:0;font-size:17px;font-weight:800;">5. Control Panel vs. Modern Settings</h3>
               <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="badge-tag" style="background:#F7F7F5;">Win + I vs. control</span>
+                <span class="badge-tag" style="background:#22262E;">Win + I vs. control</span>
                 <button type="button" onclick="copyText('ncpa.cpl')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: ncpa.cpl</button>
               </div>
             </div>
@@ -971,19 +1083,19 @@
               <div class="wb-subbox">
                 <strong class="font-mono" style="display:block;margin-bottom:6px;">MODERN SETTINGS (Win + I)</strong>
                 <ul style="margin:0;padding-left:18px;" class="space-y-2">
-                  <li>Windows Update &amp; Optional Updates</li>
-                  <li>Display scaling &amp; multi-monitor layout</li>
+                  <li>Windows Update &amp; Optional driver updates</li>
+                  <li>Display scaling &amp; multi-monitor layout (<code class="code-pill-white">Win + P</code>)</li>
                   <li>Bluetooth devices &amp; Default apps</li>
-                  <li>Work or school account (Entra ID)</li>
+                  <li><strong>Access work or school</strong> (Microsoft <strong>Entra ID</strong> join/sync)</li>
                 </ul>
               </div>
               <div class="wb-subbox">
                 <strong class="font-mono" style="display:block;margin-bottom:6px;">CLASSIC CONTROL PANEL (control)</strong>
                 <ul style="margin:0;padding-left:18px;" class="space-y-2">
-                  <li><code class="code-pill-white">ncpa.cpl</code> — Network Adapters &amp; static IPv4</li>
-                  <li><code class="code-pill-white">appwiz.cpl</code> — Repair/uninstall Office &amp; MSI apps</li>
-                  <li><strong>Credential Manager</strong> — Wipe bad cached passwords</li>
-                  <li><code class="code-pill-white">mmsys.cpl</code> — Classic Mic/Speaker defaults</li>
+                  <li><code class="code-pill-white">ncpa.cpl</code> — Network Adapters, disable/enable NIC &amp; static IPv4/DNS</li>
+                  <li><code class="code-pill-white">appwiz.cpl</code> — In-place <strong>Repair</strong>/uninstall for Office &amp; <code class="code-pill-white">.msi</code> apps</li>
+                  <li><strong>Credential Manager</strong> — Wipes stale cached SMB/RDP/M365 passwords that cause repeat AD account lockouts after a password reset</li>
+                  <li><code class="code-pill-white">mmsys.cpl</code> — Classic Mic/Speaker defaults &amp; exclusive mode</li>
                 </ul>
               </div>
             </div>
@@ -1003,21 +1115,85 @@
       </section>
 
       <!-- =================================================================== -->
-      <!-- LESSON 03: FILE & DRIVE BASICS                                      -->
+      <!-- LESSON 03: FILE & DRIVE BASICS (BEGINNER-EXPANDED)                  -->
       <!-- =================================================================== -->
       <section id="tab-lesson3" class="lesson-panel hidden">
         <div>
-          <div class="badge-ink" style="margin-bottom:8px;">LESSON 03 OF 09 • STORAGE &amp; ACCESS CONTROL</div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 03 OF 09 • STORAGE, PERMISSIONS &amp; NETWORK SHARES</div>
           <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
-            File &amp; Drive Basics: NTFS &amp; Network Shares
+            File &amp; Drive Basics: NTFS, UNC Paths &amp; Mapped Network Drives
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Shared department folders break every day because of two things: wrong NTFS permissions or stale network drive mappings. Here is how Windows actually evaluates folder access.
+            In almost every office, employees save files to shared department folders on a central server. When a user says <em>"My Z: drive is missing"</em> or <em>"I can't save my Excel file in the Finance folder,"</em> the root cause is almost always <strong>NTFS permissions</strong> or a <strong>Mapped Network Drive / UNC path</strong> issue. Let's break down every term from scratch.
           </p>
         </div>
 
+        <!-- Acronym Decoder for Lesson 03 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Abbreviation in Lesson 03 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">NTFS</strong> = <strong>N</strong>ew <strong>T</strong>echnology <strong>F</strong>ile <strong>S</strong>ystem<br>
+              <span class="text-muted">Windows' primary file system with built-in security locks.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">FAT32 / exFAT</strong> = <strong>F</strong>ile <strong>A</strong>llocation <strong>T</strong>able<br>
+              <span class="text-muted">Simple USB flash-drive file systems with NO user permissions.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">ACL</strong> = <strong>A</strong>ccess <strong>C</strong>ontrol <strong>L</strong>ist<br>
+              <span class="text-muted">The Security tab list of who is allowed or denied access.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">UNC</strong> = <strong>U</strong>niversal <strong>N</strong>aming <strong>C</strong>onvention<br>
+              <span class="text-muted">Standard network address format: <code class="code-pill">\\Server\Share</code>.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">SMB</strong> = <strong>S</strong>erver <strong>M</strong>essage <strong>B</strong>lock<br>
+              <span class="text-muted">The network protocol Windows uses to share folders &amp; printers.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">DNS / VPN / AD</strong><br>
+              <span class="text-muted"><strong>D</strong>omain <strong>N</strong>ame <strong>S</strong>ystem • <strong>V</strong>irtual <strong>P</strong>rivate <strong>N</strong>etwork • <strong>A</strong>ctive <strong>D</strong>irectory.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. What is NTFS? -->
+        <div class="wb-card space-y-3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:18px;font-weight:800;">1. First Principles: What Is NTFS?</h3>
+            <span class="badge-tag" style="background:#122922;">New Technology File System</span>
+          </div>
+          <p style="margin:0;font-size:14px;">
+            Think of a brand-new hard drive or SSD (<strong>S</strong>olid-<strong>S</strong>tate <strong>D</strong>rive) as an empty warehouse. Before Windows can store a single file inside it, the drive needs a shelf-and-catalog rulebook called a <strong>File System</strong>.
+          </p>
+          <p style="margin:0;font-size:14px;">
+            <strong>NTFS (New Technology File System)</strong> is the modern file system Windows uses on your <code class="code-pill">C:</code> drive and on company file servers. Why doesn't Windows just use USB-stick formats like <strong>FAT32</strong> or <strong>exFAT</strong>?
+          </p>
+
+          <div class="grid-2" style="font-size:13px;">
+            <div class="wb-subbox">
+              <strong class="font-mono text-muted" style="display:block;margin-bottom:4px;">USB / SD Card Formats (FAT32 / exFAT)</strong>
+              Built for simple portability across cameras, TVs, and Macs. They have <strong>zero user permissions</strong>—anyone who plugs in the drive can open, change, or delete every file on it.
+            </div>
+            <div class="wb-emerald-box">
+              <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Windows Standard (NTFS)</strong>
+              Supports massive files, crash recovery journaling, encryption, and <strong>folder-level security permissions (ACLs)</strong>—so IT can lock the <em>Payroll</em> folder from everyone except HR.
+            </div>
+          </div>
+
+          <div class="wb-subbox" style="font-size:13px;">
+            <strong>Where you see NTFS in real life:</strong> Right-click any folder on your PC &rarr; click <strong>Properties</strong> &rarr; open the <strong>Security</strong> tab. Every user and group listed there (with <em>Allow</em> or <em>Deny</em> checkmarks) is an <strong>NTFS permission</strong>. Subfolders automatically copy permissions from their parent folder—a feature called <strong>Inheritance</strong>.
+          </div>
+        </div>
+
+        <!-- 2. NTFS Permission Levels -->
         <div class="wb-card">
-          <h3 style="margin:0 0 12px;font-size:18px;font-weight:800;">NTFS Permission Levels (From Strictest to Highest)</h3>
+          <h3 style="margin:0 0 12px;font-size:18px;font-weight:800;">2. NTFS Permission Levels (From Strictest to Highest)</h3>
           <div class="table-wrap">
             <table class="wb-table">
               <thead>
@@ -1031,11 +1207,11 @@
                 <tr>
                   <td class="font-mono"><strong>Read</strong></td>
                   <td>View folder names, open files, and copy files out. Cannot save edits or delete.</td>
-                  <td>Company policy PDFs, HR handbooks.</td>
+                  <td>Company policy PDFs, HR (<strong>H</strong>uman <strong>R</strong>esources) handbooks.</td>
                 </tr>
                 <tr>
                   <td class="font-mono"><strong>Read &amp; Execute</strong></td>
-                  <td>Everything in Read, plus permission to launch <code class="code-pill">.exe</code> programs or scripts.</td>
+                  <td>Everything in Read, plus permission to run <code class="code-pill">.exe</code> (<strong>Exe</strong>cutable) programs or scripts.</td>
                   <td>Shared software installers folder.</td>
                 </tr>
                 <tr>
@@ -1043,12 +1219,12 @@
                   <td>Create new files/folders and overwrite content, but <strong>cannot delete</strong> existing files.</td>
                   <td>Drop-box folders where staff submit reports.</td>
                 </tr>
-                <tr style="background:#ECFDF5;">
+                <tr style="background:#122922;">
                   <td class="font-mono text-emerald"><strong>Modify</strong></td>
                   <td>Read &amp; Execute + Write + <strong>Delete</strong> files and subfolders.</td>
                   <td><strong>Standard permission for department shared drives.</strong></td>
                 </tr>
-                <tr style="background:#FFFBEB;">
+                <tr style="background:#292112;">
                   <td class="font-mono text-amber"><strong>Full Control</strong></td>
                   <td>Everything in Modify + <strong>change permissions</strong> &amp; take file ownership.</td>
                   <td>IT Admins only. Never grant to regular staff.</td>
@@ -1061,42 +1237,116 @@
             <div class="wb-subbox">
               <div class="font-mono text-crimson" style="font-size:11px;font-weight:700;">GOLDEN RULE #1</div>
               <h4 style="margin:4px 0 6px;font-size:15px;font-weight:800;">Explicit Deny Always Overrides Allow</h4>
-              <p style="margin:0;">If a user is in <code class="code-pill-white">Sales_Staff (Allow: Modify)</code> AND also in <code class="code-pill-white">Contractors (Deny: Write)</code>, Windows blocks them from writing. Always check every group the user belongs to.</p>
+              <p style="margin:0;">If a user is in <code class="code-pill-white">Sales_Staff (Allow: Modify)</code> AND also in <code class="code-pill-white">Contractors (Deny: Write)</code>, Windows blocks them from writing. Always check <em>every</em> AD (<strong>A</strong>ctive <strong>D</strong>irectory) group the user belongs to.</p>
             </div>
             <div class="wb-subbox">
               <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">GOLDEN RULE #2</div>
               <h4 style="margin:4px 0 6px;font-size:15px;font-weight:800;">Network Access = Most Restrictive Wins</h4>
-              <p style="margin:0;">Over the network, Windows checks both <strong>Share Permissions</strong> and <strong>NTFS Permissions</strong> and enforces whichever is stricter. Example: Share = Full Control + NTFS = Read &rarr; User gets <strong>Read</strong>.</p>
+              <p style="margin:0;">Over the network, Windows checks two separate locks: <strong>Share Permissions</strong> (the front door) and <strong>NTFS Permissions</strong> (the inner vault), and enforces whichever is stricter. Example: Share = Full Control + NTFS = Read &rarr; User gets <strong>Read</strong>.</p>
             </div>
           </div>
         </div>
 
-        <div class="wb-card-sm space-y-3">
-          <h3 style="margin:0;font-size:18px;font-weight:800;">Mapped Network Drives (<code style="font-size:16px;">\\ServerName\ShareName</code>)</h3>
-          <p style="margin:0;font-size:14px;">
-            A <strong>UNC Path</strong> points directly to a shared folder on another computer or file server using <code class="code-pill">\\ServerName\ShareName</code> (e.g., <code class="code-pill">\\FS01\Finance</code>). Mapping assigns that path a persistent drive letter like <code class="font-mono"><strong>Z:</strong></code>.
-          </p>
-
-          <div class="wb-terminal space-y-2">
-            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
-              <span style="color:#34D399;"># Map Z: permanently via Command Prompt:</span>
-              <button type="button" onclick="copyText('net use Z: \\\\FS01\\Finance /persistent:yes')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">
-                Copy Command
-              </button>
-            </div>
-            <div>net use Z: \\FS01\Finance /persistent:yes</div>
-            <div style="color:#A3A3A3;padding-top:4px;"># Clear broken cached drive sessions:</div>
-            <div>net use * /delete</div>
+        <!-- 3. Network Shares, UNC Paths & Mapped Network Drives (Step-by-Step) -->
+        <div class="wb-card space-y-4">
+          <div>
+            <div class="badge-tag" style="background:#292112;border-color:#6B4C16;color:#FBBF24;margin-bottom:6px;">STEP-BY-STEP BEGINNER BREAKDOWN</div>
+            <h3 style="margin:0;font-size:19px;font-weight:800;">3. Network Shares, UNC Paths &amp; Mapped Network Drives</h3>
           </div>
 
+          <!-- Step A: What is a Network Share? -->
+          <div class="wb-subbox space-y-2" style="font-size:14px;">
+            <strong class="font-mono text-emerald" style="display:block;font-size:13px;">STEP A • WHAT IS A "NETWORK SHARE"?</strong>
+            <p style="margin:0;">
+              Imagine 50 employees in an office all need access to the same <em>Finance</em> budget spreadsheets. Instead of emailing files back and forth, IT stores those files on a central computer called a <strong>File Server</strong> (commonly named <code class="code-pill-white">FS01</code> = <strong>F</strong>ile <strong>S</strong>erver <strong>01</strong>) and turns on sharing for the <code class="code-pill-white">Finance</code> folder over the office network using the <strong>SMB (Server Message Block)</strong> protocol. That shared folder is called a <strong>Network Share</strong>.
+            </p>
+          </div>
+
+          <!-- Step B: What is a UNC Path? -->
+          <div class="wb-subbox space-y-2" style="font-size:14px;">
+            <strong class="font-mono text-amber" style="display:block;font-size:13px;">STEP B • WHAT IS A "UNC PATH" (\\ServerName\ShareName)?</strong>
+            <p style="margin:0;">
+              <strong>UNC</strong> stands for <strong>U</strong>niversal <strong>N</strong>aming <strong>C</strong>onvention. It is simply the <strong>full network street address</strong> of a shared folder on another computer—written without any drive letter. Here is what every single symbol in <code class="code-pill-white">\\FS01\Finance</code> means:
+            </p>
+            <div class="grid-3" style="font-size:13px;margin-top:8px;">
+              <div class="wb-card-sm" style="box-shadow:none;padding:12px;">
+                <code class="font-mono text-crimson" style="font-size:16px;font-weight:800;">\\</code><br>
+                <strong>Two Leading Backslashes</strong><br>
+                Tells Windows: <em>"Don't look on my local C: drive—go out onto the network!"</em>
+              </div>
+              <div class="wb-card-sm" style="box-shadow:none;padding:12px;">
+                <code class="font-mono text-emerald" style="font-size:16px;font-weight:800;">FS01</code><br>
+                <strong>ServerName (Host)</strong><br>
+                The network name of the computer or server holding the folder (e.g., <code class="code-pill">FS01</code>).
+              </div>
+              <div class="wb-card-sm" style="box-shadow:none;padding:12px;">
+                <code class="font-mono text-amber" style="font-size:16px;font-weight:800;">\Finance</code><br>
+                <strong>\ShareName</strong><br>
+                A single backslash followed by the exact shared folder name on that server.
+              </div>
+            </div>
+            <p style="margin:6px 0 0;font-size:13px;" class="text-muted">
+              <strong>Try this mental picture:</strong> Just like a website URL (<code class="code-pill-white">https://google.com/maps</code>) points to a page on a web server, a UNC path (<code class="code-pill-white">\\FS01\Finance</code>) points to a folder on a Windows file server. You can paste <code class="code-pill-white">\\FS01\Finance</code> directly into the File Explorer address bar and press Enter!
+            </p>
+          </div>
+
+          <!-- Step C: What is Drive Mapping? -->
+          <div class="wb-subbox space-y-2" style="font-size:14px;">
+            <strong class="font-mono text-emerald" style="display:block;font-size:13px;">STEP C • WHAT IS "MAPPING A NETWORK DRIVE" (ASSIGNING Z:)?</strong>
+            <p style="margin:0;">
+              Regular office users don't want to type <code class="code-pill-white">\\FS01\Finance</code> every morning—and many older Windows programs (like legacy accounting software) <em>only</em> know how to browse drive letters like <code class="code-pill-white">C:\</code> or <code class="code-pill-white">Z:\</code>.
+            </p>
+            <p style="margin:0;">
+              <strong>Mapping a Network Drive</strong> creates a permanent shortcut that attaches a drive letter (such as <code class="code-pill-white">Z:</code>) to a UNC path (<code class="code-pill-white">\\FS01\Finance</code>). Once mapped, <code class="code-pill-white">Finance (\\FS01) (Z:)</code> appears inside File Explorer under <strong>This PC</strong> right next to <code class="code-pill-white">Local Disk (C:)</code>. When the user saves a file to <code class="code-pill-white">Z:\Budget.xlsx</code>, Windows silently saves it over the network onto <code class="code-pill-white">\\FS01\Finance\Budget.xlsx</code>.
+            </p>
+          </div>
+
+          <!-- Step D: Command Prompt Breakdown -->
+          <div class="space-y-2">
+            <strong class="font-mono" style="font-size:13px;display:block;">STEP D • COMMAND PROMPT (<code class="code-pill">cmd</code>) COMMANDS DECODED WORD-FOR-WORD:</strong>
+            <div class="wb-terminal space-y-3">
+              <div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
+                  <span style="color:#34D399;font-weight:700;"># 1. Map Z: permanently via Command Prompt:</span>
+                  <button type="button" onclick="copyText('net use Z: \\\\FS01\\Finance /persistent:yes')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">
+                    Copy Command
+                  </button>
+                </div>
+                <div style="font-size:14px;font-weight:700;">net use Z: \\FS01\Finance /persistent:yes</div>
+                <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;line-height:1.6;">
+                  &bull; <code style="color:#34D399;">net use</code> = Windows' built-in command for connecting, viewing, and disconnecting network drives.<br>
+                  &bull; <code style="color:#34D399;">Z:</code> = The drive letter you are assigning on this PC (you can pick any free letter like <code style="font-family:monospace;">S:</code> or <code style="font-family:monospace;">Z:</code>).<br>
+                  &bull; <code style="color:#34D399;">\\FS01\Finance</code> = The UNC path (<code style="font-family:monospace;">\\ServerName\ShareName</code>) you want <code style="font-family:monospace;">Z:</code> to point to.<br>
+                  &bull; <code style="color:#34D399;">/persistent:yes</code> = Tells Windows: <em>"Remember this drive letter and automatically reconnect it every time the user logs in or restarts."</em>
+                </div>
+              </div>
+
+              <div style="border-top:1px dashed #525252;padding-top:10px;">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
+                  <span style="color:#FBBF24;font-weight:700;"># 2. Clear all broken or stuck cached drive sessions:</span>
+                  <button type="button" onclick="copyText('net use * /delete')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">
+                    Copy: net use * /delete
+                  </button>
+                </div>
+                <div style="font-size:14px;font-weight:700;">net use * /delete</div>
+                <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;line-height:1.6;">
+                  &bull; <code style="color:#FBBF24;">*</code> (Wildcard asterisk) = Means <strong>ALL</strong> currently connected network drives at once.<br>
+                  &bull; <code style="color:#FBBF24;">/delete</code> = Disconnects and wipes stuck/expired drive sessions from Windows' memory so you can remap them cleanly (especially useful right after a user changes their domain password).<br>
+                  &bull; <em>Tip:</em> Typing <code style="color:#34D399;">net use</code> by itself (with nothing after it) simply lists all currently mapped drives and whether their status is <code style="font-family:monospace;">OK</code> or <code style="font-family:monospace;">Disconnected</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two Common Network Drive Errors -->
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-red-box">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">ERROR A: "The network path was not found"</strong>
-              <strong>Meaning:</strong> Windows couldn't reach the server at all. Check Wi-Fi/VPN connection, run <code class="code-pill-white">ping FS01</code>, check DNS, or verify the UNC path spelling.
+              <strong>Meaning:</strong> Windows couldn't reach the server on the network at all. Check Wi-Fi or <strong>VPN</strong> (<strong>V</strong>irtual <strong>P</strong>rivate <strong>N</strong>etwork) connection, run <code class="code-pill-white">ping FS01</code> to test connectivity, check <strong>DNS</strong> (<strong>D</strong>omain <strong>N</strong>ame <strong>S</strong>ystem), or verify the UNC path spelling.
             </div>
             <div class="wb-amber-box" style="box-shadow:none;">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">ERROR B: "Access is denied"</strong>
-              <strong>Meaning:</strong> Network connection works—security blocked the user. Check AD group membership, NTFS/Share permissions, or wipe old cached passwords in <strong>Credential Manager</strong>.
+              <strong>Meaning:</strong> The network connection works—security blocked the user. Check <strong>AD</strong> (<strong>A</strong>ctive <strong>D</strong>irectory) group membership, NTFS/Share permissions, or wipe old cached passwords in <strong>Credential Manager</strong>.
             </div>
           </div>
         </div>
@@ -1123,33 +1373,90 @@
             Windows Install &amp; BIOS Boot
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Fresh laptops arrive from vendors with bloatware or broken images, and crashed machines need clean installs. Know how to build bootable USB media, trigger one-time boot menus across brands, resolve missing NVMe drives, and build a local admin account offline.
+            Fresh laptops arrive from vendors with bloatware or broken images, and crashed machines need clean installs. Here is what every boot acronym stands for, how a PC wakes up before Windows loads, and how to install Windows cleanly from USB.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 04 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Abbreviation in Lesson 04 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">BIOS</strong> = <strong>B</strong>asic <strong>I</strong>nput/<strong>O</strong>utput <strong>S</strong>ystem<br>
+              <span class="text-muted">Built-in motherboard chip software that wakes up hardware first.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">UEFI</strong> = <strong>U</strong>nified <strong>E</strong>xtensible <strong>F</strong>irmware <strong>I</strong>nterface<br>
+              <span class="text-muted">Modern replacement for old BIOS with Secure Boot &amp; fast startup.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">CSM</strong> = <strong>C</strong>ompatibility <strong>S</strong>upport <strong>M</strong>odule<br>
+              <span class="text-muted">UEFI setting that imitates old Legacy BIOS for older OSes.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">GPT</strong> = <strong>G</strong>UID <strong>P</strong>artition <strong>T</strong>able<br>
+              <span class="text-muted">(<strong>G</strong>lobally <strong>U</strong>nique <strong>I</strong>dentifier) Modern drive layout for UEFI &amp; &gt;2 TB drives.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">MBR</strong> = <strong>M</strong>aster <strong>B</strong>oot <strong>R</strong>ecord<br>
+              <span class="text-muted">Legacy 1980s drive layout for old BIOS (max 2 TB).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">TPM</strong> = <strong>T</strong>rusted <strong>P</strong>latform <strong>M</strong>odule<br>
+              <span class="text-muted">Motherboard security chip required for Windows 11 &amp; BitLocker.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">NVMe / VMD / RST</strong><br>
+              <span class="text-muted"><strong>N</strong>on-<strong>V</strong>olatile <strong>M</strong>emory <strong>E</strong>xpress • <strong>V</strong>olume <strong>M</strong>anagement <strong>D</strong>evice • <strong>R</strong>apid <strong>S</strong>torage <strong>T</strong>ech.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">AHCI / OEM / MSR</strong><br>
+              <span class="text-muted"><strong>A</strong>dvanced <strong>H</strong>ost <strong>C</strong>ontroller <strong>I</strong>nterface • <strong>O</strong>riginal <strong>E</strong>quipment <strong>M</strong>fr • <strong>M</strong>icrosoft <strong>S</strong>ystem <strong>R</strong>eserved.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">ISO / USB / OOBE</strong><br>
+              <span class="text-muted">Disc Image File • <strong>U</strong>niversal <strong>S</strong>erial <strong>B</strong>us • <strong>O</strong>ut-<strong>O</strong>f-<strong>B</strong>ox <strong>E</strong>xperience.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beginner Mental Model: How Booting Works -->
+        <div class="wb-subbox space-y-2" style="font-size:14px;">
+          <strong class="font-mono text-emerald" style="display:block;font-size:13px;">BEGINNER MENTAL MODEL • WHAT HAPPENS WHEN YOU PRESS THE POWER BUTTON?</strong>
+          <p style="margin:0;">
+            Before Windows starts, the motherboard's built-in <strong>Firmware (BIOS / UEFI)</strong> wakes up, checks that the CPU, RAM, and drives work (called <strong>POST</strong> = <strong>P</strong>ower-<strong>O</strong>n <strong>S</strong>elf-<strong>T</strong>est), and looks for an operating system to boot. Normally it boots from your internal SSD, unless you interrupt it at power-on with a <strong>One-Time Boot Menu key</strong> to boot from a Windows installer <strong>USB (Universal Serial Bus)</strong> stick.
           </p>
         </div>
 
         <div class="wb-card space-y-3">
           <h3 style="margin:0;font-size:18px;font-weight:800;">1. Bootable USB Creation: Media Creation Tool vs. Rufus</h3>
+          <p class="text-muted" style="margin:0;font-size:13px;">
+            An <strong>ISO</strong> (named after the <strong>I</strong>nternational Organization for <strong>S</strong>tandardization disc format) is a single file containing a complete copy of the Windows installation DVD. You flash that <code class="code-pill">.iso</code> onto an 8 GB+ USB stick using one of two tools:
+          </p>
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-subbox">
               <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">OFFICIAL • AUTOMATED</div>
               <h4 style="margin:4px 0 6px;font-size:15px;font-weight:800;">Windows Media Creation Tool</h4>
-              <p style="margin:0;">Microsoft's official utility downloads the current Windows 10/11 image and formats an 8GB+ USB drive automatically. Simple, though slower when preparing multiple USB sticks.</p>
+              <p style="margin:0;">Microsoft's official utility downloads the current Windows 10/11 image and formats an 8 GB+ USB drive automatically. Simple, though slower when preparing multiple USB sticks.</p>
             </div>
             <div class="wb-subbox">
               <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">DESK STANDARD • FAST</div>
               <h4 style="margin:4px 0 6px;font-size:15px;font-weight:800;">Rufus + Official Microsoft ISO</h4>
-              <p style="margin:0;">Preferred at IT desks because you flash a local ISO in 3 minutes and explicitly select the <strong>Partition Scheme</strong> and <strong>Target System</strong> to match the PC's firmware.</p>
+              <p style="margin:0;">Preferred at IT desks because you flash a local <code class="code-pill-white">.iso</code> in 3 minutes and explicitly pick the <strong>Partition Scheme</strong> (the drive's "table of contents" format) to match the PC's firmware.</p>
             </div>
           </div>
 
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-emerald-box">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">GPT + UEFI (non-CSM) &rarr; Modern PCs</strong>
-              Required for Windows 11, Secure Boot, TPM 2.0, and drives over 2 TB. Use this on virtually all modern business laptops/desktops.
+              <strong>GPT (GUID Partition Table)</strong> pairs with <strong>UEFI</strong> firmware. Required for Windows 11, Secure Boot, <strong>TPM 2.0 (Trusted Platform Module)</strong>, and drives larger than 2 TB. Use this on virtually all modern business laptops.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-muted" style="display:block;margin-bottom:4px;">MBR + Legacy BIOS &rarr; 10+ Yr Old Hardware</strong>
-              Only for legacy machines that lack UEFI firmware. A GPT USB will not boot on a Legacy-only BIOS.
+              <strong>MBR (Master Boot Record)</strong> pairs with old <strong>Legacy BIOS</strong> firmware (maximum 2 TB drive size). A GPT USB will not boot on a Legacy-only BIOS—firmware and partition scheme must match!
             </div>
           </div>
         </div>
@@ -1157,8 +1464,11 @@
         <div class="wb-card-sm space-y-3">
           <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
             <h3 style="margin:0;font-size:18px;font-weight:800;">2. Brand BIOS &amp; One-Time Boot Menu Keys</h3>
-            <span class="badge-tag" style="background:#F7F7F5;">Tap Immediately on Power-On</span>
+            <span class="badge-tag" style="background:#22262E;">Tap Immediately on Power-On</span>
           </div>
+          <p class="text-muted" style="margin:0;font-size:13px;">
+            <strong>BIOS Setup Key</strong> opens the full firmware settings screen (to check boot order, TPM, or storage mode). <strong>One-Time Boot Menu Key</strong> opens a quick popup letting you pick your USB drive once without changing permanent settings.
+          </p>
           <div class="table-wrap">
             <table class="wb-table">
               <thead>
@@ -1196,38 +1506,38 @@
 
         <div class="wb-amber-box space-y-3">
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
-            <span class="badge-ink" style="background:#D97706;">SETUP TRAPS &amp; OOBE</span>
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">SETUP TRAPS &amp; OOBE</span>
             <h3 style="margin:0;font-size:17px;font-weight:800;">Missing NVMe Drives, Drive 0 Cleanup &amp; Offline Local Admin</h3>
           </div>
 
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-card-sm" style="box-shadow:none;padding:14px;">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">Trap 1: Missing NVMe Drive (Intel VMD / RST)</strong>
-              11th–14th Gen Intel laptops ship with <strong>Intel VMD/RST</strong> enabled in BIOS. Standard Windows ISOs lack this storage controller driver, showing zero drives during setup. Fix: click <strong>Load driver</strong> and load the OEM Intel RST/VMD F6 driver from USB (or toggle VMD/storage mode to AHCI in BIOS before a fresh install).
+              11th–14th Gen Intel laptops ship with <strong>Intel VMD (Volume Management Device) / RST (Rapid Storage Technology)</strong> enabled in BIOS. Standard Windows ISOs lack this storage driver, so Setup says <em>"We couldn't find any drives."</em> Fix: click <strong>Load driver</strong> and load the <strong>OEM (Original Equipment Manufacturer)</strong> Intel RST/VMD driver from USB (or switch storage mode to <strong>AHCI — Advanced Host Controller Interface</strong> in BIOS before a fresh install).
             </div>
             <div class="wb-card-sm" style="box-shadow:none;padding:14px;">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Trap 2: Drive 0 Clean Partitioning</strong>
-              Choose <em>Custom: Install Windows only</em>. Delete existing partitions on <strong>Drive 0</strong> (System, MSR, Primary, Recovery) until it shows <code class="code-pill">Drive 0 Unallocated Space</code>, select it, and click <strong>Next</strong>. Never delete partitions on a secondary data drive (<code class="code-pill">Drive 1</code>).
+              Choose <em>Custom: Install Windows only</em>. Delete existing partitions on <strong>Drive 0</strong> (System, <strong>MSR — Microsoft System Reserved</strong>, Primary, Recovery) until it shows <code class="code-pill">Drive 0 Unallocated Space</code>, select it, and click <strong>Next</strong>. Never delete partitions on a secondary data drive (<code class="code-pill">Drive 1</code>).
             </div>
           </div>
 
           <div class="wb-terminal space-y-2">
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
-              <span style="color:#34D399;"># Bypass online Microsoft Account in Windows 11 OOBE (press Shift + F10):</span>
+              <span style="color:#34D399;"># Bypass online Microsoft Account in Windows 11 OOBE (Out-Of-Box Experience) — press Shift + F10:</span>
               <button type="button" onclick="copyText('oobe\\bypassnro')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">
                 Copy: oobe\bypassnro
               </button>
             </div>
             <div>oobe\bypassnro</div>
             <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
-              PC restarts &rarr; click <em>I don't have internet</em> &rarr; create a local IT admin account first, rename the PC (<code style="font-family:monospace;">sysdm.cpl</code>), then join the Domain / Entra ID.
+              <strong>What <code style="font-family:monospace;">bypassnro</code> stands for:</strong> <em>Bypass Network Requirement Option</em>. Windows 11 normally blocks setup until you connect to Wi-Fi and sign into a personal Microsoft Account. Running <code style="font-family:monospace;">oobe\bypassnro</code> restarts the PC &rarr; click <em>I don't have internet</em> &rarr; create a local IT admin account first, rename the PC (<code style="font-family:monospace;">sysdm.cpl</code> = System Properties), then join the Domain / <strong>Entra ID</strong> (Microsoft's cloud identity directory, formerly Azure AD).
             </div>
             <div style="border-top:1px dashed #525252;margin-top:10px;padding-top:10px;">
               <div style="color:#FBBF24;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;margin-bottom:6px;">
                 &#9888; Version Note: bypassnro may not work on newer Windows 11 builds
               </div>
               <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-bottom:8px;">
-                Microsoft has been removing <code style="font-family:monospace;">oobe\bypassnro</code> in newer Windows 11 builds. If the command does nothing or the <em>I don't have internet</em> button never appears, press <strong>Shift + F10</strong> and run the alternative below. It opens the local account creation screen directly, so there is no restart step. Then continue the same way: create the local IT admin account, rename the PC, and join the Domain / Entra ID.
+                Microsoft has removed <code style="font-family:monospace;">oobe\bypassnro</code> in newer Windows 11 builds. If the command does nothing, press <strong>Shift + F10</strong> and run <code style="font-family:monospace;">start ms-cxh:localonly</code> (<strong>M</strong>icro<strong>s</strong>oft <strong>C</strong>loud e<strong>X</strong>perience <strong>H</strong>ost in <strong>local-only</strong> mode). It opens the local account creation screen directly without needing a restart.
               </div>
               <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
                 <div>start ms-cxh:localonly</div>
@@ -1261,48 +1571,85 @@
             New PC Prep, User Profiles &amp; BitLocker
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Onboarding new hires, rescuing corrupted user profiles without losing data, enforcing least-privilege accounts, and unlocking BitLocker screens are daily Tier-1 desk tasks.
+            Preparing laptops for new hires, rescuing corrupted user profiles without losing employee files, enforcing safe account permissions, and unlocking BitLocker encryption screens are everyday Tier-1 desk tasks.
           </p>
         </div>
 
+        <!-- Acronym Decoder for Lesson 05 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Abbreviation in Lesson 05 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">M365 / KFM</strong><br>
+              <span class="text-muted"><strong>M</strong>icrosoft <strong>365</strong> • OneDrive <strong>K</strong>nown <strong>F</strong>older <strong>M</strong>ove (syncs Desktop/Documents).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">.ost / .dat</strong><br>
+              <span class="text-muted"><strong>O</strong>ffline <strong>S</strong>torage <strong>T</strong>able (Outlook cache) • <strong>Dat</strong>a file (<code class="code-pill">NTUSER.DAT</code>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">HKCU</strong> = <strong>H</strong>KEY_<strong>C</strong>URRENT_<strong>U</strong>SER<br>
+              <span class="text-muted">Registry section holding the currently signed-in user's preferences.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">TEMP / .bak / SID</strong><br>
+              <span class="text-muted"><strong>Temp</strong>orary folder • <strong>Bak</strong>up suffix • <strong>S</strong>ecurity <strong>ID</strong>entifier (<code class="code-pill">S-1-5-21-...</code>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">UAC / AV / SOP</strong><br>
+              <span class="text-muted"><strong>U</strong>ser <strong>A</strong>ccount <strong>C</strong>ontrol • <strong>A</strong>nti<strong>v</strong>irus • <strong>S</strong>tandard <strong>O</strong>perating <strong>P</strong>rocedure.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">BDE / MDM</strong><br>
+              <span class="text-muted"><strong>B</strong>itLocker <strong>D</strong>rive <strong>E</strong>ncryption • <strong>M</strong>obile <strong>D</strong>evice <strong>M</strong>anagement (Intune).</span>
+            </div>
+          </div>
+        </div>
+
         <div class="wb-card-sm space-y-3">
-          <h3 style="margin:0;font-size:18px;font-weight:800;">1. User Profile Anatomy (<code style="font-size:16px;">C:\Users\&lt;username&gt;</code>)</h3>
+          <h3 style="margin:0;font-size:18px;font-weight:800;">1. What Is a Windows User Profile? (<code style="font-size:16px;">C:\Users\&lt;username&gt;</code>)</h3>
+          <p style="margin:0;font-size:14px;">
+            When you log into Windows, Windows loads your personal workspace from <code class="code-pill">C:\Users\&lt;username&gt;</code>. If two employees share one PC, each person gets their own separate profile folder so their files, wallpaper, and Outlook emails never mix:
+          </p>
           <div class="grid-3" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Personal Folders</strong>
-              <code class="code-pill-white">Desktop</code>, <code class="code-pill-white">Documents</code>, <code class="code-pill-white">Downloads</code>, <code class="code-pill-white">Pictures</code>. In M365 environments, OneDrive Known Folder Move backs up Desktop &amp; Documents automatically.
+              <code class="code-pill-white">Desktop</code>, <code class="code-pill-white">Documents</code>, <code class="code-pill-white">Downloads</code>, <code class="code-pill-white">Pictures</code>. In <strong>M365 (Microsoft 365)</strong> companies, OneDrive <strong>KFM (Known Folder Move)</strong> automatically backs up Desktop &amp; Documents to the cloud.
             </div>
             <div class="wb-subbox">
-              <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Hidden AppData</strong>
-              <code class="code-pill-white">AppData\Local</code> (Outlook <code class="code-pill-white">.ost</code> cache, Teams cache, Chrome profiles) and <code class="code-pill-white">AppData\Roaming</code> (Outlook email signatures, app settings).
+              <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Hidden AppData Folder</strong>
+              <code class="code-pill-white">AppData\Local</code> stores machine-specific caches (Outlook <code class="code-pill-white">.ost</code> <strong>O</strong>ffline <strong>S</strong>torage <strong>T</strong>able, Teams cache, Chrome profiles). <code class="code-pill-white">AppData\Roaming</code> stores portable settings like Outlook email signatures.
             </div>
             <div class="wb-subbox">
-              <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">NTUSER.DAT</strong>
-              Hidden user Registry hive (<code class="code-pill-white">HKEY_CURRENT_USER</code>) storing mapped drives, Outlook profiles, and preferences. If locked or corrupted, Windows cannot load the profile.
+              <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">NTUSER.DAT (NT User Data)</strong>
+              A hidden configuration file inside your profile that loads into the Registry as <strong>HKCU (HKEY_CURRENT_USER)</strong>. It remembers your mapped drives, taskbar layout, and app settings. If locked or corrupted, Windows cannot load your profile.
             </div>
           </div>
         </div>
 
         <div class="wb-card space-y-3">
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
-            <span class="badge-ink" style="background:#DC2626;">DATA LOSS TRAP</span>
+            <span class="badge-ink" style="background:#B91C1C;color:#FFFFFF;border-color:#EF4444;">DATA LOSS TRAP</span>
             <h3 style="margin:0;font-size:18px;font-weight:800;">2. Corrupted / Temporary Profile Fix ("We can't sign into your account")</h3>
           </div>
           <p class="text-muted" style="margin:0;font-size:14px;">
-            When <code class="code-pill">NTUSER.DAT</code> fails to load, Windows signs the user into a blank temporary profile at <code class="code-pill">C:\Users\TEMP</code>:
+            If <code class="code-pill">NTUSER.DAT</code> is locked by an <strong>AV (Antivirus)</strong> scan or damaged during an update, Windows refuses to fail the login—instead, it creates a blank disposable desktop at <code class="code-pill">C:\Users\TEMP</code> (<strong>Temp</strong>orary):
           </p>
           <div class="grid-3" style="font-size:13px;">
             <div class="wb-red-box">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">1. NEVER SAVE IN TEMP</strong>
-              Warn the user immediately <strong>not to create or save files</strong> on that desktop—everything inside <code class="code-pill-white">C:\Users\TEMP</code> is wiped automatically on sign-out or reboot.
+              Warn the user immediately <strong>not to create or save files</strong> on that desktop—Windows automatically deletes <code class="code-pill-white">C:\Users\TEMP</code> the moment they sign out or restart!
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">2. REBOOT FIRST</strong>
-              Click <strong>Start &rarr; Restart</strong> once before touching Registry keys. Often an AV scan or update briefly locked <code class="code-pill-white">NTUSER.DAT</code>, and a clean restart restores the real profile.
+              Click <strong>Start &rarr; Restart</strong> once before editing Registry keys. Often a background scan briefly locked <code class="code-pill-white">NTUSER.DAT</code>, and a clean restart loads their real profile normally.
             </div>
             <div class="wb-emerald-box">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">3. BACK UP &amp; REGENERATE</strong>
-              Sign in as Local Admin, back up <code class="code-pill-white">C:\Users\&lt;user&gt;</code> data, remove the stale <code class="code-pill-white">.bak</code> profile entry in <code class="code-pill-white">ProfileList</code> (or rename the old folder), and have the user sign in to generate a clean profile.
+              If a reboot doesn't fix it: sign in as Local Admin, copy the user's real files from <code class="code-pill-white">C:\Users\&lt;user&gt;</code> to a safe backup folder, remove the stale <code class="code-pill-white">.bak</code> (<strong>Bak</strong>up) entry in Registry <code class="code-pill-white">ProfileList</code>, and have the user sign in to build a fresh profile.
             </div>
           </div>
         </div>
@@ -1310,7 +1657,7 @@
         <div class="wb-card-sm space-y-3">
           <h3 style="margin:0;font-size:18px;font-weight:800;">3. Account Privileges &amp; Day-1 New Laptop Prep Checklist</h3>
           <div class="wb-subbox" style="font-size:13px;">
-            <strong class="font-mono">Local Admin vs. Standard User (<code class="code-pill-white">lusrmgr.msc</code>):</strong> Employees must work daily as <strong>Standard Users</strong> so malicious email attachments cannot silently install software or modify system settings. IT techs elevate via UAC using a dedicated Local Admin account.
+            <strong class="font-mono">Local Admin vs. Standard User (<code class="code-pill-white">lusrmgr.msc</code> = Local Users and Groups Manager):</strong> Regular employees must work daily as <strong>Standard Users</strong> (the <em>Principle of Least Privilege</em>) so a malicious email attachment cannot silently install malware or change Windows settings. When a legitimate app needs installation, an IT tech enters Local Admin credentials into the dimmed <strong>UAC (User Account Control)</strong> prompt.
           </div>
 
           <div class="grid-5" style="font-size:12px;">
@@ -1320,7 +1667,7 @@
             </div>
             <div class="wb-subbox" style="padding:12px;">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">02. POWER &amp; LID</strong>
-              Configure sleep timers &amp; docked lid-close behavior.
+              Set sleep timers &amp; docked lid-close behavior.
             </div>
             <div class="wb-subbox" style="padding:12px;">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">03. DISPLAYS</strong>
@@ -1328,7 +1675,7 @@
             </div>
             <div class="wb-subbox" style="padding:12px;">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">04. CORE APPS</strong>
-              Install &amp; verify M365, Chrome, VPN, Teams, and AV.
+              Install &amp; test M365, Chrome, VPN, Teams, and AV.
             </div>
             <div class="wb-subbox" style="padding:12px;">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">05. IDENTITY</strong>
@@ -1340,15 +1687,15 @@
         <div class="wb-amber-box space-y-2">
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
             <span class="badge-ink">ENCRYPTION SOP • BITLOCKER</span>
-            <h3 style="margin:0;font-size:17px;font-weight:800;">BitLocker Recovery Key Trap</h3>
+            <h3 style="margin:0;font-size:17px;font-weight:800;">What Is BitLocker &amp; Why Does the 48-Digit Recovery Screen Appear?</h3>
           </div>
           <p style="margin:0;font-size:14px;">
-            A BIOS update, TPM reset, Secure Boot change, or docking station hardware change alters boot measurements and triggers the blue <strong>BitLocker Recovery</strong> screen asking for a <strong>48-digit recovery key</strong>.
+            <strong>BitLocker</strong> (managed via <code class="code-pill-white">manage-bde</code> = <strong>Manage B</strong>itLocker <strong>D</strong>rive <strong>E</strong>ncryption) scrambles the entire <code class="code-pill-white">C:</code> drive so if a laptop is stolen, nobody can remove the SSD and read company files on another PC. Normally, the motherboard's <strong>TPM (Trusted Platform Module)</strong> chip unlocks the drive silently at boot. However, a BIOS update, Secure Boot change, or docking station change makes BitLocker suspect tampering—triggering the blue <strong>BitLocker Recovery</strong> screen asking for a <strong>48-digit recovery key</strong>.
           </p>
           <div class="wb-card-sm" style="box-shadow:none;padding:12px;font-size:13px;">
             <strong>Where Tier-1 Retrieves the 48-Digit Key:</strong><br>
-            1. Ask the user for the first 8 characters of the <strong>Recovery Key ID</strong> displayed on screen.<br>
-            2. Look up that Key ID in <strong>Microsoft Entra ID / Intune</strong> (Devices &rarr; Recovery keys), <strong>Active Directory</strong> (Computer Properties &rarr; BitLocker Recovery tab), or the user's personal Microsoft account (<code class="code-pill">aka.ms/myrecoverykey</code>).
+            1. Ask the user for the first 8 characters of the <strong>Recovery Key ID</strong> shown on their blue screen.<br>
+            2. Match that Key ID in <strong>Microsoft Entra ID / Intune MDM (Mobile Device Management)</strong> (Devices &rarr; Recovery keys), <strong>Active Directory</strong> (Computer Properties &rarr; BitLocker Recovery tab), or the user's personal Microsoft account (<code class="code-pill">aka.ms/myrecoverykey</code>).
           </div>
         </div>
 
@@ -1374,17 +1721,59 @@
             OS Repair Commands &amp; Safe Mode
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Before wiping and reimaging a corrupted Windows installation, run Microsoft's built-in image and file repair commands in the exact right order—or boot into WinRE to roll back bad updates and crashing drivers.
+            Before wiping and reinstalling a glitchy Windows laptop, Windows gives you built-in self-healing commands and a safe emergency boot mode. Here is what every command acronym stands for and why running them in the right order matters.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 06 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Abbreviation in Lesson 06 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">DISM</strong><br>
+              <strong>D</strong>eployment <strong>I</strong>mage <strong>S</strong>ervicing and <strong>M</strong>anagement (repairs the Windows master backup store).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">SFC</strong><br>
+              <strong>S</strong>ystem <strong>F</strong>ile <strong>C</strong>hecker (scans &amp; replaces corrupted Windows OS files).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">WinSxS</strong><br>
+              <strong>Win</strong>dows <strong>S</strong>ide-by-<strong>S</strong>ide (<code class="code-pill">C:\Windows\WinSxS</code> component store holding clean spare OS files).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">CHKDSK</strong><br>
+              <strong>Ch</strong>ec<strong>k</strong> <strong>D</strong>i<strong>sk</strong> (checks the NTFS file system and drive sectors for errors).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">WinRE</strong><br>
+              <strong>Win</strong>dows <strong>R</strong>ecovery <strong>E</strong>nvironment (emergency repair menu before Windows boots).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">BCD</strong><br>
+              <strong>B</strong>oot <strong>C</strong>onfiguration <strong>D</strong>ata (the boot database telling the PC how to start Windows).
+            </div>
+          </div>
+        </div>
+
+        <!-- Beginner Analogy for DISM vs SFC -->
+        <div class="wb-subbox space-y-2" style="font-size:14px;">
+          <strong class="font-mono text-emerald" style="display:block;font-size:13px;">BEGINNER ANALOGY • THE HOSPITAL &amp; SUPPLY CLOSET (WHY ORDER MATTERS)</strong>
+          <p style="margin:0;">
+            Think of <strong>SFC (System File Checker)</strong> as a nurse inspecting Windows' core system files. Whenever SFC finds a damaged file, it walks into Windows' hidden spare-parts supply closet (<code class="code-pill-white">C:\Windows\WinSxS</code>) to grab a healthy replacement copy. <strong>The catch:</strong> if the supply closet (<code class="code-pill-white">WinSxS</code>) <em>itself</em> is corrupted, SFC fails! That is why you always run <strong>DISM</strong> first (to restock and repair the supply closet from Microsoft's servers) and run <strong>SFC</strong> second.
           </p>
         </div>
 
         <div class="wb-card space-y-3">
           <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
             <h3 style="margin:0;font-size:18px;font-weight:800;">1. Repair Command Order of Operations (Admin CMD)</h3>
-            <span class="badge-tag" style="background:#FEF3C7;">DISM First, SFC Second</span>
+            <span class="badge-tag" style="background:#292112;border-color:#6B4C16;color:#FBBF24;">DISM First, SFC Second</span>
           </div>
-          <p class="text-muted" style="margin:0;font-size:14px;">
-            <code class="code-pill">sfc /scannow</code> repairs corrupted Windows files by copying healthy replacements from the local Component Store (<code class="code-pill">C:\Windows\WinSxS</code>). If <code class="code-pill">WinSxS</code> is damaged, <code class="code-pill">sfc</code> fails until <strong>DISM</strong> repairs the component store image first.
+          <p class="text-muted" style="margin:0;font-size:13px;">
+            Open <strong>Command Prompt as Administrator</strong> (right-click Start &rarr; Terminal (Admin) or search <code class="code-pill">cmd</code> &rarr; <em>Run as administrator</em>):
           </p>
 
           <div class="space-y-3">
@@ -1393,7 +1782,11 @@
                 <span style="color:#34D399;font-weight:700;">1. Repair Windows Component Store Image First:</span>
                 <button type="button" onclick="copyText('DISM /Online /Cleanup-Image /RestoreHealth')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy DISM</button>
               </div>
-              <div>DISM /Online /Cleanup-Image /RestoreHealth</div>
+              <div style="font-size:14px;font-weight:700;">DISM /Online /Cleanup-Image /RestoreHealth</div>
+              <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;">
+                &bull; <code style="color:#34D399;">/Online</code> = Fix the currently running Windows OS.<br>
+                &bull; <code style="color:#34D399;">/Cleanup-Image /RestoreHealth</code> = Scan <code style="font-family:monospace;">C:\Windows\WinSxS</code> for corruption and download healthy replacement files via Windows Update.
+              </div>
             </div>
 
             <div class="wb-terminal">
@@ -1401,7 +1794,10 @@
                 <span style="color:#34D399;font-weight:700;">2. Scan &amp; Replace Corrupted OS Files Second (then Reboot):</span>
                 <button type="button" onclick="copyText('sfc /scannow')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy SFC</button>
               </div>
-              <div>sfc /scannow</div>
+              <div style="font-size:14px;font-weight:700;">sfc /scannow</div>
+              <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;">
+                &bull; <code style="color:#34D399;">/scannow</code> = Scan every protected Windows system file right now and overwrite broken files using the healthy <code style="font-family:monospace;">WinSxS</code> cache.
+              </div>
             </div>
 
             <div class="wb-terminal">
@@ -1409,7 +1805,10 @@
                 <span style="color:#FBBF24;font-weight:700;">3. Check NTFS File System &amp; Disk Integrity Online (No Reboot):</span>
                 <button type="button" onclick="copyText('chkdsk C: /scan')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy CHKDSK</button>
               </div>
-              <div>chkdsk C: /scan</div>
+              <div style="font-size:14px;font-weight:700;">chkdsk C: /scan</div>
+              <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;">
+                &bull; <code style="color:#FBBF24;">C:</code> = The drive letter to inspect. &bull; <code style="color:#FBBF24;">/scan</code> = Run an online NTFS file-system scan while Windows stays up, without forcing an immediate reboot.
+              </div>
             </div>
           </div>
         </div>
@@ -1417,24 +1816,24 @@
         <div class="wb-card-sm space-y-3">
           <h3 style="margin:0;font-size:18px;font-weight:800;">2. Windows Recovery Environment (WinRE) &amp; Safe Mode</h3>
           <p style="margin:0;font-size:14px;">
-            Hold the <strong>Shift</strong> key while clicking <strong>Start &rarr; Power &rarr; Restart</strong> &rarr; click <strong>Troubleshoot &rarr; Advanced options</strong>:
+            If Windows won't load properly or a bad driver/update crashes the desktop immediately after sign-in, hold the <strong>Shift</strong> key while clicking <strong>Start &rarr; Power &rarr; Restart</strong> to enter <strong>WinRE (Windows Recovery Environment)</strong> &rarr; click <strong>Troubleshoot &rarr; Advanced options</strong>:
           </p>
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Startup Repair</strong>
-              Fixes missing or damaged boot configuration files (BCD) when Windows fails to boot past the logo.
+              Automatically fixes missing or damaged <strong>BCD (Boot Configuration Data)</strong> files when Windows fails to boot past the spinning logo.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Uninstall Updates</strong>
-              Removes the latest Quality or Feature update when a laptop starts crashing right after Patch Tuesday.
+              Removes the latest Quality or Feature update when a laptop starts crashing right after monthly Windows patches.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">System Restore</strong>
-              Rewinds Windows drivers, Registry, and system files to a prior Restore Point without deleting personal documents.
+              Rewinds Windows drivers, Registry, and system files back to an earlier healthy Restore Point—<strong>without deleting</strong> the user's personal Documents or Desktop files.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">Startup Settings &rarr; F4 / F5 (Safe Mode)</strong>
-              Boots with minimal Microsoft drivers (<code class="code-pill-white">F4</code> Safe Mode; <code class="code-pill-white">F5</code> Safe Mode with Networking) to remove bad drivers or startup crashes.
+              Boots Windows in a minimal diagnostic state with only essential Microsoft drivers (<code class="code-pill-white">F4</code> = offline Safe Mode; <code class="code-pill-white">F5</code> = Safe Mode with Networking so you can still access shares/internet) to uninstall a bad driver or crashing app.
             </div>
           </div>
         </div>
@@ -1461,7 +1860,49 @@
             Storage, Resource Monitor &amp; Slow PC Triage
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            When an external drive fails to appear in File Explorer or a user reports a sluggish laptop, Disk Management, Computer Management, Resource Monitor, and a structured 6-point triage sequence let you pinpoint the exact bottleneck in minutes.
+            When a user plugs in an external drive that never appears in File Explorer—or complains that their laptop is crawling—knowing how Windows layers physical disks, partitions, and drive letters lets you solve the ticket safely without destroying user data.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 07 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Abbreviation in Lesson 07 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">SSD / HDD</strong><br>
+              <strong>S</strong>olid-<strong>S</strong>tate <strong>D</strong>rive (fast flash chips) • <strong>H</strong>ard <strong>D</strong>isk <strong>D</strong>rive (spinning magnetic platter).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">MMC / .msc</strong><br>
+              <strong>M</strong>icrosoft <strong>M</strong>anagement <strong>C</strong>onsole • <strong>M</strong>icrosoft <strong>S</strong>aved <strong>C</strong>onsole (<code class="code-pill">diskmgmt.msc</code>).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">EFI</strong> = <strong>E</strong>xtensible <strong>F</strong>irmware <strong>I</strong>nterface<br>
+              The small (~100 MB) hidden boot partition at the start of a GPT Windows drive.
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">PID / MB/s</strong><br>
+              <strong>P</strong>rocess <strong>ID</strong>entifier (unique program number) • <strong>M</strong>ega<strong>b</strong>ytes <strong>p</strong>er <strong>s</strong>econd.
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">TCP / IP / SAN</strong><br>
+              <strong>T</strong>ransmission <strong>C</strong>ontrol <strong>P</strong>rotocol • <strong>I</strong>nternet <strong>P</strong>rotocol • <strong>S</strong>torage <strong>A</strong>rea <strong>N</strong>etwork.
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">CPU / RAM</strong><br>
+              <strong>C</strong>entral <strong>P</strong>rocessing <strong>U</strong>nit (processor) • <strong>R</strong>andom <strong>A</strong>ccess <strong>M</strong>emory.
+            </div>
+          </div>
+        </div>
+
+        <!-- Beginner Mental Model: Disk -> Partition -> Drive Letter -->
+        <div class="wb-subbox space-y-2" style="font-size:14px;">
+          <strong class="font-mono text-emerald" style="display:block;font-size:13px;">BEGINNER MENTAL MODEL • HOW A DRIVE BECOMES "C:" OR "D:" IN 3 STEPS</strong>
+          <p style="margin:0;">
+            Beginners often think a drive <em>is</em> <code class="code-pill-white">C:</code>. In Windows, it takes three layers: <strong>(1) Physical Disk</strong> (<code class="code-pill-white">Disk 0</code> = the physical SSD chip) &rarr; <strong>(2) Partition</strong> (a carved-out section of that disk) &rarr; <strong>(3) File System + Drive Letter</strong> (formatting the partition as <code class="code-pill-white">NTFS</code> and giving it a letter like <code class="code-pill-white">D:</code> so File Explorer can show it).
           </p>
         </div>
 
@@ -1475,26 +1916,26 @@
             </div>
           </div>
           <p class="text-muted" style="margin:0;font-size:14px;">
-            When a user plugs in a secondary SSD, HDD, or USB drive and nothing appears in File Explorer, open <code class="code-pill">diskmgmt.msc</code> to diagnose its three common states:
+            When a user plugs in a secondary <strong>SSD (Solid-State Drive)</strong>, <strong>HDD (Hard Disk Drive)</strong>, or USB drive and nothing appears in File Explorer, open <code class="code-pill">diskmgmt.msc</code> to diagnose its three common states:
           </p>
 
           <div class="grid-3" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">State 1: Offline Disk</strong>
-              Occurs after disk signature collisions or SAN/dock reconnects. Right-click the disk label on the left column and select <strong>Online</strong>.
+              Occurs after disk signature collisions or <strong>SAN (Storage Area Network)</strong> / dock reconnects. Right-click the disk label on the left column and select <strong>Online</strong>.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">State 2: Unallocated Disk</strong>
-              Brand-new unformatted drive. Right-click &rarr; <strong>Initialize Disk</strong> (<code class="code-pill-white">GPT</code> for modern Windows / &gt;2 TB, <code class="code-pill-white">MBR</code> for legacy) &rarr; right-click unallocated space &rarr; <strong>New Simple Volume</strong> (format <code class="code-pill-white">NTFS</code>, assign drive letter).
+              Brand-new empty drive with no partitions yet. Right-click &rarr; <strong>Initialize Disk</strong> (<code class="code-pill-white">GPT</code> for modern Windows / &gt;2 TB, <code class="code-pill-white">MBR</code> for legacy) &rarr; right-click unallocated space &rarr; <strong>New Simple Volume</strong> (format <code class="code-pill-white">NTFS</code>, assign drive letter).
             </div>
             <div class="wb-emerald-box">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">State 3: Healthy Partition Without Drive Letter</strong>
-              Partition already contains user data, just invisible in File Explorer. Right-click the volume &rarr; <strong>Change Drive Letter and Paths... &rarr; Add</strong>. <strong>NEVER format a partition that already contains user data!</strong>
+              Partition is already formatted as <code class="code-pill-white">NTFS</code> and holds user files—it's just missing a drive letter so File Explorer hides it. Right-click the volume &rarr; <strong>Change Drive Letter and Paths... &rarr; Add</strong>. <strong>NEVER format a partition that already contains user data!</strong>
             </div>
           </div>
 
           <div class="wb-subbox" style="font-size:13px;">
-            <strong class="font-mono">Computer Management (<code class="code-pill-white">compmgmt.msc</code>):</strong> Single MMC console bundling <strong>Task Scheduler</strong>, <strong>Event Viewer</strong>, <strong>Shared Folders</strong>, <strong>Local Users and Groups</strong> (<code class="code-pill-white">lusrmgr.msc</code>), <strong>Device Manager</strong> (<code class="code-pill-white">devmgmt.msc</code>), <strong>Disk Management</strong> (<code class="code-pill-white">diskmgmt.msc</code>), and <strong>Services</strong> (<code class="code-pill-white">services.msc</code>).
+            <strong class="font-mono">Computer Management (<code class="code-pill-white">compmgmt.msc</code>):</strong> A single <strong>MMC (Microsoft Management Console)</strong> window bundling <strong>Task Scheduler</strong>, <strong>Event Viewer</strong>, <strong>Shared Folders</strong>, <strong>Local Users and Groups</strong> (<code class="code-pill-white">lusrmgr.msc</code>), <strong>Device Manager</strong> (<code class="code-pill-white">devmgmt.msc</code>), <strong>Disk Management</strong> (<code class="code-pill-white">diskmgmt.msc</code>), and <strong>Services</strong> (<code class="code-pill-white">services.msc</code>) in one sidebar.
           </div>
         </div>
 
@@ -1505,21 +1946,21 @@
             <button type="button" onclick="copyText('resmon')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: resmon</button>
           </div>
           <p class="text-muted" style="margin:0;font-size:14px;">
-            Launch via <code class="code-pill">Win + R</code> &rarr; <code class="code-pill">resmon</code> (or Task Manager &rarr; Performance &rarr; Open Resource Monitor). It goes deeper than Task Manager:
+            Task Manager shows you <em>which app</em> is busy, while <strong>Resource Monitor</strong> (<code class="code-pill">Win + R</code> &rarr; <code class="code-pill">resmon</code>) acts like an X-ray showing the exact file path or network IP address involved:
           </p>
 
           <div class="grid-3" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Disk Tab &rarr; Disk Activity</strong>
-              Pinpoints the exact process (<code class="code-pill-white">PID</code>) and exact file path (<code class="code-pill-white">C:\...</code>) reading/writing MB/s when Disk is pinned at 100%.
+              Pinpoints the exact process <strong>PID (Process ID)</strong> and exact file path (<code class="code-pill-white">C:\...</code>) reading/writing <strong>MB/s (Megabytes per second)</strong> when Disk is pinned at 100%.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Network Tab &rarr; TCP Connections</strong>
-              Shows <strong>Processes with Network Activity</strong> alongside which remote IP/port is saturating bandwidth.
+              Shows <strong>Processes with Network Activity</strong> alongside which remote <strong>TCP/IP (Transmission Control Protocol / Internet Protocol)</strong> address is saturating bandwidth.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">CPU Tab &rarr; Associated Handles</strong>
-              Search a locked filename to see which process holds a file handle open when Windows blocks deletion or renaming.
+              When Windows says <em>"Can't delete file because it is open in another program,"</em> search the filename here to see which background process is holding it open.
             </div>
           </div>
         </div>
@@ -1528,7 +1969,7 @@
         <div class="wb-card space-y-3">
           <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
             <h3 style="margin:0;font-size:18px;font-weight:800;">3. The 6-Point "Slow PC" Triage Checklist</h3>
-            <span class="badge-tag" style="background:#FEF3C7;">Ties Module 01 Together</span>
+            <span class="badge-tag" style="background:#292112;border-color:#6B4C16;color:#FBBF24;">Ties Module 01 Together</span>
           </div>
           <p class="text-muted" style="margin:0;font-size:14px;">
             Run through these six checks in order whenever a user reports <em>"My PC is running really slow"</em>:
@@ -1537,7 +1978,7 @@
           <div class="grid-3" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">01. TASK MANAGER (Ctrl + Shift + Esc)</strong>
-              Spot CPU, RAM, or Disk 100% spikes and end runaway tasks (or drill into <code class="code-pill-white">resmon</code>).
+              Spot <strong>CPU (Central Processing Unit)</strong>, <strong>RAM (Random Access Memory)</strong>, or Disk 100% spikes and end runaway tasks (or drill into <code class="code-pill-white">resmon</code>).
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">02. SYSTEM UP TIME (FAST STARTUP)</strong>
@@ -1545,7 +1986,7 @@
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">03. FREE SPACE ON C:\ (cleanmgr)</strong>
-              SSD performance degrades when free space drops below <strong>10–15%</strong>. Run Disk Cleanup (<code class="code-pill-white">cleanmgr</code>) / Storage Sense.
+              SSDs slow down badly when free space drops below <strong>10–15%</strong>. Run Disk Cleanup (<code class="code-pill-white">cleanmgr</code>) / Storage Sense.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">04. STARTUP APPS</strong>
@@ -1584,8 +2025,42 @@
             Windows Update, Editions &amp; Registry Basics
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Know how to clear stuck Windows Updates, verify whether a workstation has the right Windows edition and architecture for corporate domain join, and safely navigate and back up the Windows Registry.
+            Know how to clear frozen Windows Updates, check whether a workstation has the right Windows edition for corporate domain join, and safely navigate and back up the Windows Registry without breaking the operating system.
           </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 08 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Abbreviation in Lesson 08 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">KB</strong> = <strong>K</strong>nowledge <strong>B</strong>ase<br>
+              Microsoft's patch ID prefix (e.g., <code class="code-pill">KB5044284</code>).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">wuauserv / BITS</strong><br>
+              <strong>W</strong>indows <strong>U</strong>pdate <strong>Au</strong>to Update <strong>Serv</strong>ice • <strong>B</strong>ackground <strong>I</strong>ntelligent <strong>T</strong>ransfer <strong>S</strong>ervice.
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">RDP / MSI</strong><br>
+              <strong>R</strong>emote <strong>D</strong>esktop <strong>P</strong>rotocol • <strong>M</strong>icro<strong>s</strong>oft <strong>I</strong>nstaller (<code class="code-pill">.msi</code>).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">x64 / x86</strong><br>
+              <strong>64-bit</strong> processor architecture (<code class="code-pill">x64</code>) vs. legacy <strong>32-bit</strong> (<code class="code-pill">x86</code>).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">EoS / 24H2</strong><br>
+              <strong>E</strong>nd <strong>o</strong>f <strong>S</strong>upport • Year <strong>24</strong>, <strong>H</strong>alf <strong>2</strong> (second half of 2024 release).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">HKLM / HKCU / .reg</strong><br>
+              <strong>H</strong>KEY_<strong>L</strong>OCAL_<strong>M</strong>ACHINE • <strong>H</strong>KEY_<strong>C</strong>URRENT_<strong>U</strong>SER • <strong>Reg</strong>istry backup file.
+            </div>
+          </div>
         </div>
 
         <!-- 1. Windows Update Troubleshooting -->
@@ -1594,11 +2069,11 @@
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Check Update History &amp; Uninstall a Bad Patch</strong>
-              Open <strong>Settings &rarr; Windows Update &rarr; Update history</strong> (inspect failed <code class="code-pill-white">0x800...</code> error codes) &rarr; click <strong>Uninstall updates</strong> to remove a recent cumulative update (<code class="code-pill-white">KB...</code>) that broke an app or VPN.
+              Open <strong>Settings &rarr; Windows Update &rarr; Update history</strong> (inspect failed <code class="code-pill-white">0x800...</code> error codes) &rarr; click <strong>Uninstall updates</strong> to remove a recent cumulative update (<code class="code-pill-white">KB...</code> = <strong>K</strong>nowledge <strong>B</strong>ase patch) that broke an app or VPN.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Windows Update Troubleshooter</strong>
-              Open <strong>Settings &rarr; System &rarr; Troubleshoot &rarr; Other troubleshooters &rarr; Windows Update &rarr; Run</strong> to repair hung update services and BITS queues.
+              Open <strong>Settings &rarr; System &rarr; Troubleshoot &rarr; Other troubleshooters &rarr; Windows Update &rarr; Run</strong> to repair hung update services and <strong>BITS (Background Intelligent Transfer Service)</strong> queues.
             </div>
           </div>
 
@@ -1609,11 +2084,14 @@
                 Copy Reset Commands
               </button>
             </div>
-            <div>net stop wuauserv</div>
-            <div>net stop bits</div>
-            <div>ren C:\Windows\SoftwareDistribution SoftwareDistribution.old</div>
-            <div>net start wuauserv</div>
-            <div>net start bits</div>
+            <div style="font-weight:700;">net stop wuauserv</div>
+            <div style="font-weight:700;">net stop bits</div>
+            <div style="font-weight:700;">ren C:\Windows\SoftwareDistribution SoftwareDistribution.old</div>
+            <div style="font-weight:700;">net start wuauserv</div>
+            <div style="font-weight:700;">net start bits</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;">
+              <strong>What each line does:</strong> <code style="font-family:monospace;">C:\Windows\SoftwareDistribution</code> is Windows Update's temporary download warehouse. If a half-downloaded update file gets corrupted, Windows Update freezes at 0%. Stopping <code style="font-family:monospace;">wuauserv</code> (Windows Update service) and <code style="font-family:monospace;">bits</code> (Background Intelligent Transfer Service) unlocks the folder so <code style="font-family:monospace;">ren</code> (rename) can safely move it aside to <code style="font-family:monospace;">.old</code>—forcing Windows to create a brand-new clean folder when both services restart.
+            </div>
           </div>
         </div>
 
@@ -1627,7 +2105,7 @@
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-red-box">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">Windows Home (Consumer Edition)</strong>
-              <strong>Cannot</strong> join an on-premises Active Directory domain, lacks Group Policy Editor (<code class="code-pill-white">gpedit.msc</code>), lacks full BitLocker drive encryption management, and cannot host Remote Desktop (<code class="code-pill-white">RDP</code>). Must be upgraded to Pro before corporate onboarding.
+              <strong>Cannot</strong> join an on-premises Active Directory domain, lacks Group Policy Editor (<code class="code-pill-white">gpedit.msc</code>), lacks full BitLocker drive encryption management, and cannot host <strong>RDP (Remote Desktop Protocol)</strong> sessions. Must be upgraded to Pro before corporate onboarding.
             </div>
             <div class="wb-emerald-box">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Windows Pro / Enterprise + 64-bit vs. 32-bit</strong>
@@ -1636,34 +2114,34 @@
           </div>
 
           <div class="wb-amber-box" style="box-shadow:none;font-size:13px;">
-            <strong class="font-mono">winver &amp; Windows 10 End of Support (October 2025):</strong> Run <code class="code-pill-white">winver</code> (<code class="code-pill-white">Win + R</code>) to verify Edition (Home/Pro), Version (<code class="code-pill-white">22H2</code>, <code class="code-pill-white">24H2</code>, <code class="code-pill-white">25H2</code>), and OS Build. Because <strong>Windows 10 reached End of Support in October 2025</strong>, organizations migrating remaining Windows 10 laptops to Windows 11 must verify <strong>TPM 2.0</strong>, <strong>UEFI + Secure Boot</strong>, and supported CPUs.
+            <strong class="font-mono">winver (Windows Version) &amp; Windows 10 End of Support (October 2025):</strong> Run <code class="code-pill-white">winver</code> (<code class="code-pill-white">Win + R</code>) to verify Edition (Home/Pro), Version (<code class="code-pill-white">22H2</code>, <code class="code-pill-white">24H2</code> = Year 24 Half 2, <code class="code-pill-white">25H2</code>), and OS Build. Because <strong>Windows 10 reached EoS (End of Support) in October 2025</strong>, companies upgrading remaining Windows 10 laptops to Windows 11 must verify <strong>TPM 2.0</strong>, <strong>UEFI + Secure Boot</strong>, and supported CPUs.
           </div>
         </div>
 
         <!-- 3. Windows Registry Basics (regedit) -->
         <div class="wb-card space-y-3">
           <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
-            <h3 style="margin:0;font-size:18px;font-weight:800;">3. Windows Registry Basics (<code style="font-size:16px;">regedit</code>)</h3>
+            <h3 style="margin:0;font-size:18px;font-weight:800;">3. What Is the Windows Registry? (<code style="font-size:16px;">regedit</code>)</h3>
             <button type="button" onclick="copyText('regedit')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: regedit</button>
           </div>
-          <p class="text-muted" style="margin:0;font-size:14px;">
-            The Registry is Windows' hierarchical configuration database storing low-level OS, hardware, and application settings across two critical root hives:
+          <p style="margin:0;font-size:14px;">
+            Think of the <strong>Windows Registry</strong> (<code class="code-pill">regedit</code> = <strong>Reg</strong>istry <strong>Edit</strong>or) as Windows' master filing cabinet—a hierarchical database of folders (called <strong>Keys</strong>) and individual settings (called <strong>Values</strong>) that control how Windows, hardware drivers, and installed apps behave. You will work with two main top-level sections (called <strong>Hives</strong>):
           </p>
 
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">HKEY_LOCAL_MACHINE (HKLM)</strong>
-              Machine-wide settings affecting all users on the PC (drivers, services, <code class="code-pill-white">ProfileList</code>, installed software).
+              <strong>Machine-wide</strong> settings affecting <em>every</em> user who signs into the PC (hardware drivers, background services, <code class="code-pill-white">ProfileList</code>, installed software).
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">HKEY_CURRENT_USER (HKCU)</strong>
-              Settings for the currently signed-in user only—stored physically inside that user's <code class="code-pill-white">C:\Users\&lt;username&gt;\NTUSER.DAT</code> file.
+              <strong>Per-user</strong> settings for whoever is logged in right now—stored physically inside that user's <code class="code-pill-white">C:\Users\&lt;username&gt;\NTUSER.DAT</code> file.
             </div>
           </div>
 
           <div class="wb-red-box" style="font-size:13px;">
-            <span class="badge-ink" style="background:#DC2626;margin-right:6px;">MANDATORY BACKUP RULE</span>
-            The Registry has <strong>no Undo button</strong> and wrong edits can prevent Windows from booting. Before editing or deleting any key (such as removing a <code class="code-pill-white">.bak</code> suffix under <code class="code-pill-white">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList</code>), right-click the key &rarr; <strong>Export</strong> and save a <code class="code-pill-white">.reg</code> backup file.
+            <span class="badge-ink" style="background:#B91C1C;color:#FFFFFF;border-color:#EF4444;margin-right:6px;">MANDATORY BACKUP RULE</span>
+            The Registry has <strong>no Ctrl+Z Undo button</strong>, and deleting the wrong key can prevent Windows from booting. Before editing or deleting any key (such as removing a <code class="code-pill-white">.bak</code> suffix under <code class="code-pill-white">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList</code>), right-click the key &rarr; <strong>Export</strong> and save a <code class="code-pill-white">.reg</code> backup file.
           </div>
         </div>
 
@@ -1689,8 +2167,42 @@
             Quick Field Extras: Reliability Monitor, msconfig, Task Scheduler &amp; PC Specs
           </h2>
           <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
-            Four lightweight built-in Windows utilities that are not always your first click—until you need to correlate crashes with recent updates, run a clean-boot isolation, inspect a scheduled login script, or pull full workstation hardware specs in seconds.
+            Four lightweight built-in Windows utilities that are not always your first click—until you need a beginner-friendly crash timeline, a clean-boot isolation test, a scheduled script audit, or full workstation hardware specs in two seconds.
           </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 09 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Abbreviation in Lesson 09 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">perfmon /rel</strong><br>
+              <strong>Perf</strong>ormance <strong>Mon</strong>itor (<strong>Rel</strong>iability Monitor timeline view).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">.dll</strong> = <strong>D</strong>ynamic <strong>L</strong>ink <strong>L</strong>ibrary<br>
+              Shared code module used by apps (e.g., <code class="code-pill">ntdll.dll</code>).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">msconfig</strong><br>
+              <strong>M</strong>icro<strong>s</strong>oft <strong>S</strong>ystem <strong>Config</strong>uration utility.
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">taskschd.msc</strong><br>
+              <strong>Task</strong> <strong>Sch</strong>e<strong>d</strong>uler <strong>M</strong>icrosoft <strong>S</strong>aved <strong>C</strong>onsole.
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">.bat / .ps1 / 0x0</strong><br>
+              <strong>Bat</strong>ch script • <strong>P</strong>ower<strong>S</strong>hell script • Hex zero (<code class="code-pill">0x0</code> = Success).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">GUI / CLI / findstr</strong><br>
+              <strong>G</strong>raphical <strong>U</strong>ser <strong>I</strong>nterface • <strong>C</strong>ommand-<strong>L</strong>ine <strong>I</strong>nterface • <strong>Find</strong> <strong>Str</strong>ing.
+            </div>
+          </div>
         </div>
 
         <!-- 1. Reliability Monitor -->
@@ -1700,7 +2212,7 @@
             <button type="button" onclick="copyText('perfmon /rel')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: perfmon /rel</button>
           </div>
           <p class="text-muted" style="margin:0;font-size:14px;">
-            Event Viewer contains thousands of noisy entries. <strong>Reliability Monitor</strong> (<code class="code-pill">Win + R</code> &rarr; <code class="code-pill">perfmon /rel</code>) distills system stability into a clean day-by-day timeline so you can spot patterns in 10 seconds:
+            Event Viewer contains thousands of noisy entries that can overwhelm beginners. <strong>Reliability Monitor</strong> (<code class="code-pill">Win + R</code> &rarr; <code class="code-pill">perfmon /rel</code> = <strong>Perf</strong>ormance <strong>Mon</strong>itor <strong>Rel</strong>iability view) turns those logs into a clean day-by-day visual chart:
           </p>
 
           <div class="grid-3" style="font-size:13px;">
@@ -1714,7 +2226,7 @@
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">View Technical Details</strong>
-              Click <strong>View technical details</strong> on any red crash entry to copy the exact <strong>Faulting Application Path</strong>, <strong>Faulting Module</strong> (e.g., <code class="code-pill-white">ntdll.dll</code>), and <strong>Exception Code</strong> into Tier-2 escalations.
+              Click <strong>View technical details</strong> on any red crash entry to copy the exact <strong>Faulting Application Path</strong>, <strong>Faulting Module</strong> (e.g., <code class="code-pill-white">ntdll.dll</code> — <strong>D</strong>ynamic <strong>L</strong>ink <strong>L</strong>ibrary), and <strong>Exception Code</strong> into Tier-2 escalations.
             </div>
           </div>
         </div>
@@ -1726,13 +2238,13 @@
             <button type="button" onclick="copyText('msconfig')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: msconfig</button>
           </div>
           <p class="text-muted" style="margin:0;font-size:14px;">
-            Used primarily for <strong>Clean Boot isolation</strong> (ruling out third-party background software) and triggering Safe Mode remotely when holding <code class="code-pill">Shift</code> during restart isn't feasible:
+            <strong>msconfig (Microsoft System Configuration)</strong> is used primarily for <strong>Clean Boot isolation</strong>—testing whether a third-party background app (like Zoom, Logitech software, or vendor bloat) is causing crashes while keeping core Windows drivers and Wi-Fi active:
           </p>
 
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Services Tab &rarr; Clean Boot Isolation</strong>
-              Check <strong>"Hide all Microsoft services"</strong> at the bottom first, then click <strong>Disable all</strong> and restart. This disables third-party agents (AV, VPN, vendor bloat) while keeping core Windows networking and sign-in intact.
+              Check <strong>"Hide all Microsoft services"</strong> at the bottom first (so you never accidentally turn off core Windows sign-in or networking!), then click <strong>Disable all</strong> and restart to test with all third-party services paused.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">General &amp; Startup Tabs</strong>
@@ -1741,7 +2253,7 @@
           </div>
 
           <div class="wb-red-box" style="font-size:13px;">
-            <span class="badge-ink" style="background:#DC2626;margin-right:6px;">BOOT TAB TRAP • SAFE BOOT LOOP</span>
+            <span class="badge-ink" style="background:#B91C1C;color:#FFFFFF;border-color:#EF4444;margin-right:6px;">BOOT TAB TRAP • SAFE BOOT LOOP</span>
             Checking <strong>Boot &rarr; Safe boot</strong> in <code class="code-pill-white">msconfig</code> modifies the Boot Configuration Data persistently. Unlike WinRE <code class="code-pill-white">F4</code>/<code class="code-pill-white">F5</code> (one-time Safe Mode), <code class="code-pill-white">msconfig</code> will boot the PC into Safe Mode <strong>on every restart forever</strong> until you reopen <code class="code-pill-white">msconfig</code>, uncheck <strong>Safe boot</strong> (or select <strong>Normal startup</strong>), and reboot.
           </div>
         </div>
@@ -1753,21 +2265,21 @@
             <button type="button" onclick="copyText('taskschd.msc')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: taskschd.msc</button>
           </div>
           <p class="text-muted" style="margin:0;font-size:14px;">
-            Controls automated background jobs, logon scripts, app auto-updaters, and scheduled backups. Click <strong>Task Scheduler Library</strong> on the left pane to inspect custom and third-party tasks:
+            Think of <strong>Task Scheduler</strong> (<code class="code-pill">taskschd.msc</code>) as Windows' built-in alarm clock for programs—running automated scripts, logon jobs, app auto-updaters, and scheduled backups. Click <strong>Task Scheduler Library</strong> on the left pane to inspect tasks:
           </p>
 
           <div class="grid-3" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Triggers &amp; Actions</strong>
-              <strong>Triggers</strong> define <em>when</em> a task runs (At log on, At startup, Daily schedule); <strong>Actions</strong> reveal the exact <code class="code-pill-white">.exe</code>, <code class="code-pill-white">.bat</code>, or <code class="code-pill-white">.ps1</code> script path being launched.
+              <strong>Triggers</strong> define <em>when</em> the alarm rings (At log on, At startup, Daily schedule); <strong>Actions</strong> reveal the exact <code class="code-pill-white">.exe</code>, <code class="code-pill-white">.bat</code> (<strong>Bat</strong>ch script), or <code class="code-pill-white">.ps1</code> (<strong>P</strong>ower<strong>S</strong>hell script) launched.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Status &amp; Last Run Result (<code class="code-pill-white">0x0</code>)</strong>
-              Status shows <strong>Ready</strong>, <strong>Running</strong>, or <strong>Disabled</strong>. A <strong>Last Run Result</strong> of <code class="code-pill-white">0x0</code> means the task succeeded; non-zero hex codes (e.g., <code class="code-pill-white">0x1</code> or <code class="code-pill-white">0x80070002</code>) indicate a script or missing-file error.
+              Status shows <strong>Ready</strong>, <strong>Running</strong>, or <strong>Disabled</strong>. A <strong>Last Run Result</strong> of <code class="code-pill-white">0x0</code> (hexadecimal zero = 0 errors) means the task succeeded; non-zero hex codes (e.g., <code class="code-pill-white">0x1</code> or <code class="code-pill-white">0x80070002</code>) indicate a script or missing-file error.
             </div>
             <div class="wb-subbox">
               <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">Common Desk Tickets</strong>
-              Catching a flashing Command Prompt popup on every user login (rogue scheduled task), testing a failed backup job via <strong>Right-click &rarr; Run</strong>, or disabling broken legacy updaters.
+              Catching a flashing Command Prompt popup on every user login (a rogue scheduled task), testing a failed backup job via <strong>Right-click &rarr; Run</strong>, or disabling broken legacy updaters.
             </div>
           </div>
         </div>
@@ -1785,11 +2297,11 @@
           <div class="grid-2" style="font-size:13px;">
             <div class="wb-subbox">
               <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">winver (2-Second GUI Popup)</strong>
-              Run <code class="code-pill-white">winver</code> (<code class="code-pill-white">Win + R</code>) when you only need <strong>Windows Edition</strong> (Home/Pro/Enterprise), <strong>Feature Version</strong> (<code class="code-pill-white">24H2</code>/<code class="code-pill-white">25H2</code>), and <strong>OS Build</strong>.
+              <strong>GUI</strong> = <strong>G</strong>raphical <strong>U</strong>ser <strong>I</strong>nterface. Run <code class="code-pill-white">winver</code> (<code class="code-pill-white">Win + R</code>) when you only need <strong>Windows Edition</strong> (Home/Pro/Enterprise), <strong>Feature Version</strong> (<code class="code-pill-white">24H2</code>/<code class="code-pill-white">25H2</code>), and <strong>OS Build</strong>.
             </div>
             <div class="wb-emerald-box">
               <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">systeminfo (Full CLI Hardware &amp; OS Spec Sheet)</strong>
-              Run <code class="code-pill-white">systeminfo</code> in <code class="code-pill-white">cmd</code> to pull <strong>Host Name</strong>, <strong>OS Version</strong>, <strong>Original Install Date</strong>, <strong>System Boot Time</strong>, <strong>System Manufacturer &amp; Model</strong>, <strong>BIOS Version</strong>, <strong>Total Physical Memory (RAM)</strong>, <strong>Domain</strong>, and installed <strong>Hotfix(s)</strong>.
+              <strong>CLI</strong> = <strong>C</strong>ommand-<strong>L</strong>ine <strong>I</strong>nterface. Run <code class="code-pill-white">systeminfo</code> in <code class="code-pill-white">cmd</code> to pull <strong>Host Name</strong>, <strong>OS Version</strong>, <strong>Original Install Date</strong>, <strong>System Boot Time</strong>, <strong>System Manufacturer &amp; Model</strong>, <strong>BIOS Version</strong>, <strong>Total Physical Memory (RAM)</strong>, <strong>Domain</strong>, and installed <strong>Hotfix(s)</strong>.
             </div>
           </div>
 
@@ -1800,7 +2312,10 @@
                 Copy Filtered Command
               </button>
             </div>
-            <div>systeminfo | findstr /B /C:"OS" /C:"System Boot" /C:"System Model" /C:"Total Physical Memory"</div>
+            <div style="font-weight:700;">systeminfo | findstr /B /C:"OS" /C:"System Boot" /C:"System Model" /C:"Total Physical Memory"</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;">
+              <strong>Command decoded:</strong> <code style="color:#34D399;">|</code> (Pipe) sends the full text output of <code style="font-family:monospace;">systeminfo</code> straight into <code style="color:#34D399;">findstr</code> (<strong>Find</strong> <strong>Str</strong>ing filter); <code style="color:#34D399;">/B</code> matches only at the <strong>B</strong>eginning of a line; <code style="color:#34D399;">/C:"..."</code> searches for an exact literal <strong>C</strong>haracter string including spaces.
+            </div>
           </div>
         </div>
 
@@ -1857,9 +2372,9 @@
   <!-- ===================================================================== -->
   <div id="cheatsheet-modal" role="dialog" aria-modal="true" aria-labelledby="cheatsheet-title" class="modal-overlay hidden">
     <div class="modal-dialog">
-      <div style="padding:16px 20px;background:#F7F7F5;border-bottom:2px solid #141414;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <div style="padding:16px 20px;background:#22262E;border-bottom:2px solid #343A46;display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div>
-          <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">QUICK REFERENCE • 29 ESSENTIAL COMMANDS</div>
+          <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">QUICK REFERENCE • 24 ESSENTIAL COMMANDS</div>
           <h3 id="cheatsheet-title" style="margin:2px 0 0;font-size:17px;font-weight:800;">
             Windows Run (<code style="font-size:14px;">Win + R</code>) &amp; CLI Cheat Sheet
           </h3>
@@ -1874,7 +2389,7 @@
         <div id="cheatsheet-items" class="grid-2" style="gap:10px;"></div>
       </div>
 
-      <div style="padding:12px 20px;background:#F7F7F5;border-top:2px solid #141414;display:flex;justify-content:flex-end;">
+      <div style="padding:12px 20px;background:#22262E;border-top:2px solid #343A46;display:flex;justify-content:flex-end;">
         <button type="button" onclick="closeCheatSheet()" class="btn-wb btn-ink" style="padding:8px 16px;font-size:12px;">
           Done
         </button>
@@ -2395,32 +2910,32 @@
     ];
 
     const CHEAT_SHEET_COMMANDS = [
-      { cmd: 'taskmgr', desc: 'Task Manager (Processes, Performance, Uptime)' },
-      { cmd: 'devmgmt.msc', desc: 'Device Manager (Drivers & hardware status)' },
-      { cmd: 'services.msc', desc: 'Services (Restart Print Spooler, Audio, etc.)' },
+      { cmd: 'taskmgr', desc: 'Task Manager (Processes, Performance, CPU Up time)' },
+      { cmd: 'devmgmt.msc', desc: 'Device Manager — Microsoft Saved Console (Drivers & hardware)' },
+      { cmd: 'services.msc', desc: 'Windows Services (Restart Print Spooler, Audio, etc.)' },
       { cmd: 'eventvwr.msc', desc: 'Event Viewer (System & Application error logs)' },
-      { cmd: 'ncpa.cpl', desc: 'Network Connections (Wi-Fi/Ethernet adapters)' },
-      { cmd: 'appwiz.cpl', desc: 'Programs & Features (Uninstall/repair apps)' },
-      { cmd: 'control', desc: 'Classic Control Panel (Credential Manager)' },
+      { cmd: 'ncpa.cpl', desc: 'Network Connections Control Panel (Wi-Fi/Ethernet adapters)' },
+      { cmd: 'appwiz.cpl', desc: 'Programs & Features Control Panel (Uninstall/repair apps)' },
+      { cmd: 'control', desc: 'Classic Control Panel (Credential Manager, Power Options)' },
       { cmd: 'ms-settings:', desc: 'Modern Windows Settings app' },
       { cmd: 'sysdm.cpl', desc: 'System Properties (Computer name & Domain join)' },
-      { cmd: 'msinfo32', desc: 'System Information (BIOS Mode & Secure Boot)' },
-      { cmd: 'lusrmgr.msc', desc: 'Local Users & Groups (Administrators audit)' },
-      { cmd: 'manage-bde -status', desc: 'Check BitLocker encryption & protection status' },
-      { cmd: 'DISM /Online /Cleanup-Image /RestoreHealth', desc: 'Repair Windows Component Store image (Admin)' },
-      { cmd: 'sfc /scannow', desc: 'Scan & repair protected Windows system files' },
-      { cmd: 'chkdsk C: /scan', desc: 'Check NTFS disk integrity online (no reboot)' },
-      { cmd: 'oobe\\bypassnro', desc: 'Bypass online Microsoft Account in Win11 OOBE' },
-      { cmd: 'start ms-cxh:localonly', desc: 'Win11 OOBE local account (if bypassnro is removed)' },
-      { cmd: 'diskmgmt.msc', desc: 'Disk Management (Partitions, Offline, Drive letters)' },
-      { cmd: 'compmgmt.msc', desc: 'Computer Management (All-in-one admin console)' },
-      { cmd: 'resmon', desc: 'Resource Monitor (Per-process Disk/Network/File handles)' },
-      { cmd: 'cleanmgr', desc: 'Disk Cleanup (Free C: drive space & temp files)' },
-      { cmd: 'winver', desc: 'Windows Version (Edition, Version & OS Build)' },
-      { cmd: 'regedit', desc: 'Registry Editor (HKLM & HKCU — Export backup first)' },
-      { cmd: 'net stop wuauserv', desc: 'Stop Windows Update service before cache reset' },
-      { cmd: 'perfmon /rel', desc: 'Reliability Monitor (1-10 stability timeline & crash details)' },
-      { cmd: 'msconfig', desc: 'System Configuration (Clean boot & Safe boot toggle)' },
+      { cmd: 'msinfo32', desc: 'Microsoft System Information (BIOS Mode & Secure Boot)' },
+      { cmd: 'lusrmgr.msc', desc: 'Local Users & Groups Manager (Administrators audit)' },
+      { cmd: 'manage-bde -status', desc: 'Manage BitLocker Drive Encryption status' },
+      { cmd: 'DISM /Online /Cleanup-Image /RestoreHealth', desc: 'Deployment Image Servicing & Management (Repair WinSxS store)' },
+      { cmd: 'sfc /scannow', desc: 'System File Checker (Scan & repair protected OS files)' },
+      { cmd: 'chkdsk C: /scan', desc: 'Check Disk (Verify NTFS file system online, no reboot)' },
+      { cmd: 'oobe\\bypassnro', desc: 'Out-Of-Box Experience: Bypass Network Requirement Option' },
+      { cmd: 'start ms-cxh:localonly', desc: 'Microsoft Cloud Experience Host (Win11 local account screen)' },
+      { cmd: 'diskmgmt.msc', desc: 'Disk Management (Partitions, Offline disks, Drive letters)' },
+      { cmd: 'compmgmt.msc', desc: 'Computer Management (All-in-one MMC admin console)' },
+      { cmd: 'resmon', desc: 'Resource Monitor (Per-process Disk/TCP/File handles)' },
+      { cmd: 'cleanmgr', desc: 'Disk Cleanup Manager (Free C: drive space & temp files)' },
+      { cmd: 'winver', desc: 'Windows Version (Edition, Feature Version & OS Build)' },
+      { cmd: 'regedit', desc: 'Registry Editor (HKLM & HKCU — Export .reg backup first)' },
+      { cmd: 'net stop wuauserv', desc: 'Stop Windows Update Auto Update Service before cache reset' },
+      { cmd: 'perfmon /rel', desc: 'Performance Monitor — Reliability view (1-10 crash timeline)' },
+      { cmd: 'msconfig', desc: 'Microsoft System Configuration (Clean boot & Safe boot toggle)' },
       { cmd: 'taskschd.msc', desc: 'Task Scheduler (Scheduled scripts, triggers & 0x0 status)' },
       { cmd: 'systeminfo', desc: 'System Info CLI (Model, BIOS, RAM, OS & Boot Time)' },
       { cmd: 'cmd', desc: 'Command Prompt (net use, net share, ping)' }
@@ -2500,7 +3015,7 @@
       const dot = document.getElementById('toast-dot');
       if (!toast || !msg || !dot) return;
       msg.textContent = message;
-      dot.style.background = tone === 'crimson' ? '#DC2626' : tone === 'amber' ? '#D97706' : '#059669';
+      dot.style.background = tone === 'crimson' ? '#F87171' : tone === 'amber' ? '#FBBF24' : '#34D399';
       toast.classList.remove('hidden');
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
@@ -2576,14 +3091,14 @@
           const isSelected = chosenIdx === optIdx;
           const btn = document.createElement('button');
           btn.type = 'button';
-          let bg = '#FFFFFF';
-          let borderCol = '#141414';
+          let bg = '#1A1D23';
+          let borderCol = '#343A46';
           if (isSelected) {
-            if (opt.status === 'verified') { bg = '#ECFDF5'; borderCol = '#059669'; }
-            else if (opt.status === 'warning') { bg = '#FFFBEB'; borderCol = '#D97706'; }
-            else { bg = '#FEF2F2'; borderCol = '#DC2626'; }
+            if (opt.status === 'verified') { bg = '#122922'; borderCol = '#34D399'; }
+            else if (opt.status === 'warning') { bg = '#292112'; borderCol = '#FBBF24'; }
+            else { bg = '#2B1518'; borderCol = '#F87171'; }
           }
-          btn.style.cssText = `width:100%;text-align:left;padding:11px 13px;border:2px solid ${borderCol};border-radius:8px;background:${bg};color:#141414;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:flex-start;gap:8px;`;
+          btn.style.cssText = `width:100%;text-align:left;padding:11px 13px;border:2px solid ${borderCol};border-radius:8px;background:${bg};color:#E6E8EC;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:flex-start;gap:8px;`;
           btn.innerHTML = `<strong class="font-mono">${String.fromCharCode(65 + optIdx)}.</strong><span>${opt.label}</span>`;
           btn.addEventListener('click', () => {
             appState.triage[ticket.id] = optIdx;
@@ -2617,13 +3132,13 @@
         const card = document.createElement('div');
         card.className = 'wb-card';
         card.innerHTML = `
-          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-bottom:14px;margin-bottom:16px;border-bottom:2px solid #141414;">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-bottom:14px;margin-bottom:16px;border-bottom:2px solid #343A46;">
             <div>
               <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">${group.badge}</div>
               <h3 style="margin:2px 0;font-size:19px;font-weight:800;">${group.title}</h3>
               <p class="text-muted" style="margin:0;font-size:13px;">${group.subtitle}</p>
             </div>
-            <span id="${group.counterId}" class="badge-tag" style="background:#F7F7F5;padding:5px 10px;">0 / ${group.labs.length} Verified</span>
+            <span id="${group.counterId}" class="badge-tag" style="background:#22262E;padding:5px 10px;">0 / ${group.labs.length} Verified</span>
           </div>
         `;
 
@@ -2733,7 +3248,7 @@
           statusEl.className = 'font-mono text-emerald';
         }
         if (cardEl) {
-          cardEl.style.background = '#ECFDF5';
+          cardEl.style.background = '#122922'; cardEl.style.borderColor = '#1F5E4B';
         }
         if (msgEl) {
           msgEl.textContent = 'Verified: ' + (labData.displayLabel || labData.value);
@@ -2746,7 +3261,7 @@
           statusEl.className = 'font-mono text-muted';
         }
         if (cardEl) {
-          cardEl.style.background = '#F7F7F5';
+          cardEl.style.background = '#22262E'; cardEl.style.borderColor = '#343A46';
         }
         if (msgEl) msgEl.classList.add('hidden');
       }
@@ -2770,7 +3285,7 @@
         card.className = 'wb-card-sm';
         card.innerHTML = `
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
-            <span class="badge-tag" style="background:#F7F7F5;">QUESTION ${qLabel} • ${q.tag}</span>
+            <span class="badge-tag" style="background:#22262E;">QUESTION ${qLabel} • ${q.tag}</span>
             ${submitted ? `<span class="font-mono ${selected === q.correctIndex ? 'text-emerald' : 'text-crimson'}" style="font-size:12px;font-weight:700;">
               ${selected === q.correctIndex ? 'CORRECT' : 'INCORRECT'}
             </span>` : ''}
@@ -2784,16 +3299,17 @@
         q.options.forEach((optText, oIdx) => {
           const isPicked = selected === oIdx;
           const isCorrect = q.correctIndex === oIdx;
-          let bg = '#F7F7F5';
-          let color = '#141414';
-          let borderCol = '#141414';
+          let bg = '#22262E';
+          let color = '#E6E8EC';
+          let borderCol = '#343A46';
 
           if (!submitted && isPicked) {
-            bg = '#141414';
+            bg = '#283140';
             color = '#FFFFFF';
+            borderCol = '#34D399';
           } else if (submitted) {
-            if (isCorrect) { bg = '#ECFDF5'; borderCol = '#059669'; }
-            else if (isPicked && !isCorrect) { bg = '#FEF2F2'; borderCol = '#DC2626'; }
+            if (isCorrect) { bg = '#122922'; borderCol = '#34D399'; }
+            else if (isPicked && !isCorrect) { bg = '#2B1518'; borderCol = '#F87171'; }
           }
 
           const btn = document.createElement('button');
@@ -2828,7 +3344,7 @@
           const score = calculateExamScore();
           const passed = score >= 10;
           banner.classList.remove('hidden');
-          banner.style.background = passed ? '#ECFDF5' : '#FFFBEB';
+          banner.style.background = passed ? '#122922' : '#292112'; banner.style.borderColor = passed ? '#1F5E4B' : '#6B4C16';
           banner.innerHTML = `
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
               <span class="font-mono ${passed ? 'text-emerald' : 'text-amber'}" style="font-size:12px;font-weight:700;">
@@ -2941,13 +3457,13 @@
       CHEAT_SHEET_COMMANDS.forEach(item => {
         const row = document.createElement('button');
         row.type = 'button';
-        row.style.cssText = 'text-align:left;padding:10px 12px;background:#F7F7F5;border:2px solid #141414;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;gap:4px;';
+        row.style.cssText = 'text-align:left;padding:10px 12px;background:#22262E;border:2px solid #343A46;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;gap:4px;';
         row.innerHTML = `
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
             <span class="badge-ink" style="word-break:break-all;">${item.cmd}</span>
             <span class="font-mono text-muted" style="font-size:11px;flex-shrink:0;">Copy</span>
           </div>
-          <span style="font-size:12px;color:#141414;">${item.desc}</span>
+          <span style="font-size:12px;color:#E6E8EC;">${item.desc}</span>
         `;
         row.addEventListener('click', () => copyText(item.cmd));
         wrap.appendChild(row);
