@@ -1,0 +1,2909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 02: Practical Networking (Tier-1 Scope)</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              workbench: '#121417',
+              ink: '#E6E8EC',
+              muted: '#9CA3AF',
+              amberStatus: '#FBBF24',
+              emeraldStatus: '#34D399',
+              crimsonStatus: '#F87171'
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+              mono: ['JetBrains Mono', 'Consolas', 'Monaco', 'monospace']
+            }
+          }
+        }
+      };
+    }
+  </script>
+
+  <!-- Standalone + Fallback CSS so page renders identically online and offline (file://) -->
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-workbench: #121417;
+      --bg-card: #1A1D23;
+      --bg-subbox: #22262E;
+      --bg-hover: #2A2F3A;
+      --border-strong: #343A46;
+      --border-subtle: #2A2F3A;
+      --shadow-hard: #090A0C;
+      --ink: #E6E8EC;
+      --muted: #9CA3AF;
+      --emerald: #34D399;
+      --emerald-bg: #122922;
+      --emerald-border: #1F5E4B;
+      --amber: #FBBF24;
+      --amber-bg: #292112;
+      --amber-border: #6B4C16;
+      --crimson: #F87171;
+      --crimson-bg: #2B1518;
+      --crimson-border: #6E252C;
+      --sky: #38BDF8;
+      --sky-bg: #102332;
+      --sky-border: #1E4E72;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--bg-workbench);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    code, pre, .font-mono {
+      font-family: 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #121417;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #343A46;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4B5563;
+    }
+
+    /* App Shell Layout */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1024px) {
+      .app-shell {
+        flex-direction: row;
+      }
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--border-strong);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-header {
+        display: none;
+      }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 40;
+      height: 100vh;
+      width: 295px;
+      max-width: 88vw;
+      background: var(--bg-card);
+      border-right: 2px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(-100%);
+      transition: transform 0.2s ease-out;
+      flex-shrink: 0;
+    }
+
+    .sidebar.sidebar-open {
+      transform: translateX(0);
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar {
+        position: sticky;
+        transform: translateX(0);
+        width: 295px;
+      }
+    }
+
+    .sidebar-scroll {
+      padding: 18px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .sidebar-footer {
+      padding: 14px;
+      border-top: 2px solid var(--border-strong);
+      background: #16191F;
+    }
+
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 6, 8, 0.75);
+      z-index: 35;
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar-backdrop {
+        display: none !important;
+      }
+    }
+
+    /* Main Content Container */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    @media (min-width: 640px) {
+      .main-content {
+        padding: 32px 28px 56px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .main-content {
+        padding: 40px 44px 64px;
+      }
+    }
+
+    /* Dark Workbench Cards & Borders */
+    .wb-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 4px 4px 0px var(--shadow-hard);
+    }
+
+    .wb-card-sm {
+      background: var(--bg-card);
+      border: 2px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
+    }
+
+    .wb-subbox {
+      background: var(--bg-subbox);
+      border: 2px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .wb-amber-box {
+      background: var(--amber-bg);
+      border: 2px solid var(--amber-border);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
+    }
+
+    .wb-red-box {
+      background: var(--crimson-bg);
+      border: 2px solid var(--crimson-border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .wb-emerald-box {
+      background: var(--emerald-bg);
+      border: 2px solid var(--emerald-border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .wb-sky-box {
+      background: var(--sky-bg);
+      border: 2px solid var(--sky-border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .wb-terminal {
+      background: #0D0F12;
+      color: #E6E8EC;
+      border: 2px solid #2E3440;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+
+    /* Buttons & Interactive Controls */
+    .btn-wb {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 2px solid var(--border-strong);
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease, border-color 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-wb:active {
+      transform: translate(2px, 2px);
+      box-shadow: none !important;
+    }
+
+    .btn-ink {
+      background: #2C3340;
+      color: #F3F4F6;
+      border-color: #4B5563;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
+    }
+
+    .btn-ink:hover {
+      background: #374050;
+      border-color: #6B7280;
+    }
+
+    .btn-light {
+      background: var(--bg-subbox);
+      color: var(--ink);
+      border-color: var(--border-strong);
+      box-shadow: 2px 2px 0px var(--shadow-hard);
+    }
+
+    .btn-light:hover {
+      background: var(--bg-hover);
+      border-color: #4B5563;
+    }
+
+    .btn-emerald {
+      background: #059669;
+      color: #FFFFFF;
+      border-color: #10B981;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
+    }
+
+    .btn-emerald:hover {
+      background: #047857;
+    }
+
+    .btn-crimson {
+      background: #B91C1C;
+      color: #FFFFFF;
+      border-color: #EF4444;
+    }
+
+    .btn-crimson:hover {
+      background: #991B1B;
+    }
+
+    /* Navigation Tabs */
+    .nav-item {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border: 2px solid var(--border-strong);
+      border-radius: 10px;
+      background: var(--bg-subbox);
+      color: var(--ink);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-hover);
+      border-color: #4B5563;
+    }
+
+    .nav-item.active {
+      background: #283140;
+      color: #FFFFFF;
+      border-color: #34D399;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
+    }
+
+    .nav-item.active:hover {
+      background: #283140;
+    }
+
+    /* Form Controls */
+    .wb-select, .wb-input {
+      width: 100%;
+      padding: 10px 12px;
+      background: #15181E;
+      color: var(--ink);
+      border: 2px solid var(--border-strong);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+
+    .wb-select:focus, .wb-input:focus {
+      outline: none;
+      border-color: #34D399;
+      box-shadow: 2px 2px 0px var(--shadow-hard);
+    }
+
+    /* Responsive Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 768px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 640px) {
+      .grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (min-width: 900px) {
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (min-width: 960px) {
+      .grid-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    /* Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 2px solid var(--border-strong);
+      border-radius: 10px;
+    }
+
+    table.wb-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    table.wb-table th {
+      background: #22262E;
+      color: #F3F4F6;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border-strong);
+      border-right: 2px solid var(--border-strong);
+    }
+
+    table.wb-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      border-right: 2px solid var(--border-strong);
+      vertical-align: top;
+    }
+
+    table.wb-table th:last-child,
+    table.wb-table td:last-child {
+      border-right: none;
+    }
+
+    table.wb-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Inline Code Pills */
+    .code-pill {
+      display: inline-block;
+      padding: 1px 6px;
+      background: #252A34;
+      color: #93C5FD;
+      border: 1px solid #3B4252;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    .code-pill-white {
+      display: inline-block;
+      padding: 1px 6px;
+      background: #16191F;
+      color: #93C5FD;
+      border: 1px solid #3B4252;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    /* Badges */
+    .badge-ink {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #2C3340;
+      color: #F3F4F6;
+      border: 1px solid #4B5563;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #22262E;
+      color: #E6E8EC;
+      border: 1.5px solid #3F4756;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .text-emerald { color: #34D399; }
+    .text-amber { color: #FBBF24; }
+    .text-crimson { color: #F87171; }
+    .text-sky { color: #38BDF8; }
+    .text-muted { color: #9CA3AF; }
+
+    /* Modal & Toast */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(5, 6, 8, 0.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-dialog {
+      background: var(--bg-card);
+      border: 2px solid var(--border-strong);
+      border-radius: 16px;
+      box-shadow: 6px 6px 0px var(--shadow-hard);
+      width: 100%;
+      max-width: 740px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .toast-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 60;
+      background: #242933;
+      color: #F3F4F6;
+      border: 2px solid #4B5563;
+      border-radius: 10px;
+      box-shadow: 4px 4px 0px var(--shadow-hard);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      max-width: 340px;
+    }
+
+    /* Section Vertical Rhythm */
+    .lesson-panel > * + * {
+      margin-top: 26px;
+    }
+
+    .space-y-4 > * + * {
+      margin-top: 16px;
+    }
+
+    .space-y-3 > * + * {
+      margin-top: 12px;
+    }
+
+    .space-y-2 > * + * {
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast" role="status" aria-live="polite" class="toast-box hidden">
+    <span id="toast-dot" style="width:10px;height:10px;border-radius:9999px;background:#10B981;flex-shrink:0;"></span>
+    <span id="toast-msg">Copied to clipboard</span>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- Mobile Top Header -->
+    <header class="mobile-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button id="mobile-menu-btn" type="button" aria-label="Open course navigation" class="btn-wb btn-light" style="padding:8px 10px;">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div>
+          <span class="font-mono text-muted" style="font-size:10px;text-transform:uppercase;display:block;line-height:1.1;">Tier-1 Desk Track</span>
+          <strong style="font-size:14px;">Module 02: Practical Networking</strong>
+        </div>
+      </div>
+      <button type="button" onclick="openCheatSheet()" class="btn-wb font-mono" style="padding:7px 10px;font-size:11px;background:#292112;border-color:#6B4C16;color:#FBBF24;">
+        CLI &amp; Ports
+      </button>
+    </header>
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop hidden" onclick="closeSidebar()"></div>
+
+    <!-- Left Navigation Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-scroll">
+        <!-- Brand / Course Header -->
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding-bottom:14px;border-bottom:2px solid #343A46;">
+          <div>
+            <div class="badge-tag" style="background:#22262E;margin-bottom:8px;display:inline-flex;align-items:center;gap:6px;">
+              <span style="width:8px;height:8px;border-radius:9999px;background:#38BDF8;display:inline-block;"></span>
+              SERVICE DESK FIELD MANUAL
+            </div>
+            <h1 style="margin:0;font-size:17px;font-weight:800;line-height:1.25;">
+              Module 02: Practical Networking
+            </h1>
+            <p class="text-muted" style="margin:4px 0 0;font-size:12px;">Tier-1 Scope • 29 Checkpoints</p>
+          </div>
+          <button type="button" onclick="closeSidebar()" aria-label="Close sidebar" class="btn-wb btn-light lg:hidden" style="padding:6px 8px;">
+            ✕
+          </button>
+        </div>
+
+        <!-- Live Progress Box -->
+        <div class="wb-subbox" style="margin-top:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:6px;">
+            <span>Module Completion</span>
+            <span id="progress-text" class="font-mono">0% (0/29)</span>
+          </div>
+          <div style="width:100%;height:12px;background:#15181E;border:2px solid #343A46;border-radius:9999px;overflow:hidden;">
+            <div id="progress-bar" style="height:100%;background:#10B981;width:0%;transition:width 0.3s ease;"></div>
+          </div>
+          <p id="progress-subtext" class="font-mono text-muted" style="margin:6px 0 0;font-size:11px;">
+            3 triage tickets + 14 PC labs + 12 exam checks.
+          </p>
+        </div>
+
+        <!-- Lesson Navigation -->
+        <nav aria-label="Module Lessons" class="space-y-2" style="margin-top:14px;">
+          <div class="font-mono text-muted" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:2px 4px;">
+            Core Foundations
+          </div>
+
+          <button type="button" data-nav="lesson1" onclick="switchTab('lesson1')" class="nav-item active">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 01</div>
+              <div style="font-size:13px;font-weight:800;">The Network Triage Ladder</div>
+              <div style="font-size:11px;opacity:0.8;">4-step Ping ladder + 3 triage tickets</div>
+            </div>
+            <span id="badge-lesson1" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/3</span>
+          </button>
+
+          <button type="button" data-nav="lesson2" onclick="switchTab('lesson2')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 02</div>
+              <div style="font-size:13px;font-weight:800;">IPv4, Subnet Mask &amp; Gateway</div>
+              <div style="font-size:11px;opacity:0.8;">Private ranges, routing + Labs 01–02</div>
+            </div>
+            <span id="badge-lesson2" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/2</span>
+          </button>
+
+          <button type="button" data-nav="lesson3" onclick="switchTab('lesson3')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 03</div>
+              <div style="font-size:13px;font-weight:800;">DHCP &amp; APIPA (169.254.x.x)</div>
+              <div style="font-size:11px;opacity:0.8;">DORA flow, leases + Labs 03–04</div>
+            </div>
+            <span id="badge-lesson3" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/2</span>
+          </button>
+
+          <button type="button" data-nav="lesson4" onclick="switchTab('lesson4')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 04</div>
+              <div style="font-size:13px;font-weight:800;">DNS &amp; Name Resolution</div>
+              <div style="font-size:11px;opacity:0.8;">nslookup, flushdns + Labs 05–06</div>
+            </div>
+            <span id="badge-lesson4" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/2</span>
+          </button>
+
+          <div class="font-mono text-muted" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:8px 4px 2px;">
+            Connectivity, Ports &amp; CLI
+          </div>
+
+          <button type="button" data-nav="lesson5" onclick="switchTab('lesson5')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 05</div>
+              <div style="font-size:13px;font-weight:800;">LAN, Wi-Fi &amp; VPN Awareness</div>
+              <div style="font-size:11px;opacity:0.8;">Cables, 2.4/5GHz, tunnels + Labs 07–08</div>
+            </div>
+            <span id="badge-lesson5" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/2</span>
+          </button>
+
+          <button type="button" data-nav="lesson6" onclick="switchTab('lesson6')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 06</div>
+              <div style="font-size:13px;font-weight:800;">Common Ports &amp; Firewall</div>
+              <div style="font-size:11px;opacity:0.8;">80, 443, 53, 3389, 445, 22 + Labs 09–10</div>
+            </div>
+            <span id="badge-lesson6" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/2</span>
+          </button>
+
+          <button type="button" data-nav="lesson7" onclick="switchTab('lesson7')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 07</div>
+              <div style="font-size:13px;font-weight:800;">Diagnostic CLI Commands</div>
+              <div style="font-size:11px;opacity:0.8;">ipconfig, ping, tracert + Labs 11–12</div>
+            </div>
+            <span id="badge-lesson7" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/2</span>
+          </button>
+
+          <button type="button" data-nav="lesson8" onclick="switchTab('lesson8')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">LESSON 08 • FIELD OPS</div>
+              <div style="font-size:13px;font-weight:800;">Stack Reset &amp; Escalation SOP</div>
+              <div style="font-size:11px;opacity:0.8;">Proxy traps, netsh + Labs 13–14</div>
+            </div>
+            <span id="badge-lesson8" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/2</span>
+          </button>
+
+          <div class="font-mono text-muted" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:8px 4px 2px;">
+            Certification Gate
+          </div>
+
+          <button type="button" data-nav="exam" onclick="switchTab('exam')" class="nav-item">
+            <div>
+              <div class="font-mono" style="font-size:10px;opacity:0.75;font-weight:700;">FINAL CHECK</div>
+              <div style="font-size:13px;font-weight:800;">Practical Scenario Exam</div>
+              <div style="font-size:11px;opacity:0.8;">12 network tickets • Pass 10/12</div>
+            </div>
+            <span id="badge-exam" class="font-mono" style="font-size:11px;padding:2px 6px;border:1px solid currentColor;border-radius:5px;flex-shrink:0;">0/12</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Sidebar Bottom Utilities -->
+      <div class="sidebar-footer space-y-2">
+        <button type="button" onclick="openCheatSheet()" class="btn-wb btn-light" style="width:100%;padding:9px 12px;justify-content:space-between;font-size:12px;">
+          <span style="display:flex;align-items:center;gap:6px;">
+            <span class="badge-ink" style="padding:2px 6px;font-size:10px;">CLI</span>
+            <span>Network &amp; Ports Cheat Sheet (26)</span>
+          </span>
+          <span class="font-mono">&rarr;</span>
+        </button>
+
+        <div id="reset-container">
+          <button type="button" onclick="showResetConfirm()" class="font-mono text-muted" style="width:100%;padding:6px;background:transparent;border:1px solid transparent;border-radius:8px;font-size:11px;cursor:pointer;">
+            Reset Saved Progress
+          </button>
+        </div>
+        <div id="reset-confirm-box" class="wb-red-box hidden" style="padding:10px;font-size:12px;">
+          <p class="text-crimson" style="margin:0 0 8px;font-weight:700;">Clear all Module 02 check-ins and scores?</p>
+          <div style="display:flex;gap:8px;">
+            <button type="button" onclick="executeReset()" class="btn-wb btn-crimson" style="flex:1;padding:6px;font-size:11px;">
+              Yes, Wipe
+            </button>
+            <button type="button" onclick="hideResetConfirm()" class="btn-wb btn-light" style="flex:1;padding:6px;font-size:11px;box-shadow:none;">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Top Context Strip -->
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-bottom:16px;margin-bottom:24px;border-bottom:2px solid #343A46;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;">
+          <span class="badge-tag">DESK SOP-02</span>
+          <span class="font-mono text-muted">Module 02: Practical Networking (Tier-1 Scope)</span>
+        </div>
+        <div class="font-mono text-muted" style="font-size:12px;">
+          Rule #2: Separate "No Internet" from "DNS Broken" in 10 seconds.
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 01: THE NETWORK TRIAGE LADDER                                -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson1" class="lesson-panel">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 01 OF 08 • NETWORK DIAGNOSTIC MINDSET</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            The Network Triage Ladder: How Tier-1 Isolates "No Internet"
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            Users call almost every network issue <em>"The internet is down."</em> As a web developer, you already know HTTP requests fail for completely different reasons (DNS failure, connection timeout, firewall block, or offline client). At the Service Desk, you test <strong>four sequential hops outward from the laptop</strong> so you pinpoint the exact break point in under 60 seconds.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 01 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Network Term in Lesson 01 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">NIC</strong> = <strong>N</strong>etwork <strong>I</strong>nterface <strong>C</strong>ard<br>
+              <span class="text-muted">The physical Ethernet port or Wi-Fi chip inside the PC.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">LAN / WAN</strong><br>
+              <span class="text-muted"><strong>L</strong>ocal <strong>A</strong>rea <strong>N</strong>etwork (office) vs. <strong>W</strong>ide <strong>A</strong>rea <strong>N</strong>etwork (internet/branches).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">ICMP</strong> = <strong>I</strong>nternet <strong>C</strong>ontrol <strong>M</strong>essage <strong>P</strong>rotocol<br>
+              <span class="text-muted">The diagnostic echo protocol used by <code class="code-pill">ping</code> and <code class="code-pill">tracert</code>.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">Loopback</strong> = <code class="code-pill">127.0.0.1</code><br>
+              <span class="text-muted">Reserved self-test IP (<code class="code-pill">localhost</code>) proving Windows' own TCP/IP stack works.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">Default Gateway</strong> = Local Router IP<br>
+              <span class="text-muted">The office router door that forwards traffic outside your local LAN.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">ISP</strong> = <strong>I</strong>nternet <strong>S</strong>ervice <strong>P</strong>rovider<br>
+              <span class="text-muted">External telecom carrier (e.g., WE, Orange, Vodafone) supplying the WAN link.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- First Principles Mental Model: How a Web Request Travels -->
+        <div class="wb-subbox space-y-2" style="font-size:14px;">
+          <strong class="font-mono text-sky" style="display:block;font-size:13px;">BEGINNER MENTAL MODEL • WHAT HAPPENS WHEN YOU OPEN A WEBSITE?</strong>
+          <p style="margin:0;">
+            When an employee types <code class="code-pill-white">portal.aboughaly.com</code> into Chrome, four invisible steps happen in milliseconds:
+            <strong>(1) Physical Link:</strong> The laptop's <strong>NIC</strong> has an active Wi-Fi or Ethernet signal.
+            <strong>(2) Local Identity (IP + DHCP):</strong> The laptop has a valid office IPv4 address (not <code class="code-pill-white">169.254.x.x</code>).
+            <strong>(3) Name Lookup (DNS):</strong> Windows asks the DNS server to translate <code class="code-pill-white">portal.aboughaly.com</code> into a numeric IP address.
+            <strong>(4) Routing (Default Gateway):</strong> Windows sends packets to the <strong>Default Gateway</strong> router, which forwards them across the internet to the server.
+            <em>If any single link in that 4-step chain breaks, the browser shows the exact same vague "This site can't be reached" page!</em>
+          </p>
+        </div>
+
+        <!-- The 4-Step Ping Isolation Ladder -->
+        <div class="wb-card space-y-3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:18px;font-weight:800;">The 4-Step Ping Isolation Ladder (Inside &rarr; Out)</h3>
+            <span class="badge-tag" style="background:#122922;border-color:#1F5E4B;color:#34D399;">Memorize This Sequence</span>
+          </div>
+          <p class="text-muted" style="margin:0;font-size:13px;">
+            Run these four <code class="code-pill">ping</code> targets in order from closest (inside the PC) to farthest (public internet name). The <strong>first step that fails</strong> tells you the exact layer to fix:
+          </p>
+
+          <div class="grid-4" style="font-size:13px;">
+            <div class="wb-subbox">
+              <div class="font-mono text-sky" style="font-size:11px;font-weight:700;">STEP 01 • SELF / STACK</div>
+              <div style="margin:6px 0;"><code class="code-pill-white" style="font-weight:700;">ping 127.0.0.1</code></div>
+              <p style="margin:0;font-size:12px;">Tests the PC's own TCP/IP software stack.<br><strong class="text-crimson">If fails:</strong> Windows TCP/IP / Winsock stack is corrupted (<code class="code-pill-white">netsh int ip reset</code>).</p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">STEP 02 • LOCAL LAN / ROUTER</div>
+              <div style="margin:6px 0;"><code class="code-pill-white" style="font-weight:700;">ping &lt;Gateway IP&gt;</code></div>
+              <p style="margin:0;font-size:12px;">Tests cable/Wi-Fi + local IP to your Default Gateway (e.g., <code class="code-pill-white">192.168.1.1</code>).<br><strong class="text-crimson">If fails:</strong> Cable unplugged, wrong Wi-Fi, or <code class="code-pill-white">169.254.x.x</code> APIPA IP.</p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">STEP 03 • EXTERNAL IP</div>
+              <div style="margin:6px 0;"><code class="code-pill-white" style="font-weight:700;">ping 8.8.8.8</code></div>
+              <p style="margin:0;font-size:12px;">Tests raw internet routing beyond your router (Google Public DNS IP) without using DNS.<br><strong class="text-crimson">If fails:</strong> Office ISP WAN outage or firewall blocking outbound traffic.</p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-crimson" style="font-size:11px;font-weight:700;">STEP 04 • NAME RESOLUTION</div>
+              <div style="margin:6px 0;"><code class="code-pill-white" style="font-weight:700;">ping google.com</code></div>
+              <p style="margin:0;font-size:12px;">Tests whether DNS translates names to IPs.<br><strong class="text-crimson">If Step 3 works but Step 4 fails:</strong> <strong>Points directly to DNS / name resolution!</strong> Raw IP routing works, so check DNS server, cache, <code class="code-pill-white">hosts</code> file, or Port 53.</p>
+            </div>
+          </div>
+
+          <div class="wb-amber-box" style="box-shadow:none;font-size:13px;">
+            <strong class="font-mono text-amber">FIELD CAVEAT ON PING:</strong> Some corporate firewalls or cloud websites block inbound <strong>ICMP Echo Requests</strong> (returning <em>Request timed out</em> even when HTTPS port 443 works). Always verify with a known ICMP-friendly target (<code class="code-pill-white">8.8.8.8</code> or your Default Gateway) or test the TCP port directly with <code class="code-pill-white">Test-NetConnection</code>.
+          </div>
+        </div>
+
+        <!-- Interactive Triage Simulator -->
+        <div class="wb-card">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-bottom:14px;margin-bottom:16px;border-bottom:2px solid #343A46;">
+            <div>
+              <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">INTERACTIVE DRILL • LIVE NETWORK QUEUE</div>
+              <h3 style="margin:2px 0;font-size:19px;font-weight:800;">Tier-1 Network Triage Simulator (3 Tickets)</h3>
+              <p class="text-muted" style="margin:0;font-size:13px;">Diagnose each user ticket using scope isolation and the 4-step Ping ladder.</p>
+            </div>
+            <span id="triage-counter" class="badge-tag" style="background:#22262E;padding:5px 10px;">0 / 3 Resolved</span>
+          </div>
+          <div id="triage-list" class="space-y-4"></div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <span class="font-mono text-muted" style="font-size:12px;">End of Lesson 01</span>
+          <button type="button" onclick="switchTab('lesson2')" class="btn-wb btn-ink" style="padding:11px 18px;font-size:13px;">
+            Next: IPv4, Subnet Mask &amp; Gateway &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 02: IPV4, SUBNET MASK & DEFAULT GATEWAY                      -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson2" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 02 OF 08 • CORE ADDRESSING &amp; ROUTING</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            IPv4 Addressing, Subnet Masks &amp; Default Gateway
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            For Tier-1 Service Desk roles, you do <strong>not</strong> need to calculate binary subnet math in your head. You need to understand what the three core IPv4 numbers do, recognize private vs. broken IP ranges on sight, and spot a misconfigured Subnet Mask or Default Gateway immediately.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 02 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Addressing Term in Lesson 02 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">IPv4 / IPv6</strong><br>
+              <span class="text-muted"><strong>I</strong>nternet <strong>P</strong>rotocol version <strong>4</strong> (32-bit, <code class="code-pill">192.168.1.50</code>) &amp; version <strong>6</strong> (128-bit hex).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">Octet</strong> = 8-bit number (0–255)<br>
+              <span class="text-muted">Each of the 4 dot-separated numbers in an IPv4 address (<code class="code-pill">10.20.30.40</code>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">CIDR</strong> = <strong>C</strong>lassless <strong>I</strong>nter-<strong>D</strong>omain <strong>R</strong>outing<br>
+              <span class="text-muted">Slash shorthand for subnet mask (e.g., <code class="code-pill">/24</code> = <code class="code-pill">255.255.255.0</code>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">MAC</strong> = <strong>M</strong>edia <strong>A</strong>ccess <strong>C</strong>ontrol<br>
+              <span class="text-muted">Permanent hardware address burned into the NIC (e.g., <code class="code-pill">A4-83-E7-12-9B-01</code>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">ARP</strong> = <strong>A</strong>ddress <strong>R</strong>esolution <strong>P</strong>rotocol<br>
+              <span class="text-muted">Maps a local IPv4 address to its physical MAC address on the LAN switch.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">NAT</strong> = <strong>N</strong>etwork <strong>A</strong>ddress <strong>T</strong>ranslation<br>
+              <span class="text-muted">Your router translating private office IPs into one public internet IP.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- The 3 Core IPv4 Numbers Explained -->
+        <div class="wb-card space-y-3">
+          <h3 style="margin:0;font-size:18px;font-weight:800;">1. The Three Numbers Every Networked PC Needs</h3>
+          <div class="grid-3" style="font-size:13px;">
+            <div class="wb-subbox">
+              <div class="font-mono text-sky" style="font-size:11px;font-weight:700;">1. IPv4 ADDRESS</div>
+              <h4 style="margin:4px 0 6px;font-size:15px;font-weight:800;">Your Device's Street Address</h4>
+              <p style="margin:0;">Four numbers (0–255) separated by dots, e.g. <code class="code-pill-white">192.168.10.45</code>. Every active device on the same network must have a <strong>unique</strong> IPv4 address—two PCs with the same IP trigger an IP conflict.<br><strong class="text-amber">Fix:</strong> Run <code class="code-pill-white">ipconfig /release</code> then <code class="code-pill-white">/renew</code>, or find the other device and move its static IP outside the DHCP pool.</p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">2. SUBNET MASK</div>
+              <h4 style="margin:4px 0 6px;font-size:15px;font-weight:800;">Network Part vs. Host Part</h4>
+              <p style="margin:0;">Tells Windows which portion of the IP is your <strong>office network (street)</strong> and which portion is your <strong>specific device (house number)</strong>. In <code class="code-pill-white">255.255.255.0</code> (<code class="code-pill-white">/24</code>), the first 3 numbers (<code class="code-pill-white">192.168.10</code>) are the network and the last (<code class="code-pill-white">.45</code>) is the host.</p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">3. DEFAULT GATEWAY</div>
+              <h4 style="margin:4px 0 6px;font-size:15px;font-weight:800;">The Exit Door Off Your LAN</h4>
+              <p style="margin:0;">The IP address of your local router (often <code class="code-pill-white">.1</code> or <code class="code-pill-white">.254</code>, e.g. <code class="code-pill-white">192.168.10.1</code>). If a destination IP is on your <em>same subnet</em>, Windows talks directly; if it's outside, Windows sends packets to the Default Gateway.</p>
+            </div>
+          </div>
+
+          <div class="wb-emerald-box" style="font-size:13px;">
+            <strong class="font-mono text-emerald">CLASSIC TIER-1 SYMPTOM OF A MISSING DEFAULT GATEWAY:</strong><br>
+            A user can open internal file shares (<code class="code-pill-white">\\FS01\Finance</code>) and ping coworkers on the same floor, <strong>but cannot reach any external website or cloud M365 app</strong>. Cause: someone entered a manual static IP and left the <strong>Default Gateway</strong> blank (or typed a gateway IP on the wrong subnet)!
+          </div>
+        </div>
+
+        <!-- IPv4 Address Ranges Cheat Table -->
+        <div class="wb-card-sm space-y-3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:18px;font-weight:800;">2. IPv4 Ranges You Must Recognize Immediately</h3>
+            <span class="badge-tag" style="background:#22262E;">Instant Visual Triage</span>
+          </div>
+          <div class="table-wrap">
+            <table class="wb-table">
+              <thead>
+                <tr>
+                  <th>Range / CIDR</th>
+                  <th>Category</th>
+                  <th>What Seeing It in <code class="code-pill">ipconfig</code> Tells You</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-mono"><strong>10.0.0.0 – 10.255.255.255</strong> (<code class="code-pill">/8</code>)</td>
+                  <td><span class="badge-tag" style="color:#34D399;">Private (RFC 1918)</span></td>
+                  <td>Standard enterprise corporate office, VPN, or branch VLAN IP. Healthy internal IP.</td>
+                </tr>
+                <tr>
+                  <td class="font-mono"><strong>172.16.0.0 – 172.31.255.255</strong> (<code class="code-pill">/12</code>)</td>
+                  <td><span class="badge-tag" style="color:#34D399;">Private (RFC 1918)</span></td>
+                  <td>Medium/enterprise internal LAN, Docker/WSL virtual switches, or corporate VPN pool.</td>
+                </tr>
+                <tr>
+                  <td class="font-mono"><strong>192.168.0.0 – 192.168.255.255</strong> (<code class="code-pill">/16</code>)</td>
+                  <td><span class="badge-tag" style="color:#34D399;">Private (RFC 1918)</span></td>
+                  <td>Small office or employee home Wi-Fi router (e.g., <code class="code-pill">192.168.1.x</code>). Healthy local IP.</td>
+                </tr>
+                <tr style="background:#2B1518;">
+                  <td class="font-mono text-crimson"><strong>169.254.0.0 – 169.254.255.255</strong> (<code class="code-pill">/16</code>)</td>
+                  <td><span class="badge-tag" style="color:#F87171;">APIPA (Broken DHCP)</span></td>
+                  <td><strong>RED FLAG!</strong> PC failed to reach a DHCP server and self-assigned a link-local IP. Cannot route to internet or servers.</td>
+                </tr>
+                <tr>
+                  <td class="font-mono"><strong>127.0.0.0 – 127.255.255.255</strong> (<code class="code-pill">127.0.0.1</code>)</td>
+                  <td><span class="badge-tag" style="color:#38BDF8;">Loopback</span></td>
+                  <td>Points back to the local PC itself (<code class="code-pill">localhost</code>). Used for testing the local TCP/IP stack.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-muted" style="margin:0;font-size:12px;">
+            <strong class="font-mono text-sky">IPv6 One-Liner:</strong> Windows adapters also display a 128-bit hex IPv6 address (<code class="code-pill">fe80::...</code> link-local is normal by default); if web apps stall despite healthy IPv4, broken upstream IPv6 routing or VPN IPv6 handling may be the culprit.
+          </p>
+        </div>
+
+        <div id="labs-lesson2-container"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson1')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: Triage Ladder
+          </button>
+          <button type="button" onclick="switchTab('lesson3')" class="btn-wb btn-ink" style="padding:11px 18px;font-size:13px;">
+            Next: DHCP &amp; APIPA &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 03: DHCP & APIPA (169.254.x.x)                               -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson3" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 03 OF 08 • AUTOMATIC IP ASSIGNMENT</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            DHCP &amp; APIPA (<code style="font-size:22px;">169.254.x.x</code>) Failures
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            Typing IP addresses manually on 500 office laptops would be impossible. Instead, a <strong>DHCP Server</strong> hands out IP settings automatically every time a PC connects—until a cable, switch port, or full IP pool breaks that handshake and leaves the PC stranded on <code class="code-pill">169.254.x.x</code>.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 03 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every DHCP Abbreviation in Lesson 03 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">DHCP</strong><br>
+              <strong>D</strong>ynamic <strong>H</strong>ost <strong>C</strong>onfiguration <strong>P</strong>rotocol (auto-assigns IP, Mask, Gateway &amp; DNS).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">DORA</strong><br>
+              <strong>D</strong>iscover &rarr; <strong>O</strong>ffer &rarr; <strong>R</strong>equest &rarr; <strong>A</strong>cknowledge (4-step DHCP handshake).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">APIPA</strong><br>
+              <strong>A</strong>utomatic <strong>P</strong>rivate <strong>IP</strong> <strong>A</strong>ddressing (<code class="code-pill">169.254.x.x</code> fallback when DHCP fails).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">DHCP Lease</strong><br>
+              Temporary rental timer (e.g., 8 hours or 8 days) before the IP returns to the pool.
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">DHCP Scope / Pool</strong><br>
+              The range of available IPs a DHCP server can hand out (e.g., <code class="code-pill">.50</code> to <code class="code-pill">.200</code>).
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-sky">DHCP Reservation</strong><br>
+              Permanently locks a specific IP to a printer/server's <strong>MAC address</strong> via DHCP.
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. The 4-Step DORA Handshake -->
+        <div class="wb-card space-y-3">
+          <h3 style="margin:0;font-size:18px;font-weight:800;">1. How DHCP Works: The 4-Step DORA Handshake</h3>
+          <p class="text-muted" style="margin:0;font-size:13px;">
+            When a laptop plugs into an Ethernet jack or joins Wi-Fi, it has no IP address yet—so it shouts a broadcast across the local LAN (Ports <strong>UDP 67/68</strong>):
+          </p>
+          <div class="grid-4" style="font-size:13px;">
+            <div class="wb-subbox">
+              <div class="font-mono text-sky" style="font-size:11px;font-weight:700;">D • DISCOVER (Client &rarr; All)</div>
+              <p style="margin:6px 0 0;"><em>"I have no IP! Are there any DHCP servers on this network?"</em></p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">O • OFFER (Server &rarr; Client)</div>
+              <p style="margin:6px 0 0;"><em>"I'm the DHCP server—you can lease 10.10.20.84 with mask, gateway &amp; DNS."</em></p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">R • REQUEST (Client &rarr; Server)</div>
+              <p style="margin:6px 0 0;"><em>"Thanks, I officially accept 10.10.20.84!"</em></p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">A • ACKNOWLEDGE (Server &rarr; Client)</div>
+              <p style="margin:6px 0 0;"><em>"Confirmed! Logged in my lease table for 8 days."</em></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. APIPA 169.254.x.x Deep Dive -->
+        <div class="wb-red-box space-y-3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B91C1C;color:#FFFFFF;border-color:#EF4444;">FIELD TRAP • APIPA</span>
+            <h3 style="margin:0;font-size:18px;font-weight:800;">2. Why Does <code style="font-size:16px;">169.254.x.x</code> Appear?</h3>
+          </div>
+          <p style="margin:0;font-size:14px;">
+            If Windows sends <strong>DHCP Discover</strong> packets and gets <strong>zero replies</strong>, Windows refuses to leave the network card blank—instead, <strong>APIPA (Automatic Private IP Addressing)</strong> picks a random IP between <code class="code-pill-white">169.254.0.1</code> and <code class="code-pill-white">169.254.255.254</code> with subnet mask <code class="code-pill-white">255.255.0.0</code> and <strong>no Default Gateway</strong>.
+          </p>
+          <div class="grid-2" style="font-size:13px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:12px;">
+              <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Top 4 Causes of 169.254.x.x</strong>
+              <ul style="margin:0;padding-left:18px;" class="space-y-2">
+                <li>Damaged Ethernet patch cable, bad dock port, or dead wall jack</li>
+                <li>Switch port is disabled or assigned to a dead/unrouted <strong>VLAN</strong></li>
+                <li><strong>DHCP Scope Exhaustion:</strong> Every IP in the office pool is leased out (classic in busy conference rooms or guest Wi-Fi!)</li>
+                <li>Windows <strong>DHCP Client</strong> service (<code class="code-pill">Dhcp</code> in <code class="code-pill">services.msc</code>) is stopped</li>
+              </ul>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:12px;">
+              <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Tier-1 Fix Sequence</strong>
+              <ul style="margin:0;padding-left:18px;" class="space-y-2">
+                <li>Run <code class="code-pill">ipconfig /release</code> followed by <code class="code-pill">ipconfig /renew</code></li>
+                <li>Check NIC link lights &amp; swap Ethernet cable / test on Wi-Fi to isolate laptop vs. wall port</li>
+                <li>Verify <code class="code-pill">ncpa.cpl</code> &rarr; IPv4 Properties is set to <strong>Obtain an IP address automatically</strong></li>
+                <li>If multiple users on the same floor get <code class="code-pill">169.254.x.x</code>, escalate to NetOps (DHCP scope full or switch uplink down)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div id="labs-lesson3-container"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson2')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: IPv4 &amp; Gateway
+          </button>
+          <button type="button" onclick="switchTab('lesson4')" class="btn-wb btn-ink" style="padding:11px 18px;font-size:13px;">
+            Next: DNS &amp; Name Resolution &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 04: DNS & NAME RESOLUTION                                    -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson4" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 04 OF 08 • NAME-TO-IP TRANSLATION</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            DNS (Domain Name System) &amp; Name Resolution
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            Computers route packets using IP addresses, not domain names. <strong>DNS</strong> is the distributed phonebook that translates <code class="code-pill">outlook.office.com</code> or <code class="code-pill">FS01.corp.local</code> into an IP address—and it is responsible for roughly half of all "the website won't load" tickets.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 04 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every DNS Term in Lesson 04 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">DNS</strong> = <strong>D</strong>omain <strong>N</strong>ame <strong>S</strong>ystem<br>
+              <span class="text-muted">Translates human hostnames into IP addresses (Port <strong>53</strong>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">FQDN</strong> = <strong>F</strong>ully <strong>Q</strong>ualified <strong>D</strong>omain <strong>N</strong>ame<br>
+              <span class="text-muted">Complete exact address: <code class="code-pill">fs01.aboughaly.local</code>.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">A / CNAME / MX</strong><br>
+              <span class="text-muted"><strong>A</strong>ddress (Name&rarr;IPv4) • <strong>C</strong>anonical <strong>Name</strong> (Alias) • <strong>M</strong>ail E<strong>x</strong>changer.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">TTL</strong> = <strong>T</strong>ime <strong>T</strong>o <strong>L</strong>ive<br>
+              <span class="text-muted">Seconds Windows caches a DNS answer before asking the server again.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">HOSTS File</strong><br>
+              <span class="text-muted">Local override text file at <code class="code-pill">C:\Windows\System32\drivers\etc\hosts</code>.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">NXDOMAIN</strong> = <strong>N</strong>on-E<strong>x</strong>istent <strong>Domain</strong><br>
+              <span class="text-muted">DNS server reply meaning "No record exists for that name."</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Windows Name Resolution Order -->
+        <div class="wb-card space-y-3">
+          <h3 style="margin:0;font-size:18px;font-weight:800;">1. How Windows Resolves a Name (3-Step Lookup Chain)</h3>
+          <div class="grid-3" style="font-size:13px;">
+            <div class="wb-subbox">
+              <div class="font-mono text-sky" style="font-size:11px;font-weight:700;">STEP 1 • LOCAL DNS CACHE</div>
+              <p style="margin:6px 0 0;">Windows checks its in-memory DNS Resolver Cache first. If an IT admin just moved a server to a new IP, Windows still remembers the old cached IP until its <strong>TTL</strong> expires—or until you run <code class="code-pill-white">ipconfig /flushdns</code>.</p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">STEP 2 • LOCAL HOSTS FILE</div>
+              <p style="margin:6px 0 0;">Next, Windows checks <code class="code-pill-white">C:\Windows\System32\drivers\etc\hosts</code>. Developers or old installers sometimes hardcode entries here, overriding real DNS and breaking migrated apps.</p>
+            </div>
+            <div class="wb-subbox">
+              <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">STEP 3 • CONFIGURED DNS SERVER</div>
+              <p style="margin:6px 0 0;">Finally, Windows sends a DNS query (Port 53) to the DNS Server IP listed in <code class="code-pill-white">ipconfig /all</code> (usually your on-prem Domain Controller in an office, or your router/ISP at home).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Corporate Internal DNS Trap -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">CRITICAL ENTERPRISE TRAP</span>
+            <h3 style="margin:0;font-size:17px;font-weight:800;">Never Permanently Set a Work PC's DNS to <code style="font-size:15px;">8.8.8.8</code>!</h3>
+          </div>
+          <p style="margin:0;font-size:14px;">
+            In a home setup, changing DNS to Google (<code class="code-pill-white">8.8.8.8</code>) or Cloudflare (<code class="code-pill-white">1.1.1.1</code>) is harmless. <strong>In a corporate Active Directory office, it breaks internal resources!</strong> Google's public DNS knows <code class="code-pill-white">google.com</code>, but it has <strong>zero knowledge</strong> of internal company names like <code class="code-pill-white">\\FS01\Finance</code>, <code class="code-pill-white">intranet.company.local</code>, or your Active Directory Domain Controller.
+          </p>
+          <div class="wb-card-sm" style="box-shadow:none;padding:12px;font-size:13px;">
+            <strong>How to test DNS safely without changing adapter settings:</strong> Run <code class="code-pill">nslookup portal.company.com 8.8.8.8</code> in Command Prompt. That queries <code class="code-pill">8.8.8.8</code> for a single one-off test while leaving the laptop's corporate DNS settings untouched!
+          </div>
+        </div>
+
+        <div id="labs-lesson4-container"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson3')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: DHCP &amp; APIPA
+          </button>
+          <button type="button" onclick="switchTab('lesson5')" class="btn-wb btn-ink" style="padding:11px 18px;font-size:13px;">
+            Next: LAN, Wi-Fi &amp; VPN &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 05: LAN, WI-FI & VPN AWARENESS                               -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson5" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 05 OF 08 • MEDIA &amp; REMOTE CONNECTIVITY</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            LAN vs. Wi-Fi &amp; Corporate VPN Awareness
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            Whether an employee sits at an office docking station over copper Ethernet, roams between floor Access Points on Wi-Fi, or works from home over a VPN tunnel, each connection medium has its own signature failure modes.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 05 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Connectivity Term in Lesson 05 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">SSID / AP</strong><br>
+              <span class="text-muted"><strong>S</strong>ervice <strong>S</strong>et <strong>ID</strong>entifier (Wi-Fi network name) • <strong>A</strong>ccess <strong>P</strong>oint.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">WPA2 / WPA3 / 802.1X</strong><br>
+              <span class="text-muted"><strong>W</strong>i-Fi <strong>P</strong>rotected <strong>A</strong>ccess security • Enterprise username/cert login.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">PoE / RJ45</strong><br>
+              <span class="text-muted"><strong>P</strong>ower <strong>o</strong>ver <strong>E</strong>thernet (powers desk phones/APs) • Standard Ethernet plug.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">VPN</strong> = <strong>V</strong>irtual <strong>P</strong>rivate <strong>N</strong>etwork<br>
+              <span class="text-muted">Encrypted tunnel connecting a remote laptop into the office LAN.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">Split vs. Full Tunnel</strong><br>
+              <span class="text-muted"><strong>Split:</strong> only office traffic uses VPN. <strong>Full:</strong> all internet routes via office.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">Captive Portal</strong><br>
+              <span class="text-muted">Hotel/airport Wi-Fi login webpage that blocks VPN/HTTPS until accepted.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Wired LAN vs Wi-Fi -->
+        <div class="wb-card space-y-3">
+          <h3 style="margin:0;font-size:18px;font-weight:800;">1. Wired LAN (Ethernet) vs. Enterprise Wi-Fi</h3>
+          <div class="grid-2" style="font-size:13px;">
+            <div class="wb-subbox space-y-2">
+              <strong class="font-mono text-emerald" style="display:block;">WIRED LAN (Cat5e / Cat6 Ethernet)</strong>
+              <ul style="margin:0;padding-left:18px;" class="space-y-2">
+                <li><strong>Link Lights:</strong> Solid green/amber LED = physical electrical link to the switch; blinking LED = active data frames. <strong>Both LEDs dark</strong> = unplugged cable, dead wall jack, or disabled switch port.</li>
+                <li><strong>Docking Station Trap:</strong> USB-C docks contain their own internal USB Ethernet NIC. If wired drops on a dock, test unplugging/re-seating the USB-C dock cable or plugging Ethernet directly into the laptop.</li>
+                <li><strong>Speed Negotiation:</strong> Check <code class="code-pill-white">ncpa.cpl</code> &rarr; Status: healthy office links negotiate <code class="code-pill-white">1.0 Gbps</code> (or <code class="code-pill-white">100 Mbps</code> on older wall runs). <code class="code-pill-white">10 Mbps</code> indicates a damaged cable pair.</li>
+              </ul>
+            </div>
+            <div class="wb-subbox space-y-2">
+              <strong class="font-mono text-sky" style="display:block;">WIRELESS LAN (2.4 GHz vs. 5 GHz / 6 GHz)</strong>
+              <ul style="margin:0;padding-left:18px;" class="space-y-2">
+                <li><strong>2.4 GHz:</strong> Travels farther through concrete walls, but slower and heavily congested by neighboring routers and Bluetooth.</li>
+                <li><strong>5 GHz / 6 GHz:</strong> Much faster throughput with less interference, but shorter range—drops off behind thick office walls.</li>
+                <li><strong>Password Change Wi-Fi Lockout:</strong> On corporate <strong>WPA2/WPA3-Enterprise</strong> Wi-Fi (which authenticates using the employee's AD username/password), resetting a user's AD password often causes Windows to spam the old cached Wi-Fi password and lock their AD account! Right-click SSID &rarr; <strong>Forget</strong> and reconnect.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Corporate VPN Awareness -->
+        <div class="wb-card-sm space-y-3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:18px;font-weight:800;">2. Corporate VPN Awareness (Remote Work Triage)</h3>
+            <span class="badge-tag" style="background:#102332;border-color:#1E4E72;color:#38BDF8;">FortiClient • GlobalProtect • Cisco AnyConnect</span>
+          </div>
+          <p class="text-muted" style="margin:0;font-size:13px;">
+            When an employee works from home, their laptop is on a public residential ISP network—outside the office firewall. Connecting the <strong>VPN client</strong> builds an encrypted tunnel back into the corporate network and assigns the laptop a virtual corporate IP address.
+          </p>
+          <div class="grid-3" style="font-size:13px;">
+            <div class="wb-subbox">
+              <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">1. Home Internet Must Work First</strong>
+              A VPN rides <em>on top</em> of the user's home Wi-Fi or hotspot. If their home Wi-Fi has no internet or is stuck behind a hotel <strong>Captive Portal</strong> login page, VPN will always fail at 0–10%.
+            </div>
+            <div class="wb-subbox">
+              <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">2. "Z: Drive Won't Open From Home"</strong>
+              Classic ticket! On-premises file shares (<code class="code-pill-white">\\FS01\Finance</code>), internal ERP portals, and RDP to office desktops are blocked from the public internet—connect VPN first, then refresh <code class="code-pill-white">Z:\</code>.
+            </div>
+            <div class="wb-subbox">
+              <strong class="font-mono text-crimson" style="display:block;margin-bottom:4px;">3. VPN Connects, Websites Slow/Blocked</strong>
+              In a <strong>Full-Tunnel VPN</strong>, all YouTube/web traffic routes through the office firewall (which may throttle or block streaming). In a <strong>Split-Tunnel VPN</strong>, only internal corporate subnets go through VPN while general web traffic goes straight out the user's home ISP.
+            </div>
+          </div>
+        </div>
+
+        <div id="labs-lesson5-container"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson4')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: DNS &amp; Name Resolution
+          </button>
+          <button type="button" onclick="switchTab('lesson6')" class="btn-wb btn-ink" style="padding:11px 18px;font-size:13px;">
+            Next: Common Ports &amp; Firewall &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 06: COMMON PORTS & WINDOWS FIREWALL                          -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson6" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 06 OF 08 • NETWORK PORTS &amp; FIREWALLS</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            Everyday Network Ports &amp; Windows Firewall Triage
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            If an <strong>IP address</strong> is the street address of an office building, a <strong>Port Number (0–65535)</strong> is the exact suite number inside that building telling the server which application should handle the incoming request.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 06 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every Port &amp; Protocol Acronym in Lesson 06 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">TCP</strong> = <strong>T</strong>ransmission <strong>C</strong>ontrol <strong>P</strong>rotocol<br>
+              <span class="text-muted">Reliable, acknowledged delivery (3-way handshake: SYN, SYN-ACK, ACK).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">UDP</strong> = <strong>U</strong>ser <strong>D</strong>atagram <strong>P</strong>rotocol<br>
+              <span class="text-muted">Fast, connectionless delivery used for DNS lookups, DHCP &amp; Teams voice/video.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">HTTP / HTTPS</strong><br>
+              <span class="text-muted"><strong>H</strong>yper<strong>t</strong>ext <strong>T</strong>ransfer <strong>P</strong>rotocol (Port <strong>80</strong>) &amp; <strong>S</strong>ecure TLS encrypted (Port <strong>443</strong>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">RDP</strong> = <strong>R</strong>emote <strong>D</strong>esktop <strong>P</strong>rotocol<br>
+              <span class="text-muted">Microsoft graphical remote control protocol (Port <strong>3389</strong>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-amber">SMB</strong> = <strong>S</strong>erver <strong>M</strong>essage <strong>B</strong>lock<br>
+              <span class="text-muted">Windows network file sharing (<code class="code-pill">\\FS01\Share</code>) &amp; printing (Port <strong>445</strong>).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-crimson">SSH</strong> = <strong>S</strong>ecure <strong>Sh</strong>ell<br>
+              <span class="text-muted">Encrypted command-line login for Linux servers, switches &amp; firewalls (Port <strong>22</strong>).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. The 6 Essential Tier-1 Ports Table -->
+        <div class="wb-card space-y-3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:18px;font-weight:800;">1. The 6 Everyday Ports Every Tier-1 Tech Must Know Cold</h3>
+            <span class="badge-tag" style="background:#122922;border-color:#1F5E4B;color:#34D399;">Interview Favorite</span>
+          </div>
+          <div class="table-wrap">
+            <table class="wb-table">
+              <thead>
+                <tr>
+                  <th>Port</th>
+                  <th>Protocol</th>
+                  <th>Transport</th>
+                  <th>Real-World Service Desk Relevance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-mono text-sky"><strong>22</strong></td>
+                  <td class="font-mono"><strong>SSH</strong></td>
+                  <td>TCP</td>
+                  <td>Encrypted CLI administration for Linux servers, network switches, and SFTP file transfers.</td>
+                </tr>
+                <tr>
+                  <td class="font-mono text-emerald"><strong>53</strong></td>
+                  <td class="font-mono"><strong>DNS</strong></td>
+                  <td>UDP / TCP</td>
+                  <td>Domain Name System lookups (UDP for standard queries; TCP for large responses/zone transfers).</td>
+                </tr>
+                <tr>
+                  <td class="font-mono text-amber"><strong>80</strong></td>
+                  <td class="font-mono"><strong>HTTP</strong></td>
+                  <td>TCP</td>
+                  <td>Unencrypted web traffic (usually redirects to 443, or triggers hotel/airport Wi-Fi captive portals).</td>
+                </tr>
+                <tr style="background:#122922;">
+                  <td class="font-mono text-emerald"><strong>443</strong></td>
+                  <td class="font-mono"><strong>HTTPS</strong></td>
+                  <td>TCP</td>
+                  <td>Encrypted web traffic—Microsoft 365, Teams, webmail, SSL VPN gateways, and modern SaaS apps.</td>
+                </tr>
+                <tr style="background:#102332;">
+                  <td class="font-mono text-sky"><strong>445</strong></td>
+                  <td class="font-mono"><strong>SMB</strong></td>
+                  <td>TCP</td>
+                  <td>Windows File &amp; Printer Sharing (<code class="code-pill">\\FS01\Finance</code>). Often blocked by ISPs over public internet—requires VPN!</td>
+                </tr>
+                <tr>
+                  <td class="font-mono text-amber"><strong>3389</strong></td>
+                  <td class="font-mono"><strong>RDP</strong></td>
+                  <td>TCP / UDP</td>
+                  <td>Windows Remote Desktop connection to jump hosts, servers, or office workstations.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#34D399;font-weight:700;"># Test if a specific TCP port is reachable in PowerShell (when ping/ICMP is blocked!):</span>
+              <button type="button" onclick="copyText('Test-NetConnection -ComputerName google.com -Port 443')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">
+                Copy Port Test
+              </button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">Test-NetConnection -ComputerName google.com -Port 443</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              Look at the final line: <code style="color:#34D399;">TcpTestSucceeded : True</code> proves end-to-end TCP reachability on Port 443 even if ICMP <code style="font-family:monospace;">ping</code> is blocked. Replace <code style="font-family:monospace;">google.com</code> and <code style="font-family:monospace;">443</code> with <code style="font-family:monospace;">FS01</code> and <code style="font-family:monospace;">445</code> to prove whether SMB file sharing is open or blocked by a firewall!
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Windows Firewall Profiles Trap -->
+        <div class="wb-card-sm space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+            <h3 style="margin:0;font-size:18px;font-weight:800;">2. Windows Defender Firewall Profiles (<code style="font-size:15px;">wf.msc</code>)</h3>
+            <button type="button" onclick="copyText('wf.msc')" class="btn-wb btn-ink" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: wf.msc</button>
+          </div>
+          <p class="text-muted" style="margin:0;font-size:13px;">
+            Windows applies three separate firewall rule sets depending on which network profile your adapter detects: <strong>Domain</strong> (authenticated to corporate Active Directory), <strong>Private</strong> (trusted home/small office), and <strong>Public</strong> (cafes, airports, untrusted networks—strictest blocking).
+          </p>
+          <div class="wb-subbox" style="font-size:13px;">
+            <strong class="font-mono text-amber">COMMON DESK FIX:</strong> A small-office workstation without Active Directory suddenly stops sharing a USB printer or folder after a router swap. Reason: Windows classified the new router as a <strong>Public</strong> network, blocking inbound SMB/discovery. Switch the connection profile back to <strong>Private</strong> in <em>Settings &rarr; Network &amp; internet &rarr; Properties</em>.
+          </div>
+        </div>
+
+        <div id="labs-lesson6-container"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson5')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: LAN, Wi-Fi &amp; VPN
+          </button>
+          <button type="button" onclick="switchTab('lesson7')" class="btn-wb btn-ink" style="padding:11px 18px;font-size:13px;">
+            Next: Diagnostic CLI Commands &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 07: DIAGNOSTIC CLI COMMANDS DEEP-DIVE                        -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson7" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 07 OF 08 • COMMAND-LINE TOOLKIT</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            Diagnostic CLI Commands Deep-Dive
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            GUIs hide details behind five clicks; Command Prompt (<code class="code-pill">cmd</code>) gives you raw ground-truth proof in two seconds. Here is every command from the Tier-1 syllabus, what flags matter, and how to read the output like an engineer.
+          </p>
+        </div>
+
+        <!-- Acronym Decoder for Lesson 07 -->
+        <div class="wb-amber-box space-y-2">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#B45309;color:#FFFFFF;border-color:#D97706;">ACRONYM DECODER</span>
+            <h3 style="margin:0;font-size:16px;font-weight:800;">What Every CLI Output Term in Lesson 07 Stands For</h3>
+          </div>
+          <div class="grid-3" style="font-size:12px;">
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">RTT (time=14ms)</strong><br>
+              <span class="text-muted"><strong>R</strong>ound-<strong>T</strong>rip <strong>T</strong>ime in milliseconds for a packet to go and return.</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">Hop</strong> = One Router Step<br>
+              <span class="text-muted">Each router a packet passes through in <code class="code-pill">tracert</code> (max 30 hops).</span>
+            </div>
+            <div class="wb-card-sm" style="box-shadow:none;padding:10px;">
+              <strong class="font-mono text-emerald">netstat -ano</strong><br>
+              <span class="text-muted"><strong>Net</strong>work <strong>Stat</strong>istics: <code class="code-pill">-a</code> all ports, <code class="code-pill">-n</code> numeric IPs, <code class="code-pill">-o</code> owning PID.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Command Reference Cards -->
+        <div class="space-y-3">
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#38BDF8;font-weight:700;">1. ipconfig /all — Complete Adapter &amp; Lease Inspection</span>
+              <button type="button" onclick="copyText('ipconfig /all')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: ipconfig /all</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">ipconfig /all</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              Plain <code style="font-family:monospace;">ipconfig</code> only shows IPv4, Subnet Mask, and Default Gateway. Adding <code style="color:#38BDF8;">/all</code> reveals five critical extra fields: <strong>Physical Address (MAC)</strong>, <strong>DHCP Enabled (Yes/No)</strong>, <strong>DHCP Server IP</strong>, <strong>Lease Obtained/Expires</strong>, and <strong>DNS Servers</strong>.
+            </div>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#FBBF24;font-weight:700;">2. ipconfig /release &amp;&amp; ipconfig /renew — Refresh DHCP Lease Safely</span>
+              <button type="button" onclick="copyText('ipconfig /release && ipconfig /renew')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy Chained Command</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">ipconfig /release &amp;&amp; ipconfig /renew</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              <code style="color:#FBBF24;">/release</code> drops the current IP back to <code style="font-family:monospace;">0.0.0.0</code>; <code style="color:#FBBF24;">/renew</code> broadcasts a fresh DHCP Discover/Request.
+              <br><strong style="color:#F87171;">REMOTE SUPPORT WARNING:</strong> Never run <code style="font-family:monospace;">ipconfig /release</code> alone while connected over Quick Assist, AnyDesk, or RDP—dropping the IP disconnects your remote session before you can type <code style="font-family:monospace;">/renew</code>! Always chain them with <code style="font-family:monospace;">&amp;&amp;</code>.
+            </div>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#34D399;font-weight:700;">3. ipconfig /flushdns — Clear Stale Local DNS Cache</span>
+              <button type="button" onclick="copyText('ipconfig /flushdns')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: ipconfig /flushdns</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">ipconfig /flushdns</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              Purges cached name-to-IP records from Windows' DNS Resolver Cache so the next request fetches fresh DNS records from the server.
+            </div>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#34D399;font-weight:700;">4. ping &amp; ping -t — Reachability, Packet Loss &amp; Jitter</span>
+              <button type="button" onclick="copyText('ping -t 8.8.8.8')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: ping -t 8.8.8.8</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">ping 8.8.8.8 &nbsp;&nbsp;|&nbsp;&nbsp; ping -t 8.8.8.8</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              Default <code style="font-family:monospace;">ping</code> sends 4 ICMP echo packets. Adding <code style="color:#34D399;">-t</code> pings continuously (press <code style="font-family:monospace;">Ctrl + C</code> to stop and print packet loss statistics)—ideal for catching intermittent Wi-Fi drops or latency spikes during Teams calls.
+            </div>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#38BDF8;font-weight:700;">5. tracert — Hop-by-Hop Path Diagnosis</span>
+              <button type="button" onclick="copyText('tracert -d 8.8.8.8')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: tracert -d 8.8.8.8</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">tracert -d 8.8.8.8</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              Lists every router hop between the PC and the destination (<code style="color:#38BDF8;">-d</code> skips reverse DNS lookups so it finishes 3x faster). If Hop 1 (Default Gateway) replies in <code style="font-family:monospace;">1ms</code> and Hop 3+ times out (<code style="font-family:monospace;">* * *</code>), it <strong>points to the ISP / upstream path</strong> rather than your office LAN—though note that some routers simply ignore or deprioritize <code style="font-family:monospace;">tracert</code> probes (if later hops reply, intermediate <code style="font-family:monospace;">* * *</code> timeouts are normal).
+            </div>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#FBBF24;font-weight:700;">6. nslookup — Direct DNS Server Query</span>
+              <button type="button" onclick="copyText('nslookup google.com')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: nslookup google.com</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">nslookup google.com &nbsp;&nbsp;|&nbsp;&nbsp; nslookup google.com 8.8.8.8</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              Shows <strong>which DNS server answered</strong> (<code style="font-family:monospace;">Server: ...</code>) and <strong>what IP it returned</strong> (<code style="font-family:monospace;">Address: ...</code>). Comparing your default DNS server against <code style="font-family:monospace;">8.8.8.8</code> proves immediately whether your local DNS server is failing.
+            </div>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#A78BFA;font-weight:700;">7. Bonus Tools — netstat, arp &amp; displaydns</span>
+              <button type="button" onclick="copyText('netstat -ano')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">Copy: netstat -ano</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;">netstat -ano &nbsp;&nbsp;|&nbsp;&nbsp; arp -a &nbsp;&nbsp;|&nbsp;&nbsp; ipconfig /displaydns</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;">
+              <strong>netstat -ano</strong> lists every open port and active connection with the owning <em>PID</em>. Use it to find which process is using a port (for example, an app that won't start because port 443 is taken), then match the PID in Task Manager &rarr; Details. Add <code style="font-family:monospace;">| findstr :443</code> to filter one port.<br><br>
+              <strong>arp -a</strong> shows the table of IP-to-MAC pairs your PC has learned on the LAN. Use it to spot an IP conflict: two different IPs are fine, but the same IP showing a MAC that doesn't match the expected device means another machine is using that address.<br><br>
+              <strong>ipconfig /displaydns</strong> prints the cached DNS records Windows is holding. If a name resolves to an old IP after a server move, you'll see it here, and <code style="font-family:monospace;">ipconfig /flushdns</code> clears it.
+            </div>
+          </div>
+        </div>
+
+        <div id="labs-lesson7-container"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson6')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: Ports &amp; Firewall
+          </button>
+          <button type="button" onclick="switchTab('lesson8')" class="btn-wb btn-ink" style="padding:11px 18px;font-size:13px;">
+            Next: Stack Reset &amp; Escalation &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- LESSON 08 (FIELD OPS): STACK RESET, PROXY TRAPS & ESCALATION SOP    -->
+      <!-- =================================================================== -->
+      <section id="tab-lesson8" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">LESSON 08 OF 08 • FIELD OPS • REPAIR &amp; ESCALATION</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            Windows Network Stack Reset, Proxy Traps &amp; Escalation SOP
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            Sometimes the office network is completely healthy, yet one laptop shows <em>"Connected, no internet"</em> after a crashed VPN client or bad update. Know how to catch hidden proxy overrides, reset the Windows network stack cleanly, and write a rock-solid Tier-2 escalation note when an outage is genuinely upstream.
+          </p>
+        </div>
+
+        <!-- 1. Stuck Proxy Trap & Network Stack Reset -->
+        <div class="wb-card space-y-3">
+          <h3 style="margin:0;font-size:18px;font-weight:800;">1. Single-PC "No Internet" Fixes (Quick Toggles, Proxy &amp; Stack Reset)</h3>
+          <div class="wb-emerald-box" style="font-size:13px;padding:12px 14px;">
+            <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">FIRST-LINE NON-REBOOT FIXES (TRY THESE BEFORE NETSH RESET)</strong>
+            <ul style="margin:0;padding-left:18px;" class="space-y-2">
+              <li><strong>Disable &amp; Re-enable Adapter (<code class="code-pill-white">ncpa.cpl</code>):</strong> Right-click Wi-Fi or Ethernet &rarr; <strong>Disable</strong>, wait 5 seconds, then <strong>Enable</strong> to clear a wedged NIC or DHCP state without rebooting <em>(local hands-on only—never disable the active adapter during a remote session!)</em>.</li>
+              <li><strong>Windows Network Troubleshooter:</strong> Run <em>Settings &rarr; Network &amp; internet &rarr; Diagnose network problems</em> (or right-click the taskbar network icon) to automatically detect and reset broken adapter, DHCP, or DNS bindings in seconds.</li>
+            </ul>
+          </div>
+          <div class="grid-2" style="font-size:13px;">
+            <div class="wb-subbox">
+              <strong class="font-mono text-amber" style="display:block;margin-bottom:4px;">Check Stuck Proxy (<code class="code-pill-white">inetcpl.cpl</code>)</strong>
+              Run <code class="code-pill-white">inetcpl.cpl</code> (<code class="code-pill-white">Win + R</code>) &rarr; <strong>Connections &rarr; LAN settings</strong>. Crashed VPN clients, security agents, or adware often leave <em>"Use a proxy server for your LAN"</em> checked pointing to <code class="code-pill-white">127.0.0.1:8080</code>—which hijacks all browser traffic while <code class="code-pill-white">ping 8.8.8.8</code> still works!
+            </div>
+            <div class="wb-subbox">
+              <strong class="font-mono text-emerald" style="display:block;margin-bottom:4px;">Windows Network Reset (GUI Alternative)</strong>
+              In <strong>Settings &rarr; Network &amp; internet &rarr; Advanced network settings &rarr; Network reset</strong>, Windows reinstalls all network adapters back to defaults and reboots in 5 minutes (note: requires re-entering Wi-Fi passwords).
+            </div>
+          </div>
+
+          <div class="wb-terminal space-y-2">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;">
+              <span style="color:#34D399;font-weight:700;"># Full Windows TCP/IP &amp; Winsock Stack Reset in Admin CMD (Requires Restart!):</span>
+              <button type="button" onclick="copyText('netsh winsock reset & netsh int ip reset & ipconfig /flushdns')" class="btn-wb btn-light" style="padding:3px 10px;font-size:11px;box-shadow:none;">
+                Copy Reset Commands
+              </button>
+            </div>
+            <div style="font-weight:700;">netsh winsock reset</div>
+            <div style="font-weight:700;">netsh int ip reset</div>
+            <div style="font-weight:700;">ipconfig /flushdns</div>
+            <div style="color:#D4D4D4;font-family:'Inter',sans-serif;font-size:12px;margin-top:6px;">
+              <strong>What each command repairs:</strong> <code style="color:#34D399;">netsh winsock reset</code> rebuilds the Windows Sockets catalog (used by every app to open network connections); <code style="color:#34D399;">netsh int ip reset</code> rewrites the TCP/IP registry keys back to clean defaults. <strong>Always restart the PC afterward</strong> so the clean stack loads.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Tier-1 vs Tier-2 Escalation Handoff -->
+        <div class="wb-sky-box space-y-3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <span class="badge-ink" style="background:#0369A1;color:#FFFFFF;border-color:#0284C7;">ESCALATION HANDOFF SOP</span>
+            <h3 style="margin:0;font-size:18px;font-weight:800;">2. When to Escalate to Network / Infrastructure &amp; What to Attach</h3>
+          </div>
+          <p style="margin:0;font-size:14px;">
+            Escalate immediately when diagnostics prove the fault is <strong>outside a single workstation</strong>: multiple users on the same switch/floor offline, DHCP scope exhausted, <code class="code-pill-white">ping 8.8.8.8</code> failing at the office ISP gateway across all PCs, or an enterprise DNS/file server unreachable by all departments.
+          </p>
+          <div class="wb-terminal" style="font-size:12px;line-height:1.6;">
+            <span style="color:#38BDF8;font-weight:700;"># Copy-Ready Tier-2 Network Escalation Template:</span><br>
+            <strong>Scope:</strong> 12 users on Floor 2 East Wing (Switch Closet B, Wall Ports 2B-14 to 2B-25)<br>
+            <strong>Symptom:</strong> Wired Ethernet adapters pull 169.254.x.x (APIPA); Wi-Fi on same floor works.<br>
+            <strong>Tests Run:</strong><br>
+            - ipconfig /all: IPv4 169.254.88.14, DHCP Enabled: Yes, DHCP Server: blank, MAC: A4-83-E7-12-9B-01<br>
+            - ipconfig /release &amp;&amp; /renew: Timed out ("unable to contact your DHCP server")<br>
+            - Swap test: Verified with known-good patch cable and 2nd laptop on port 2B-14 (same 169.254.x.x)<br>
+            <strong>Request:</strong> Check VLAN / DHCP relay configuration on Floor 2 East switch uplink.
+          </div>
+        </div>
+
+        <div id="labs-lesson8-container"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson7')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: Diagnostic CLI Commands
+          </button>
+          <button type="button" onclick="switchTab('exam')" class="btn-wb btn-emerald" style="padding:11px 18px;font-size:13px;">
+            Next: Final Practical Check &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- FINAL CHECK: PRACTICAL SCENARIO EXAM (12 QUESTIONS)                 -->
+      <!-- =================================================================== -->
+      <section id="tab-exam" class="lesson-panel hidden">
+        <div>
+          <div class="badge-ink" style="margin-bottom:8px;">MODULE 02 ASSESSMENT • 12 NETWORK TICKETS</div>
+          <h2 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.02em;">
+            Final Practical Check (12 Network Scenarios)
+          </h2>
+          <p class="text-muted" style="margin:8px 0 0;font-size:15px;">
+            Twelve real Service Desk networking tickets testing every lesson in Module 02. Score at least <strong>10/12</strong> to clear Module 02.
+          </p>
+        </div>
+
+        <div id="exam-result-banner" class="hidden wb-card-sm"></div>
+
+        <div id="exam-questions-list" class="space-y-4"></div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+          <button type="button" onclick="switchTab('lesson8')" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+            &larr; Prev: Stack Reset &amp; Escalation
+          </button>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <button type="button" onclick="resetExamOnly()" class="btn-wb btn-light" style="padding:11px 16px;font-size:13px;">
+              Clear Exam Answers
+            </button>
+            <button type="button" onclick="submitExam()" class="btn-wb btn-ink" style="padding:11px 20px;font-size:13px;">
+              Grade Practical Check
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- NETWORK CLI & PORTS CHEAT SHEET MODAL (26 ITEMS)                      -->
+  <!-- ===================================================================== -->
+  <div id="cheatsheet-modal" role="dialog" aria-modal="true" aria-labelledby="cheatsheet-title" class="modal-overlay hidden">
+    <div class="modal-dialog">
+      <div style="padding:16px 20px;background:#22262E;border-bottom:2px solid #343A46;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div>
+          <div class="font-mono text-amber" style="font-size:11px;font-weight:700;">QUICK REFERENCE • 26 COMMANDS, IPs &amp; PORTS</div>
+          <h3 id="cheatsheet-title" style="margin:2px 0 0;font-size:17px;font-weight:800;">
+            Tier-1 Networking CLI, Ranges &amp; Ports Cheat Sheet
+          </h3>
+        </div>
+        <button type="button" onclick="closeCheatSheet()" aria-label="Close cheat sheet" class="btn-wb btn-light" style="padding:6px 10px;box-shadow:none;">
+          ✕
+        </button>
+      </div>
+
+      <div style="padding:18px 20px;overflow-y:auto;">
+        <p class="text-muted" style="margin:0 0 12px;font-size:12px;">Click any command or reference card to copy it to your clipboard.</p>
+        <div id="cheatsheet-items" class="grid-2" style="gap:10px;"></div>
+      </div>
+
+      <div style="padding:12px 20px;background:#22262E;border-top:2px solid #343A46;display:flex;justify-content:flex-end;">
+        <button type="button" onclick="closeCheatSheet()" class="btn-wb btn-ink" style="padding:8px 16px;font-size:12px;">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC & STATE MANAGEMENT                                  -->
+  <!-- ===================================================================== -->
+  <script>
+    const STORAGE_KEY = 'sd_module02_v1';
+
+    const TRIAGE_TICKETS = [
+      {
+        id: 'ticketA',
+        code: 'INC-2011',
+        dept: 'Marketing Dept',
+        user: 'Salma T.',
+        prompt: '"The internet is completely down! Chrome says DNS_PROBE_FINISHED_NXDOMAIN, even though Microsoft Teams chat is still sending messages."',
+        options: [
+          {
+            label: 'Replace the user\'s Ethernet cable and call the ISP to report an office outage.',
+            status: 'error',
+            feedback: 'Teams is still sending messages, so the physical cable and ISP link are alive! The error explicitly says NXDOMAIN (DNS failure).'
+          },
+          {
+            label: 'Test ping 8.8.8.8 vs. ping google.com, run nslookup, and flush/verify the PC\'s configured DNS servers.',
+            status: 'verified',
+            feedback: 'Spot on. When existing IP sessions (Teams) or ping 8.8.8.8 work while new domain lookups fail with NXDOMAIN, you have isolated a DNS issue.'
+          },
+          {
+            label: 'Reinstall Windows 11 on the user\'s laptop.',
+            status: 'warning',
+            feedback: 'Never reimage a PC before running a 10-second nslookup and ipconfig /flushdns check.'
+          }
+        ]
+      },
+      {
+        id: 'ticketB',
+        code: 'INC-2018',
+        dept: 'Procurement',
+        user: 'Tarek M.',
+        prompt: '"I plugged my laptop into the desk Ethernet jack this morning and now I can\'t reach Outlook, shared drives, or any websites."',
+        options: [
+          {
+            label: 'Run ipconfig /all to check if the Ethernet adapter received a valid office IP or a 169.254.x.x APIPA address, and inspect NIC link LEDs.',
+            status: 'verified',
+            feedback: 'Textbook Tier-1 triage. Checking ipconfig /all immediately shows whether the port gave a valid DHCP lease or failed into 169.254.x.x APIPA.'
+          },
+          {
+            label: 'Set a random manual static IP like 192.168.1.55 without checking the floor\'s subnet.',
+            status: 'error',
+            feedback: 'Never guess a static IP on a corporate network—wrong subnets fail to route and duplicate IPs cause network conflicts.'
+          },
+          {
+            label: 'Run DISM /Online /Cleanup-Image /RestoreHealth (which requires internet access).',
+            status: 'warning',
+            feedback: 'DISM RestoreHealth downloads files from Windows Update—which cannot work while the laptop is offline!'
+          }
+        ]
+      },
+      {
+        id: 'ticketC',
+        code: 'INC-2024',
+        dept: 'Logistics',
+        user: 'Hossam E.',
+        prompt: '"Fourteen users in the Logistics wing just called saying none of their desktop PCs can open shared folders or websites."',
+        options: [
+          {
+            label: 'Walk to each of the 14 PCs one by one and run netsh winsock reset.',
+            status: 'warning',
+            feedback: 'Fourteen simultaneous failures on one wing is a shared infrastructure outage (switch, VLAN, or gateway), not 14 simultaneous Windows bugs.'
+          },
+          {
+            label: 'Verify scope on one PC (check Gateway ping & DNS), confirm all 14 share the same wing/switch, and escalate immediately to Network Infrastructure with test results.',
+            status: 'verified',
+            feedback: 'Correct. Once you prove multiple users in one area share the same network failure, gather 1 clean diagnostic sample and escalate to NetOps immediately.'
+          },
+          {
+            label: 'Tell all 14 users to tether to their personal mobile hotspots permanently.',
+            status: 'error',
+            feedback: 'Mobile hotspots cannot reach internal on-premises servers without VPN and do not resolve a wing-wide network outage.'
+          }
+        ]
+      }
+    ];
+
+    const LESSON_LAB_GROUPS = [
+      {
+        lessonId: 'lesson2',
+        counterId: 'labs-l2-counter',
+        badge: 'HANDS-ON PRACTICE • USE YOUR REAL PC',
+        title: 'IPv4, Subnet Mask & Gateway Labs (Labs 01–02)',
+        subtitle: 'Inspect your active network adapter on your Windows PC and decode its addressing.',
+        labs: [
+          {
+            key: 'lab1',
+            tag: 'LAB 01 • LIVE IPv4 & DEFAULT GATEWAY AUDIT',
+            desc: 'Open Command Prompt (<code class="code-pill-white">cmd</code>) and run <code class="code-pill-white">ipconfig</code>. Look at your active Wi-Fi or Ethernet adapter and select which Private IPv4 range your IP belongs to:',
+            type: 'select',
+            placeholder: '-- Select the private IPv4 range on your active adapter --',
+            options: [
+              { value: '192.168.x.x (Private /16)', label: '192.168.x.x (Private RFC 1918 range)' },
+              { value: '10.x.x.x (Private /8)', label: '10.x.x.x (Private RFC 1918 range)' },
+              { value: '172.16-31.x.x (Private /12)', label: '172.16.x.x – 172.31.x.x (Private RFC 1918 range)' }
+            ],
+            validate: (v) => ({ ok: true })
+          },
+          {
+            key: 'lab2',
+            tag: 'LAB 02 • SUBNET & GATEWAY ROUTING CHECK',
+            desc: 'Your PC is <code class="code-pill-white">10.20.30.45</code> with Subnet Mask <code class="code-pill-white">255.255.255.0</code> (<code class="code-pill-white">/24</code>) and Default Gateway <code class="code-pill-white">10.20.30.1</code>. You send a packet to <code class="code-pill-white">10.20.99.12</code>. Does Windows send it directly on the LAN or via the Default Gateway?',
+            type: 'select',
+            placeholder: '-- Select how Windows routes to 10.20.99.12 --',
+            options: [
+              { value: 'wrong1', label: 'Directly on the local LAN (same 10.20 prefix)' },
+              { value: 'correct', label: 'Via the Default Gateway (10.20.30.1) because the 3rd octet differs under /24' },
+              { value: 'wrong2', label: 'Via APIPA 169.254.0.1' }
+            ],
+            validate: (v) => v === 'correct'
+              ? { ok: true, label: 'Via the Default Gateway (10.20.30.1) because the 3rd octet differs under /24' }
+              : { ok: false, error: 'Under 255.255.255.0 (/24), the first three octets (10.20.30 vs 10.20.99) must match to be on the same local subnet.' }
+          }
+        ]
+      },
+      {
+        lessonId: 'lesson3',
+        counterId: 'labs-l3-counter',
+        badge: 'HANDS-ON PRACTICE • DHCP LEASE INSPECTION',
+        title: 'DHCP & APIPA Labs (Labs 03–04)',
+        subtitle: 'Inspect your live DHCP lease details and verify DORA / APIPA troubleshooting logic.',
+        labs: [
+          {
+            key: 'lab3',
+            tag: 'LAB 03 • IPCONFIG /ALL DHCP AUDIT',
+            desc: 'Run <code class="code-pill-white">ipconfig /all</code> in <code class="code-pill-white">cmd</code>, locate your active adapter, and check <strong>DHCP Enabled</strong> and <strong>DHCP Server</strong>. Enter the <strong>DHCP Server IP</strong> (or Subnet Mask) shown on your adapter:',
+            type: 'text',
+            placeholder: 'e.g., 192.168.1.1 or 255.255.255.0',
+            validate: (v) => v.length >= 4
+              ? { ok: true }
+              : { ok: false, error: 'Enter the DHCP Server IP or Subnet Mask displayed by ipconfig /all on your PC.' }
+          },
+          {
+            key: 'lab4',
+            tag: 'LAB 04 • APIPA DIAGNOSIS',
+            desc: 'A docked laptop shows <code class="code-pill-white">IPv4 Address: 169.254.112.9</code>, <code class="code-pill-white">Subnet Mask: 255.255.0.0</code>, and <code class="code-pill-white">Default Gateway: (blank)</code>. What happened?',
+            type: 'select',
+            placeholder: '-- Select the root cause of 169.254.112.9 --',
+            options: [
+              { value: 'wrong1', label: 'The laptop is connected to a high-speed IPv6 fiber line' },
+              { value: 'correct', label: 'DHCP Discover failed to get an Offer, so Windows self-assigned an APIPA address' },
+              { value: 'wrong2', label: 'The user typed the wrong DNS server' }
+            ],
+            validate: (v) => v === 'correct'
+              ? { ok: true, label: 'DHCP Discover failed to get an Offer, so Windows self-assigned an APIPA address' }
+              : { ok: false, error: '169.254.x.x is APIPA — Windows assigns it automatically whenever DHCP fails.' }
+          }
+        ]
+      },
+      {
+        lessonId: 'lesson4',
+        counterId: 'labs-l4-counter',
+        badge: 'HANDS-ON PRACTICE • DNS QUERY & CACHE',
+        title: 'DNS & Nslookup Labs (Labs 05–06)',
+        subtitle: 'Query live DNS records from Command Prompt and inspect Windows\' DNS Resolver Cache.',
+        labs: [
+          {
+            key: 'lab5',
+            tag: 'LAB 05 • LIVE NSLOOKUP QUERY',
+            desc: 'Open <code class="code-pill-white">cmd</code> and run <code class="code-pill-white">nslookup one.one.one.one</code> (or <code class="code-pill-white">nslookup dns.google</code>). Enter one of the resolved IPv4 addresses returned under <strong>Addresses:</strong>:',
+            type: 'text',
+            placeholder: 'e.g., 1.1.1.1 or 8.8.8.8',
+            validate: (v) => v.length >= 4
+              ? { ok: true }
+              : { ok: false, error: 'Run nslookup one.one.one.one or nslookup dns.google and enter a resolved IPv4 address.' }
+          },
+          {
+            key: 'lab6',
+            tag: 'LAB 06 • SPLIT-BRAIN CORPORATE DNS TRAP',
+            desc: 'A remote employee changed their laptop\'s DNS setting to <code class="code-pill-white">8.8.8.8</code> after reading a blog post. Now YouTube works, but <code class="code-pill-white">\\\\FS01\\Finance</code> and <code class="code-pill-white">intranet.corp.local</code> fail with "cannot be found." Why?',
+            type: 'select',
+            placeholder: '-- Select why 8.8.8.8 broke internal company names --',
+            options: [
+              { value: 'correct', label: 'Public DNS (8.8.8.8) has no records for private internal Active Directory / corporate hostnames' },
+              { value: 'wrong1', label: 'Google DNS blocks SMB port 445 on Windows 11' },
+              { value: 'wrong2', label: '8.8.8.8 only works on Ethernet, not Wi-Fi' }
+            ],
+            validate: (v) => v === 'correct'
+              ? { ok: true, label: 'Public DNS (8.8.8.8) has no records for private internal Active Directory / corporate hostnames' }
+              : { ok: false, error: 'Public DNS servers only know public internet domains—internal corporate hostnames must resolve against internal corporate DNS.' }
+          }
+        ]
+      },
+      {
+        lessonId: 'lesson5',
+        counterId: 'labs-l5-counter',
+        badge: 'HANDS-ON PRACTICE • ADAPTER & VPN AUDIT',
+        title: 'LAN, Wi-Fi & VPN Labs (Labs 07–08)',
+        subtitle: 'Inspect your Windows network adapters and verify corporate VPN triage rules.',
+        labs: [
+          {
+            key: 'lab7',
+            tag: 'LAB 07 • NCPA.CPL ADAPTER & LINK SPEED AUDIT',
+            desc: 'Press <code class="code-pill-white">Win + R</code>, run <code class="code-pill-white">ncpa.cpl</code>, double-click your active Wi-Fi or Ethernet connection (or run <code class="code-pill-white">netsh wlan show interfaces</code>), and select your connection type:',
+            type: 'select',
+            placeholder: '-- Select your active connection type in ncpa.cpl --',
+            options: [
+              { value: 'Wi-Fi (Wireless LAN)', label: 'Wi-Fi (Wireless LAN adapter active)' },
+              { value: 'Ethernet (Wired LAN)', label: 'Ethernet (Wired LAN adapter active)' }
+            ],
+            validate: (v) => ({ ok: true })
+          },
+          {
+            key: 'lab8',
+            tag: 'LAB 08 • REMOTE VPN + SHARED DRIVE SCENARIO',
+            desc: 'An employee working from home says Gmail works fine in Chrome, but their mapped <code class="code-pill-white">Z:\\</code> drive (<code class="code-pill-white">\\\\FS01\\Sales</code>) says <em>"The network path was not found."</em> What is your first check?',
+            type: 'select',
+            placeholder: '-- Select the first Tier-1 check --',
+            options: [
+              { value: 'wrong1', label: 'Tell the user to plug an Ethernet cable into their home ISP router' },
+              { value: 'correct', label: 'Verify whether the corporate VPN client is connected and authenticated' },
+              { value: 'wrong2', label: 'Re-create their Active Directory user account' }
+            ],
+            validate: (v) => v === 'correct'
+              ? { ok: true, label: 'Verify whether the corporate VPN client is connected and authenticated' }
+              : { ok: false, error: 'Internal file servers (FS01) sit behind the corporate firewall—remote users must connect VPN first.' }
+          }
+        ]
+      },
+      {
+        lessonId: 'lesson6',
+        counterId: 'labs-l6-counter',
+        badge: 'HANDS-ON PRACTICE • PORT & SOCKET AUDIT',
+        title: 'Common Ports & Firewall Labs (Labs 09–10)',
+        subtitle: 'Match core Tier-1 ports and inspect active network sockets on your PC.',
+        labs: [
+          {
+            key: 'lab9',
+            tag: 'LAB 09 • PORT-TO-PROTOCOL MATCH',
+            desc: 'Which port number does Windows SMB File &amp; Printer Sharing (<code class="code-pill-white">\\\\FS01\\Share</code>) use over TCP?',
+            type: 'select',
+            placeholder: '-- Select the TCP port used by SMB --',
+            options: [
+              { value: 'wrong1', label: 'Port 22 (SSH)' },
+              { value: 'wrong2', label: 'Port 3389 (RDP)' },
+              { value: 'correct', label: 'Port 445 (SMB)' },
+              { value: 'wrong3', label: 'Port 53 (DNS)' }
+            ],
+            validate: (v) => v === 'correct'
+              ? { ok: true, label: 'Port 445 (SMB)' }
+              : { ok: false, error: 'Review the 6-port table: 22=SSH, 53=DNS, 80=HTTP, 443=HTTPS, 445=SMB, 3389=RDP.' }
+          },
+          {
+            key: 'lab10',
+            tag: 'LAB 10 • POWERHELL PORT REACHABILITY CHECK',
+            desc: 'Open PowerShell or <code class="code-pill-white">cmd</code> and run <code class="code-pill-white">powershell -c "Test-NetConnection -ComputerName 8.8.8.8 -Port 53"</code>. What boolean value appears next to <strong>TcpTestSucceeded</strong>?',
+            type: 'select',
+            placeholder: '-- Select TcpTestSucceeded output --',
+            options: [
+              { value: 'True', label: 'True (Port 53 is reachable)' },
+              { value: 'False', label: 'False (Blocked or offline)' }
+            ],
+            validate: (v) => v === 'True'
+              ? { ok: true }
+              : { ok: false, error: 'When online, Test-NetConnection against 8.8.8.8 port 53 returns TcpTestSucceeded : True.' }
+          }
+        ]
+      },
+      {
+        lessonId: 'lesson7',
+        counterId: 'labs-l7-counter',
+        badge: 'HANDS-ON PRACTICE • CLI DIAGNOSTICS',
+        title: 'Ping, Tracert & Remote CLI Labs (Labs 11–12)',
+        subtitle: 'Run a live trace route on your PC and master remote CLI safety.',
+        labs: [
+          {
+            key: 'lab11',
+            tag: 'LAB 11 • LIVE TRACERT HOP INSPECTION',
+            desc: 'Open <code class="code-pill-white">cmd</code> and run <code class="code-pill-white">tracert -d -h 5 8.8.8.8</code> (traces the first 5 router hops). What is <strong>Hop 1</strong> in almost every home or office network?',
+            type: 'select',
+            placeholder: '-- Select what Hop 1 represents --',
+            options: [
+              { value: 'Your local Default Gateway (Router)', label: 'Your local Default Gateway (Router)' },
+              { value: 'wrong1', label: 'Google\'s data center server in California' },
+              { value: 'wrong2', label: 'Your laptop\'s 127.0.0.1 loopback interface' }
+            ],
+            validate: (v) => v === 'Your local Default Gateway (Router)'
+              ? { ok: true }
+              : { ok: false, error: 'Hop 1 is always the first router your packets hit—your local Default Gateway.' }
+          },
+          {
+            key: 'lab12',
+            tag: 'LAB 12 • REMOTE SUPPORT IPCONFIG TRAP',
+            desc: 'You are assisting a remote user via Windows Quick Assist and need to renew their DHCP lease. Why must you run <code class="code-pill-white">ipconfig /release &amp;&amp; ipconfig /renew</code> in one line instead of <code class="code-pill-white">ipconfig /release</code> by itself?',
+            type: 'select',
+            placeholder: '-- Select why chaining with && is mandatory remotely --',
+            options: [
+              { value: 'correct', label: 'Running /release alone drops the PC\'s IP and kills your remote session before you can type /renew' },
+              { value: 'wrong1', label: 'Windows 11 blocks ipconfig /release unless && is used' },
+              { value: 'wrong2', label: '/release deletes the user\'s Wi-Fi drivers permanently' }
+            ],
+            validate: (v) => v === 'correct'
+              ? { ok: true, label: 'Running /release alone drops the PC\'s IP and kills your remote session before you can type /renew' }
+              : { ok: false, error: 'Releasing the IP drops network connectivity immediately—chaining && ensures /renew runs right away.' }
+          }
+        ]
+      },
+      {
+        lessonId: 'lesson8',
+        counterId: 'labs-l8-counter',
+        badge: 'HANDS-ON PRACTICE • STACK & PROXY AUDIT',
+        title: 'Proxy Audit & Escalation Labs (Labs 13–14)',
+        subtitle: 'Verify your Windows LAN proxy settings and practice clean escalation criteria.',
+        labs: [
+          {
+            key: 'lab13',
+            tag: 'LAB 13 • INETCPL.CPL LAN PROXY AUDIT',
+            desc: 'Press <code class="code-pill-white">Win + R</code>, run <code class="code-pill-white">inetcpl.cpl</code> &rarr; <strong>Connections &rarr; LAN settings</strong>, and confirm whether a manual proxy server is unexpectedly forced on your PC:',
+            type: 'select',
+            placeholder: '-- Select what your LAN settings show --',
+            options: [
+              { value: 'Clean — No stale manual proxy enabled', label: 'Clean — No stale manual proxy enabled' },
+              { value: 'Proxy checked (Corp/VPN proxy active)', label: 'Proxy checked (Corporate or active VPN proxy)' }
+            ],
+            validate: (v) => ({ ok: true })
+          },
+          {
+            key: 'lab14',
+            tag: 'LAB 14 • SINGLE-PC STACK RESET COMMANDS',
+            desc: 'After uninstalling a broken third-party VPN client, a single Windows laptop shows "Connected, no internet" while all neighboring PCs work fine. Which two <code class="code-pill-white">netsh</code> commands reset Winsock and TCP/IP before rebooting?',
+            type: 'select',
+            placeholder: '-- Select the two Admin CMD reset commands --',
+            options: [
+              { value: 'netsh winsock reset & netsh int ip reset', label: 'netsh winsock reset & netsh int ip reset' },
+              { value: 'wrong1', label: 'net use * /delete & net share' },
+              { value: 'wrong2', label: 'sfc /scannow & oobe\\bypassnro' }
+            ],
+            validate: (v) => v === 'netsh winsock reset & netsh int ip reset'
+              ? { ok: true }
+              : { ok: false, error: 'Use netsh winsock reset and netsh int ip reset in Admin CMD, followed by a Restart.' }
+          }
+        ]
+      }
+    ];
+
+    const EXAM_QUESTIONS = [
+      {
+        id: 'q1',
+        tag: '4-STEP PING LADDER',
+        question: 'A user reports "The internet is down." You run ping 127.0.0.1 (success), ping 10.10.1.1 Default Gateway (success), ping 8.8.8.8 (success), and ping google.com (Ping request could not find host). What is broken?',
+        options: [
+          'The user\'s Ethernet cable is unplugged.',
+          'DNS name resolution is failing—raw IP routing to the internet (8.8.8.8) works, so check DNS servers and run ipconfig /flushdns.',
+          'The office ISP fiber line is completely cut.'
+        ],
+        correctIndex: 1,
+        explanation: 'Passing Step 3 (ping 8.8.8.8) shows local LAN, Default Gateway, and raw IP routing to the internet work, while failing Step 4 (ping google.com) points strongly to DNS / name resolution (check DNS server, cache, hosts file, or Port 53). Interview tip: say "points to DNS" rather than "100% proves DNS," since a local HOSTS override or firewall rule blocking Port 53 can mimic a broken DNS server.'
+      },
+      {
+        id: 'q2',
+        tag: 'APIPA (169.254.x.x)',
+        question: 'You run ipconfig /all on a desktop that cannot connect to anything and see IPv4 Address: 169.254.44.19 (Preferred) with Subnet Mask 255.255.0.0 and no Default Gateway. What does this mean?',
+        options: [
+          'The PC failed to contact a DHCP server and self-assigned an APIPA link-local IP address.',
+          'The PC is connected to the corporate VPN successfully.',
+          'The user manually typed a valid Class A corporate IP.'
+        ],
+        correctIndex: 0,
+        explanation: '169.254.0.0/16 is APIPA (Automatic Private IP Addressing). Windows assigns it whenever DHCP Discover broadcasts receive no response.'
+      },
+      {
+        id: 'q3',
+        tag: 'DEFAULT GATEWAY',
+        question: 'An Accounting PC was configured with a static IP. The user can access internal \\\\FS01\\Accounting file shares and ping nearby coworkers, but cannot open any external websites or Microsoft 365. Which field is most likely missing or wrong?',
+        options: [
+          'Loopback IP (127.0.0.1)',
+          'Default Gateway (the local router IP needed to forward traffic outside the local subnet)',
+          'MAC Physical Address'
+        ],
+        correctIndex: 1,
+        explanation: 'Same-subnet LAN traffic does not need a router, whereas all external internet traffic must be sent to the Default Gateway.'
+      },
+      {
+        id: 'q4',
+        tag: 'DNS & CORPORATE SERVERS',
+        question: 'A junior tech tries to fix a slow website on a domain-joined office laptop by permanently changing its DNS server to 8.8.8.8. Ten minutes later the user calls because \\\\FS01\\HR and the company intranet stopped working. Why?',
+        options: [
+          '8.8.8.8 blocks TCP port 443.',
+          'Public DNS servers (8.8.8.8) only resolve public internet domains and have no DNS records for private internal Active Directory servers like FS01.',
+          'Windows 11 disables Ethernet whenever 8.8.8.8 is used.'
+        ],
+        correctIndex: 1,
+        explanation: 'Corporate laptops must point to internal corporate DNS servers so they can resolve internal hostnames (FS01, domain controllers, intranet) alongside public sites.'
+      },
+      {
+        id: 'q5',
+        tag: 'COMMON PORTS',
+        question: 'Which set accurately matches the everyday Tier-1 ports you must know?',
+        options: [
+          'HTTP = 80, HTTPS = 443, DNS = 53, RDP = 3389, SMB = 445, SSH = 22',
+          'HTTP = 22, HTTPS = 53, DNS = 80, RDP = 445, SMB = 3389, SSH = 443',
+          'HTTP = 443, HTTPS = 80, DNS = 445, RDP = 22, SMB = 53, SSH = 3389'
+        ],
+        correctIndex: 0,
+        explanation: 'Memorize these six cold: SSH (22), DNS (53), HTTP (80), HTTPS (443), SMB File Sharing (445), and RDP (3389).'
+      },
+      {
+        id: 'q6',
+        tag: 'TESTING BLOCKED PORTS',
+        question: 'A security-hardened file server blocks ICMP ping requests, so ping FS01 times out even though the server is online. How can you verify from Windows whether SMB file sharing (Port 445) is reachable?',
+        options: [
+          'Run Test-NetConnection -ComputerName FS01 -Port 445 in PowerShell and check for TcpTestSucceeded : True.',
+          'Run ipconfig /flushdns three times.',
+          'Check winver in Run.'
+        ],
+        correctIndex: 0,
+        explanation: 'PowerShell\'s Test-NetConnection performs a real TCP 3-way handshake on the target port (e.g., 445 or 443), bypassing ICMP ping blocks.'
+      },
+      {
+        id: 'q7',
+        tag: 'REMOTE CLI SAFETY',
+        question: 'You are helping a user remotely over Windows Quick Assist and want to refresh their DHCP lease via Command Prompt. What happens if you type ipconfig /release by itself?',
+        options: [
+          'Windows automatically renews the IP 1 second later.',
+          'The PC drops its IP address immediately, disconnecting your Quick Assist remote session before you can type ipconfig /renew.',
+          'It clears the browser history.'
+        ],
+        correctIndex: 1,
+        explanation: 'Always chain ipconfig /release && ipconfig /renew on a single line during remote sessions so the lease renews automatically.'
+      },
+      {
+        id: 'q8',
+        tag: 'CORPORATE VPN & SHARES',
+        question: 'A hybrid employee takes their work laptop home, connects to their home Wi-Fi, and can browse public websites, but their mapped Z:\\ drive (\\\\FS01\\Finance) will not open. What is the most likely fix?',
+        options: [
+          'Connect the corporate VPN client first—internal SMB shares (Port 445) are firewalled off from the public internet.',
+          'Reformat the laptop\'s C: drive as FAT32.',
+          'Switch their home Wi-Fi from 5 GHz to 2.4 GHz.'
+        ],
+        correctIndex: 0,
+        explanation: 'Internal company file servers are only reachable from outside the office once the encrypted VPN tunnel connects the laptop to the corporate network.'
+      },
+      {
+        id: 'q9',
+        tag: 'WI-FI & PASSWORD RESETS',
+        question: 'Right after you reset a user\'s Active Directory password, their laptop refuses to connect to the office corporate Wi-Fi (WPA2/WPA3-Enterprise) and repeatedly locks their AD account. What should you do?',
+        options: [
+          'Forget the corporate Wi-Fi SSID on the laptop and reconnect using the new password (and clear stale credentials in Credential Manager).',
+          'Disable the Wi-Fi adapter permanently in Device Manager.',
+          'Change the laptop\'s subnet mask to 255.0.0.0.'
+        ],
+        correctIndex: 0,
+        explanation: 'Enterprise Wi-Fi (802.1X) authenticates using the user\'s AD password—Windows keeps retrying the cached old password until you Forget and reconnect.'
+      },
+      {
+        id: 'q10',
+        tag: 'TRACERT INTERPRETATION',
+        question: 'You run tracert -d 8.8.8.8. Hop 1 (192.168.1.1) responds in 1ms, Hop 2 (ISP gateway) responds in 9ms, and Hops 3 through 10 all show * * * Request timed out. What does this indicate?',
+        options: [
+          'The user\'s laptop Wi-Fi card is broken.',
+          'The local LAN and Default Gateway are working properly; the evidence points to an upstream drop on the ISP / WAN side.',
+          'The local HOSTS file is full.'
+        ],
+        correctIndex: 1,
+        explanation: 'Reaching Hop 1 (Default Gateway) and Hop 2 shows local LAN connectivity is healthy and points to an upstream drop on the ISP / WAN side. Interview tip: say "points to the ISP side" rather than "proves it"—some routers simply do not reply to ICMP/tracert probes (* * *), so timeouts only indicate a real drop when all subsequent hops also fail.'
+      },
+      {
+        id: 'q11',
+        tag: 'STALE PROXY TRAP',
+        question: 'After uninstalling a malfunctioning third-party VPN/security tool, a user\'s Chrome and Edge browsers say "Unable to connect to the proxy server," while ping 8.8.8.8 works in CMD. Where do you fix this?',
+        options: [
+          'Open inetcpl.cpl -> Connections -> LAN settings and uncheck "Use a proxy server for your LAN" (often left pointing to 127.0.0.1).',
+          'Restart the Print Spooler service.',
+          'Run diskmgmt.msc and assign a drive letter.'
+        ],
+        correctIndex: 0,
+        explanation: 'Crashed VPNs or adware frequently leave a dead 127.0.0.1 proxy enabled in Internet Options (inetcpl.cpl), blocking browsers while raw ICMP ping still succeeds.'
+      },
+      {
+        id: 'q12',
+        tag: 'ESCALATION HYGIENE',
+        question: 'Twenty-five employees on the 3rd floor all lose wired Ethernet connectivity at the exact same moment and pull 169.254.x.x addresses, while the 2nd floor works normally. What is the right Tier-1 action?',
+        options: [
+          'Verify the symptom and 169.254.x.x ipconfig output on one affected port, confirm scope is limited to the 3rd-floor switch/VLAN, and escalate immediately to Network Infrastructure with port/IP details.',
+          'Spend 4 hours running netsh winsock reset on all 25 PCs individually.',
+          'Close all 25 tickets as "User Error."'
+        ],
+        correctIndex: 0,
+        explanation: 'A floor-wide wired DHCP failure points to a shared access switch or VLAN uplink—gather clean diagnostic proof from one workstation and escalate immediately.'
+      }
+    ];
+
+    const CHEAT_SHEET_COMMANDS = [
+      { cmd: 'ipconfig /all', desc: 'Show IPv4, Subnet, Gateway, MAC, DHCP Server & DNS Servers' },
+      { cmd: 'ipconfig /release && ipconfig /renew', desc: 'Safely drop & request a new DHCP lease in one chained command' },
+      { cmd: 'ipconfig /flushdns', desc: 'Clear stale entries from Windows\' local DNS Resolver Cache' },
+      { cmd: 'ipconfig /displaydns', desc: 'Inspect all domain names currently cached in Windows DNS' },
+      { cmd: 'ping 127.0.0.1', desc: 'Step 1 Ping Ladder: Test local Windows TCP/IP stack (Loopback)' },
+      { cmd: 'ping 8.8.8.8', desc: 'Step 3 Ping Ladder: Test raw external internet routing without DNS' },
+      { cmd: 'ping -t 8.8.8.8', desc: 'Continuous ping (Ctrl+C to stop) to catch packet loss & jitter' },
+      { cmd: 'tracert -d 8.8.8.8', desc: 'Trace router-by-router hops without slow reverse DNS lookups' },
+      { cmd: 'nslookup google.com', desc: 'Query configured DNS server and inspect resolved IP address' },
+      { cmd: 'nslookup google.com 8.8.8.8', desc: 'Test DNS resolution directly against 8.8.8.8 without changing NIC' },
+      { cmd: 'Test-NetConnection -ComputerName FS01 -Port 445', desc: 'PowerShell TCP port check (bypasses ICMP ping blocks)' },
+      { cmd: 'netstat -ano', desc: 'List all active TCP/UDP ports and owning Process IDs (PID)' },
+      { cmd: 'arp -a', desc: 'View local LAN IP-to-MAC address neighbor table' },
+      { cmd: 'netsh winsock reset', desc: 'Rebuild corrupted Windows Sockets catalog (Admin CMD + Reboot)' },
+      { cmd: 'netsh int ip reset', desc: 'Reset Windows TCP/IP stack registry settings (Admin CMD + Reboot)' },
+      { cmd: 'netsh wlan show profiles', desc: 'List saved Wi-Fi SSID profiles on the laptop' },
+      { cmd: 'ncpa.cpl', desc: 'Open Network Connections (check status, or Disable/Re-enable adapter as a first fix)' },
+      { cmd: 'inetcpl.cpl', desc: 'Internet Options -> Connections -> LAN settings (Check stuck proxy)' },
+      { cmd: 'wf.msc', desc: 'Windows Defender Firewall (Domain / Private / Public profiles)' },
+      { cmd: 'C:\\Windows\\System32\\drivers\\etc\\hosts', desc: 'Local static hostname override file checked before DNS' },
+      { cmd: '169.254.0.0/16 (APIPA)', desc: 'Self-assigned fallback IP when DHCP server cannot be reached' },
+      { cmd: '10.0.0.0/8 | 172.16.0.0/12 | 192.168.0.0/16', desc: 'RFC 1918 Private IPv4 address ranges for internal LANs/VPNs' },
+      { cmd: 'Port 22 (SSH) & Port 53 (DNS)', desc: '22 = Encrypted Linux/switch CLI • 53 = Domain Name System' },
+      { cmd: 'Port 80 (HTTP) & Port 443 (HTTPS)', desc: '80 = Unencrypted Web • 443 = Encrypted TLS Web / M365 / VPN' },
+      { cmd: 'Port 445 (SMB)', desc: 'Windows File & Printer Sharing (\\\\FS01\\Share)' },
+      { cmd: 'Port 3389 (RDP)', desc: 'Windows Remote Desktop Protocol' }
+    ];
+
+    const ALL_LAB_KEYS = [
+      'lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab6', 'lab7',
+      'lab8', 'lab9', 'lab10', 'lab11', 'lab12', 'lab13', 'lab14'
+    ];
+
+    function getDefaultState() {
+      const labs = {};
+      ALL_LAB_KEYS.forEach(k => { labs[k] = { done: false, value: '' }; });
+      const answers = {};
+      EXAM_QUESTIONS.forEach(q => { answers[q.id] = null; });
+      return {
+        currentTab: 'lesson1',
+        triage: { ticketA: null, ticketB: null, ticketC: null },
+        labs,
+        exam: { answers, submitted: false }
+      };
+    }
+
+    let appState = loadState();
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return getDefaultState();
+        const parsed = JSON.parse(raw);
+        const def = getDefaultState();
+        return {
+          currentTab: parsed.currentTab || 'lesson1',
+          triage: { ...def.triage, ...(parsed.triage || {}) },
+          labs: { ...def.labs, ...(parsed.labs || {}) },
+          exam: {
+            answers: { ...def.exam.answers, ...((parsed.exam && parsed.exam.answers) || {}) },
+            submitted: Boolean(parsed.exam && parsed.exam.submitted)
+          }
+        };
+      } catch (e) {
+        return getDefaultState();
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        // Ignore storage errors in restricted contexts
+      }
+      updateProgressUI();
+    }
+
+    function copyText(text) {
+      try {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        temp.setAttribute('readonly', '');
+        temp.style.position = 'fixed';
+        temp.style.left = '-9999px';
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        showToast('Copied: ' + text, 'emerald');
+      } catch (err) {
+        showToast('Copy failed — select manually: ' + text, 'amber');
+      }
+    }
+
+    let toastTimer = null;
+    function showToast(message, tone = 'emerald') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      const dot = document.getElementById('toast-dot');
+      if (!toast || !msg || !dot) return;
+      msg.textContent = message;
+      dot.style.background = tone === 'crimson' ? '#F87171' : tone === 'amber' ? '#FBBF24' : '#34D399';
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2600);
+    }
+
+    function openSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (sidebar) sidebar.classList.add('sidebar-open');
+      if (backdrop) backdrop.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (sidebar) sidebar.classList.remove('sidebar-open');
+      if (backdrop) backdrop.classList.add('hidden');
+    }
+
+    function switchTab(tabId) {
+      appState.currentTab = tabId;
+      saveState();
+
+      document.querySelectorAll('.lesson-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      const activePanel = document.getElementById('tab-' + tabId);
+      if (activePanel) activePanel.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        const isCurrent = btn.getAttribute('data-nav') === tabId;
+        if (isCurrent) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      closeSidebar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderTriageSimulator() {
+      const container = document.getElementById('triage-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      TRIAGE_TICKETS.forEach((ticket, idx) => {
+        const chosenIdx = appState.triage[ticket.id];
+        const isTriaged = chosenIdx !== null && ticket.options[chosenIdx] && ticket.options[chosenIdx].status === 'verified';
+
+        const card = document.createElement('div');
+        card.className = 'wb-subbox';
+        card.innerHTML = `
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="badge-ink">${ticket.code}</span>
+              <span class="font-mono text-muted" style="font-size:12px;font-weight:600;">${ticket.dept} • ${ticket.user}</span>
+            </div>
+            <span class="font-mono ${isTriaged ? 'text-emerald' : 'text-muted'}" style="font-size:12px;font-weight:700;">
+              ${isTriaged ? 'TRIAGED' : 'OPEN TICKET ' + (idx + 1) + '/3'}
+            </span>
+          </div>
+          <p style="margin:0 0 12px;font-size:15px;font-weight:700;">${ticket.prompt}</p>
+        `;
+
+        const optsWrap = document.createElement('div');
+        optsWrap.className = 'space-y-2';
+
+        ticket.options.forEach((opt, optIdx) => {
+          const isSelected = chosenIdx === optIdx;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          let bg = '#1A1D23';
+          let borderCol = '#343A46';
+          if (isSelected) {
+            if (opt.status === 'verified') { bg = '#122922'; borderCol = '#34D399'; }
+            else if (opt.status === 'warning') { bg = '#292112'; borderCol = '#FBBF24'; }
+            else { bg = '#2B1518'; borderCol = '#F87171'; }
+          }
+          btn.style.cssText = `width:100%;text-align:left;padding:11px 13px;border:2px solid ${borderCol};border-radius:8px;background:${bg};color:#E6E8EC;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:flex-start;gap:8px;`;
+          btn.innerHTML = `<strong class="font-mono">${String.fromCharCode(65 + optIdx)}.</strong><span>${opt.label}</span>`;
+          btn.addEventListener('click', () => {
+            appState.triage[ticket.id] = optIdx;
+            saveState();
+            renderTriageSimulator();
+          });
+          optsWrap.appendChild(btn);
+        });
+        card.appendChild(optsWrap);
+
+        if (chosenIdx !== null && ticket.options[chosenIdx]) {
+          const chosen = ticket.options[chosenIdx];
+          const fb = document.createElement('div');
+          const boxClass = chosen.status === 'verified' ? 'wb-emerald-box' : chosen.status === 'warning' ? 'wb-amber-box' : 'wb-red-box';
+          const badgeLabel = chosen.status === 'verified' ? 'VERIFIED STEP' : chosen.status === 'warning' ? 'SUBOPTIMAL' : 'BAD MOVE';
+          fb.className = boxClass;
+          fb.style.cssText = 'margin-top:12px;padding:10px 12px;font-size:13px;box-shadow:none;';
+          fb.innerHTML = `<strong class="font-mono" style="margin-right:6px;">[${badgeLabel}]</strong>${chosen.feedback}`;
+          card.appendChild(fb);
+        }
+
+        container.appendChild(card);
+      });
+    }
+
+    function renderAllLabSections() {
+      LESSON_LAB_GROUPS.forEach(group => {
+        const container = document.getElementById('labs-' + group.lessonId + '-container');
+        if (!container) return;
+
+        const card = document.createElement('div');
+        card.className = 'wb-card';
+        card.innerHTML = `
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-bottom:14px;margin-bottom:16px;border-bottom:2px solid #343A46;">
+            <div>
+              <div class="font-mono text-emerald" style="font-size:11px;font-weight:700;">${group.badge}</div>
+              <h3 style="margin:2px 0;font-size:19px;font-weight:800;">${group.title}</h3>
+              <p class="text-muted" style="margin:0;font-size:13px;">${group.subtitle}</p>
+            </div>
+            <span id="${group.counterId}" class="badge-tag" style="background:#22262E;padding:5px 10px;">0 / ${group.labs.length} Verified</span>
+          </div>
+        `;
+
+        const list = document.createElement('div');
+        list.className = 'space-y-4';
+
+        group.labs.forEach(lab => {
+          const labBox = document.createElement('div');
+          labBox.id = 'card-' + lab.key;
+          labBox.className = 'wb-subbox';
+
+          let controlHtml = '';
+          if (lab.type === 'select') {
+            const optsHtml = lab.options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+            controlHtml = `
+              <select id="input-${lab.key}" aria-label="${lab.tag}" class="wb-select" style="flex:1;">
+                <option value="">${lab.placeholder}</option>
+                ${optsHtml}
+              </select>
+            `;
+          } else {
+            controlHtml = `
+              <input id="input-${lab.key}" type="text" placeholder="${lab.placeholder}" class="wb-input font-mono" style="flex:1;" />
+            `;
+          }
+
+          labBox.innerHTML = `
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+              <span class="badge-tag">${lab.tag}</span>
+              <span id="status-${lab.key}" class="font-mono text-muted" style="font-size:12px;font-weight:700;">PENDING</span>
+            </div>
+            <p style="margin:0 0 12px;font-size:14px;">${lab.desc}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+              ${controlHtml}
+              <button type="button" onclick="verifyLab('${lab.key}')" class="btn-wb btn-ink" style="padding:10px 16px;font-size:13px;flex-shrink:0;">
+                Verify ${lab.key.replace('lab', 'Lab ').replace(/Lab (\d)$/, 'Lab 0$1')}
+              </button>
+            </div>
+            <p id="msg-${lab.key}" class="hidden" style="margin:8px 0 0;font-size:12px;font-weight:700;"></p>
+          `;
+
+          list.appendChild(labBox);
+        });
+
+        card.appendChild(list);
+        container.innerHTML = '';
+        container.appendChild(card);
+      });
+
+      hydrateAllLabs();
+    }
+
+    function findLabDef(labKey) {
+      for (const grp of LESSON_LAB_GROUPS) {
+        const found = grp.labs.find(l => l.key === labKey);
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function verifyLab(labKey) {
+      const inputEl = document.getElementById('input-' + labKey);
+      const msgEl = document.getElementById('msg-' + labKey);
+      const labDef = findLabDef(labKey);
+      if (!inputEl || !msgEl || !labDef) return;
+
+      const rawVal = (inputEl.value || '').trim();
+      if (!rawVal) {
+        msgEl.textContent = 'Select or enter your observation from your Windows PC first.';
+        msgEl.className = 'text-amber';
+        msgEl.classList.remove('hidden');
+        return;
+      }
+
+      const check = labDef.validate(rawVal);
+      if (!check.ok) {
+        msgEl.textContent = check.error;
+        msgEl.className = 'text-crimson';
+        msgEl.classList.remove('hidden');
+        return;
+      }
+
+      appState.labs[labKey] = {
+        done: true,
+        value: rawVal,
+        displayLabel: check.label || rawVal
+      };
+      saveState();
+      applyLabVisualState(labKey);
+      showToast(labKey.toUpperCase() + ' verified and logged.', 'emerald');
+    }
+
+    function applyLabVisualState(labKey) {
+      const labData = appState.labs[labKey];
+      const inputEl = document.getElementById('input-' + labKey);
+      const statusEl = document.getElementById('status-' + labKey);
+      const cardEl = document.getElementById('card-' + labKey);
+      const msgEl = document.getElementById('msg-' + labKey);
+
+      if (labData && labData.value && inputEl) {
+        inputEl.value = labData.value;
+      }
+
+      if (labData && labData.done) {
+        if (statusEl) {
+          statusEl.textContent = 'VERIFIED';
+          statusEl.className = 'font-mono text-emerald';
+        }
+        if (cardEl) {
+          cardEl.style.background = '#122922';
+          cardEl.style.borderColor = '#1F5E4B';
+        }
+        if (msgEl) {
+          msgEl.textContent = 'Verified: ' + (labData.displayLabel || labData.value);
+          msgEl.className = 'text-emerald';
+          msgEl.classList.remove('hidden');
+        }
+      } else {
+        if (statusEl) {
+          statusEl.textContent = 'PENDING';
+          statusEl.className = 'font-mono text-muted';
+        }
+        if (cardEl) {
+          cardEl.style.background = '#22262E';
+          cardEl.style.borderColor = '#343A46';
+        }
+        if (msgEl) msgEl.classList.add('hidden');
+      }
+    }
+
+    function hydrateAllLabs() {
+      ALL_LAB_KEYS.forEach(applyLabVisualState);
+    }
+
+    function renderExam() {
+      const container = document.getElementById('exam-questions-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      EXAM_QUESTIONS.forEach((q, qIdx) => {
+        const selected = appState.exam.answers[q.id];
+        const submitted = appState.exam.submitted;
+        const qLabel = String(qIdx + 1).padStart(2, '0');
+
+        const card = document.createElement('div');
+        card.className = 'wb-card-sm';
+        card.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+            <span class="badge-tag" style="background:#22262E;">QUESTION ${qLabel} • ${q.tag}</span>
+            ${submitted ? `<span class="font-mono ${selected === q.correctIndex ? 'text-emerald' : 'text-crimson'}" style="font-size:12px;font-weight:700;">
+              ${selected === q.correctIndex ? 'CORRECT' : 'INCORRECT'}
+            </span>` : ''}
+          </div>
+          <p style="margin:0 0 12px;font-size:15px;font-weight:700;">${q.question}</p>
+        `;
+
+        const optsWrap = document.createElement('div');
+        optsWrap.className = 'space-y-2';
+
+        q.options.forEach((optText, oIdx) => {
+          const isPicked = selected === oIdx;
+          const isCorrect = q.correctIndex === oIdx;
+          let bg = '#22262E';
+          let color = '#E6E8EC';
+          let borderCol = '#343A46';
+
+          if (!submitted && isPicked) {
+            bg = '#283140';
+            color = '#FFFFFF';
+            borderCol = '#34D399';
+          } else if (submitted) {
+            if (isCorrect) { bg = '#122922'; borderCol = '#34D399'; }
+            else if (isPicked && !isCorrect) { bg = '#2B1518'; borderCol = '#F87171'; }
+          }
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.style.cssText = `width:100%;text-align:left;padding:11px 13px;border:2px solid ${borderCol};border-radius:8px;background:${bg};color:${color};font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:flex-start;gap:8px;`;
+          btn.innerHTML = `<strong class="font-mono">${String.fromCharCode(65 + oIdx)}.</strong><span>${optText}</span>`;
+          btn.addEventListener('click', () => {
+            if (appState.exam.submitted) return;
+            appState.exam.answers[q.id] = oIdx;
+            saveState();
+            renderExam();
+          });
+          optsWrap.appendChild(btn);
+        });
+
+        card.appendChild(optsWrap);
+
+        if (submitted) {
+          const exp = document.createElement('div');
+          exp.className = 'wb-subbox';
+          exp.style.cssText = 'margin-top:12px;padding:10px 12px;font-size:13px;';
+          exp.innerHTML = `<strong class="font-mono" style="margin-right:6px;">Field Note:</strong>${q.explanation}`;
+          card.appendChild(exp);
+        }
+
+        container.appendChild(card);
+      });
+
+      const banner = document.getElementById('exam-result-banner');
+      if (banner) {
+        if (appState.exam.submitted) {
+          const score = calculateExamScore();
+          const passed = score >= 10;
+          banner.classList.remove('hidden');
+          banner.style.background = passed ? '#122922' : '#292112';
+          banner.style.borderColor = passed ? '#1F5E4B' : '#6B4C16';
+          banner.innerHTML = `
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+              <span class="font-mono ${passed ? 'text-emerald' : 'text-amber'}" style="font-size:12px;font-weight:700;">
+                ${passed ? 'MODULE 02 PRACTICAL NETWORKING CLEARED' : 'REVIEW NEEDED (PASS SCORE: 10/12)'}
+              </span>
+              <span class="font-mono" style="font-size:18px;font-weight:800;">Score: ${score} / 12</span>
+            </div>
+            <p style="margin:0;font-size:14px;">
+              ${passed
+                ? 'Solid work. You can now diagnose IPv4 addressing, Subnet Masks, Default Gateways, DHCP/APIPA (169.254.x.x) failures, DNS resolution, LAN/Wi-Fi/VPN connectivity, everyday ports (80, 443, 53, 3389, 445, 22), and core CLI diagnostics. Ready for Module 03: Active Directory & Microsoft Entra ID.'
+                : 'Review the Field Notes below each question, click "Clear Exam Answers", and run through the 12 network scenarios again.'}
+            </p>
+          `;
+        } else {
+          banner.classList.add('hidden');
+        }
+      }
+    }
+
+    function calculateExamScore() {
+      let score = 0;
+      EXAM_QUESTIONS.forEach(q => {
+        if (appState.exam.answers[q.id] === q.correctIndex) score++;
+      });
+      return score;
+    }
+
+    function submitExam() {
+      const unanswered = EXAM_QUESTIONS.filter(q => appState.exam.answers[q.id] === null);
+      if (unanswered.length > 0) {
+        showToast('Answer all 12 questions before grading (' + unanswered.length + ' left).', 'amber');
+        return;
+      }
+      appState.exam.submitted = true;
+      saveState();
+      renderExam();
+      const score = calculateExamScore();
+      showToast('Exam graded: ' + score + '/12', score >= 10 ? 'emerald' : 'amber');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetExamOnly() {
+      const answers = {};
+      EXAM_QUESTIONS.forEach(q => { answers[q.id] = null; });
+      appState.exam = { answers, submitted: false };
+      saveState();
+      renderExam();
+      showToast('Exam answers cleared.', 'emerald');
+    }
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    function updateProgressUI() {
+      let triageDone = 0;
+      TRIAGE_TICKETS.forEach(t => {
+        const picked = appState.triage[t.id];
+        if (picked !== null && t.options[picked] && t.options[picked].status === 'verified') {
+          triageDone++;
+        }
+      });
+
+      const countLabs = (keys) => keys.filter(k => appState.labs[k] && appState.labs[k].done).length;
+      const l2Done = countLabs(['lab1', 'lab2']);
+      const l3Done = countLabs(['lab3', 'lab4']);
+      const l4Done = countLabs(['lab5', 'lab6']);
+      const l5Done = countLabs(['lab7', 'lab8']);
+      const l6Done = countLabs(['lab9', 'lab10']);
+      const l7Done = countLabs(['lab11', 'lab12']);
+      const l8Done = countLabs(['lab13', 'lab14']);
+      const examDone = appState.exam.submitted ? calculateExamScore() : 0;
+
+      const totalCompleted = triageDone + l2Done + l3Done + l4Done + l5Done + l6Done + l7Done + l8Done + examDone;
+      const totalItems = 29;
+      const pct = Math.round((totalCompleted / totalItems) * 100);
+
+      setText('progress-text', `${pct}% (${totalCompleted}/${totalItems})`);
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = `${pct}%`;
+
+      setText('badge-lesson1', `${triageDone}/3`);
+      setText('badge-lesson2', `${l2Done}/2`);
+      setText('badge-lesson3', `${l3Done}/2`);
+      setText('badge-lesson4', `${l4Done}/2`);
+      setText('badge-lesson5', `${l5Done}/2`);
+      setText('badge-lesson6', `${l6Done}/2`);
+      setText('badge-lesson7', `${l7Done}/2`);
+      setText('badge-lesson8', `${l8Done}/2`);
+      setText('badge-exam', `${examDone}/12`);
+
+      setText('triage-counter', `${triageDone} / 3 Resolved`);
+      setText('labs-l2-counter', `${l2Done} / 2 Verified`);
+      setText('labs-l3-counter', `${l3Done} / 2 Verified`);
+      setText('labs-l4-counter', `${l4Done} / 2 Verified`);
+      setText('labs-l5-counter', `${l5Done} / 2 Verified`);
+      setText('labs-l6-counter', `${l6Done} / 2 Verified`);
+      setText('labs-l7-counter', `${l7Done} / 2 Verified`);
+      setText('labs-l8-counter', `${l8Done} / 2 Verified`);
+    }
+
+    function renderCheatSheet() {
+      const wrap = document.getElementById('cheatsheet-items');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      CHEAT_SHEET_COMMANDS.forEach(item => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.style.cssText = 'text-align:left;padding:10px 12px;background:#22262E;border:2px solid #343A46;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;gap:4px;';
+        row.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
+            <span class="badge-ink" style="word-break:break-all;">${item.cmd}</span>
+            <span class="font-mono text-muted" style="font-size:11px;flex-shrink:0;">Copy</span>
+          </div>
+          <span style="font-size:12px;color:#E6E8EC;">${item.desc}</span>
+        `;
+        row.addEventListener('click', () => copyText(item.cmd));
+        wrap.appendChild(row);
+      });
+    }
+
+    function openCheatSheet() {
+      const modal = document.getElementById('cheatsheet-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeCheatSheet() {
+      const modal = document.getElementById('cheatsheet-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function showResetConfirm() {
+      const rc = document.getElementById('reset-container');
+      const rcb = document.getElementById('reset-confirm-box');
+      if (rc) rc.classList.add('hidden');
+      if (rcb) rcb.classList.remove('hidden');
+    }
+
+    function hideResetConfirm() {
+      const rcb = document.getElementById('reset-confirm-box');
+      const rc = document.getElementById('reset-container');
+      if (rcb) rcb.classList.add('hidden');
+      if (rc) rc.classList.remove('hidden');
+    }
+
+    function executeReset() {
+      appState = getDefaultState();
+      saveState();
+      renderTriageSimulator();
+      renderAllLabSections();
+      renderExam();
+      switchTab('lesson1');
+      hideResetConfirm();
+      showToast('All Module 02 progress wiped.', 'amber');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      if (mobileBtn) mobileBtn.addEventListener('click', openSidebar);
+
+      const modal = document.getElementById('cheatsheet-modal');
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target && e.target.id === 'cheatsheet-modal') closeCheatSheet();
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeCheatSheet();
+          closeSidebar();
+        }
+      });
+
+      renderCheatSheet();
+      renderTriageSimulator();
+      renderAllLabSections();
+      renderExam();
+      switchTab(appState.currentTab || 'lesson1');
+      updateProgressUI();
+    });
+  </script>
+</body>
+</html>
